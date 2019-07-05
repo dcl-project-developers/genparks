@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/dcl-project-developers/genparks#readme",
   "dependencies": {
-    "chalk": "^2.4.2"
+    "chalk": "^2.4.2",
+    "fs-extra": "^8.1.0"
   }
 }

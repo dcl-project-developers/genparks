@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
-const chalk = require('chalk')
 const fs = require('fs')
+const path = require('path');
 const args = process.argv
+
+const chalk = require('chalk')
 const childProcess = require('child_process')
+const fse = require('fs-extra')
 
 function logError(error) {
   const eLog = chalk.red(error)
@@ -66,10 +69,19 @@ const generatePark = function(randomNumber, outputFolder) {
   // init the park using DCL CLI
   let spawnResultInit = childProcess.spawnSync('dcl', ['init'], {cwd: outputFolder})
   if(spawnResultInit.error) {
-    logError('Error executing dcl init:\n', spawnResultInit.error)
+    logError('Error executing dcl init:\n' + spawnResultInit.error)
     process.exit(1)
   }
   logSuccess('Ouput folder initialized')
+
+  // copy templates over to output folder
+  try {
+    fse.copySync(path.join(__dirname, 'templates'), path.join(__dirname, outputFolder))
+    logSuccess('Templates applied')
+    logSuccess(`To preview your new scene, cd $outputFolder && dcl start`)    
+  } catch(err) {
+    logError('Error copying templates:\n' + err)    
+  }
 
 }
 
