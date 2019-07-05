@@ -78,7 +78,7 @@ const generatePark = function(randomNumber, outputFolder) {
   try {
     fse.copySync(path.join(__dirname, 'templates'), path.join(__dirname, outputFolder))
     logSuccess('Templates applied')
-    logSuccess(`To preview your new scene, cd $outputFolder && dcl start`)    
+    logSuccess(`To preview your new scene, cd ${outputFolder} && dcl start`)    
   } catch(err) {
     logError('Error copying templates:\n' + err)    
   }
