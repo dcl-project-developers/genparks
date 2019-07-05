@@ -1,0 +1,23 @@
+{
+  "name": "genparks",
+  "version": "1.0.0",
+  "description": "CLI to generate DCL parks",
+  "main": "genparks.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dcl-project-developers/genparks.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/dcl-project-developers/genparks/issues"
+  },
+  "homepage": "https://github.com/dcl-project-developers/genparks#readme",
+  "dependencies": {
+    "chalk": "^2.4.2"
+  }
+}
