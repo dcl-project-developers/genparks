@@ -1,17 +1,17 @@
 function buildBench(x: number, y: number, z: number, zRotationDegrees: number) {
 
   // specs for benches
-  let benchLength = 4
-  let legHeight = 0.6
-  let legWidth = 0.05
-  let sittingWidth = 1
-  let sittingHeight = 0.1
-  let backWidth = 0.1
-  let backHeight = 0.6
+  let benchLength = <%= benchLength %>
+  let legHeight = <%= legHeight %>
+  let legWidth = <%= legWidth %>
+  let sittingWidth = <%= sittingWidth %>
+  let sittingHeight = <%= sittingHeight %>
+  let backWidth = <%= backWidth %>
+  let backHeight = <%= backHeight %>
 
   // material for benches
   let benchMaterial = new Material()
-  benchMaterial.albedoColor = Color3.FromHexString('#f9e79f')
+  benchMaterial.albedoColor = Color3.FromHexString('<%= benchColor %>')
 
   // build the bench entity itself
   let bench = new Entity()
@@ -88,14 +88,14 @@ function buildBench(x: number, y: number, z: number, zRotationDegrees: number) {
 function buildPath(x: number, y: number, z: number, zRotationDegrees: number) {
 
   // specs for path
-  let width = 2
-  let length = 16
-  let height = 1  // does PlaneShape transforms this into a point?
+  let pathWidth = <%= pathWidth %>
+  let pathLength = <%= pathLength %>
+  let pathHeight = <%= pathHeight %>
   let xRorationDegrees = 90
 
   // material for paths
   let pathMaterial = new Material()
-  pathMaterial.albedoColor = Color3.FromHexString('#6e2c00')
+  pathMaterial.albedoColor = Color3.FromHexString('<%= pathColor %>')
 
   // west path goes from south to north
   let path = new Entity()
@@ -104,7 +104,7 @@ function buildPath(x: number, y: number, z: number, zRotationDegrees: number) {
   path.addComponent(new Transform({
     position: new Vector3(x, y, z),
     rotation: Quaternion.Euler(xRorationDegrees, 0, zRotationDegrees),
-    scale: new Vector3(width, length, height)
+    scale: new Vector3(pathWidth, pathLength, pathHeight)
   }))
 
   return path
