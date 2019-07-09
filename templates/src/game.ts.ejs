@@ -122,54 +122,20 @@ function buildTree(x: number, y: number, z: number) {
   return tree
 }
 
-let westPath = buildPath(3, 0, 8, 0)
-engine.addEntity(westPath)
+<% paths.forEach(function(path) { %>
 
-let northPath = buildPath(8, 0, 13, 90)
-engine.addEntity(northPath)
+engine.addEntity(buildPath(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>))
 
-let eastPath = buildPath(13, 0, 8, 180)
-engine.addEntity(eastPath)
+<% }) %>
 
-let southPath = buildPath(8, 0, 3, 270)
-engine.addEntity(southPath)
+<% benches.forEach(function(bench) { %>
 
-let westBench = buildBench(1, 0, 8, 0)
-engine.addEntity(westBench)
+engine.addEntity(buildBench(<%= bench.x %>, <%= bench.y %>, <%= bench.z %>, <%= bench.angle %>))
 
-let northBench = buildBench(8, 0, 15, 90)
-engine.addEntity(northBench)
+<% }) %>
 
-let eastBench = buildBench(15, 0, 8, 180)
-engine.addEntity(eastBench)
+<% trees.forEach(function(tree) { %>
 
-let southBench = buildBench(8, 0, 1, 270)
-engine.addEntity(southBench)
+engine.addEntity(buildTree(<%= tree.x %>, <%= tree.y %>, <%= tree.z %>))  
 
-let swTree = buildTree(1, 0.5, 1)
-engine.addEntity(swTree)
-let swnTree = buildTree(5, 0.5, 1)
-engine.addEntity(swnTree)
-let sweTree = buildTree(1, 0.5, 5)
-engine.addEntity(sweTree)
-
-let nwTree = buildTree(1, 0.5, 15)
-engine.addEntity(nwTree)
-let nwsTree = buildTree(1, 0.5, 11)
-engine.addEntity(nwsTree)
-let nweTree = buildTree(5, 0.5, 15)
-engine.addEntity(nweTree)
-
-let neTree = buildTree(15, 0.5, 15)
-engine.addEntity(neTree)
-let newTree = buildTree(11, 0.5, 15)
-engine.addEntity(newTree)
-let nesTree = buildTree(15, 0.5, 11)
-engine.addEntity(nesTree)
-
-let seTree = buildTree(15, 0.5, 1)
-engine.addEntity(seTree)
-let senTree = buildTree(15, 0.5, 5)
-engine.addEntity(senTree)
-let sewTree = buildTree(11, 0.5, 1)
-engine.addEntity(sewTree)
+<% }) %>
