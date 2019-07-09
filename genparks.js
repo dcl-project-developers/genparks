@@ -36,7 +36,71 @@ const showHelp = function() {
   console.log(helpText)
 }
 
+const subColors = ['00', '33', '66', '99', 'CC', 'FF']
+const options = subColors.length
+const random1 = Math.floor(Math.random() * options)
+const random2 = Math.floor(Math.random() * options)
+const random3 = Math.floor(Math.random() * options)
+const random4 = Math.floor(Math.random() * options)
+
+const buildColor = function(parkNumber, variationNumber) {
+  let color = ''
+  switch(variationNumber) {
+    case 1:
+      color = '#' + subColors[random1] + subColors[random2] + subColors[random3]
+      break;
+    case 2:
+      color = '#' + subColors[random1] + subColors[random3] + subColors[random2]
+      break;
+    case 3:
+      color = '#' + subColors[random2] + subColors[random1] + subColors[random3]
+      break;    
+    case 4:
+      color = '#' + subColors[random2] + subColors[random3] + subColors[random1]
+      break;    
+    case 5:
+      color = '#' + subColors[random3] + subColors[random1] + subColors[random2]
+      break;    
+    case 6:
+      color = '#' + subColors[random3] + subColors[random2] + subColors[random1]
+      break;    
+    case 7:
+      color = '#' + subColors[random1] + subColors[random2] + subColors[random4]
+      break;
+    case 8:
+      color = '#' + subColors[random1] + subColors[random4] + subColors[random2]
+      break;
+  }
+  return color;
+}
+
+const pathColor1 = function(parkNumber) {
+  return buildColor(parkNumber, 1)
+}
+const pathColor2 = function(parkNumber) {
+  return buildColor(parkNumber, 2)
+}
+const pathColor3 = function(parkNumber) {
+  return buildColor(parkNumber, 3)
+}
+const pathColor4 = function(parkNumber) {
+  return buildColor(parkNumber, 4)
+}
+const benchColor1 = function(parkNumber) {
+  return buildColor(parkNumber, 5)
+}
+const benchColor2 = function(parkNumber) {
+  return buildColor(parkNumber, 6)
+}
+const benchColor3 = function(parkNumber) {
+  return buildColor(parkNumber, 7)
+}
+const benchColor4 = function(parkNumber) {
+  return buildColor(parkNumber, 8)
+}
+
 const templateVars = function(parkNumber) {
+
   let vars = {
     benchLength: 4,
     legHeight: 0.6,
@@ -49,16 +113,16 @@ const templateVars = function(parkNumber) {
     pathLength: 16,
     pathHeight: 1,
     paths: [
-      {x: 3,  y: 0, z: 8,  angle: 0, color: '#6e2c00'},      // westPath
-      {x: 8,  y: 0, z: 13, angle: 90, color: '#707000'},     // northPath
-      {x: 13, y: 0, z: 8,  angle: 180, color: '#007070'},    // eastPath
-      {x: 8,  y: 0, z: 3,  angle: 270, color: '#700070'}     // southPath
+      {x: 3,  y: 0, z: 8,  angle: 0,   color: pathColor1(parkNumber)},      // westPath
+      {x: 8,  y: 0, z: 13, angle: 90,  color: pathColor2(parkNumber)},      // northPath
+      {x: 13, y: 0, z: 8,  angle: 180, color: pathColor3(parkNumber)},      // eastPath
+      {x: 8,  y: 0, z: 3,  angle: 270, color: pathColor4(parkNumber)}       // southPath
     ],
     benches: [
-      {x: 1,  y: 0, z: 8,  angle: 0, color: '#f9e79f'},       // westBench  
-      {x: 8,  y: 0, z: 15, angle: 90, color: '#ff0000'},      // northBench
-      {x: 15, y: 0, z: 8,  angle: 180, color: '#00ff00'},     // eastBench
-      {x: 8,  y: 0, z: 1,  angle: 270, color: '#0000ff'}      // southBench
+      {x: 1,  y: 0, z: 8,  angle: 0,   color: benchColor1(parkNumber)},       // westBench  
+      {x: 8,  y: 0, z: 15, angle: 90,  color: benchColor2(parkNumber)},       // northBench
+      {x: 15, y: 0, z: 8,  angle: 180, color: benchColor3(parkNumber)},       // eastBench
+      {x: 8,  y: 0, z: 1,  angle: 270, color: benchColor4(parkNumber)}        // southBench
     ],
     trees: [
       {x: 1,  y: 0.5, z: 1},    // swTree
