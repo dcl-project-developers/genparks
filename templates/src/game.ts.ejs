@@ -1,4 +1,4 @@
-function buildBench(x: number, y: number, z: number, zRotationDegrees: number) {
+function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
 
   // specs for benches
   let benchLength = <%= benchLength %>
@@ -11,7 +11,7 @@ function buildBench(x: number, y: number, z: number, zRotationDegrees: number) {
 
   // material for benches
   let benchMaterial = new Material()
-  benchMaterial.albedoColor = Color3.FromHexString('<%= benchColor %>')
+  benchMaterial.albedoColor = Color3.FromHexString(color)
 
   // build the bench entity itself
   let bench = new Entity()
@@ -85,7 +85,7 @@ function buildBench(x: number, y: number, z: number, zRotationDegrees: number) {
   return bench
 }
 
-function buildPath(x: number, y: number, z: number, zRotationDegrees: number) {
+function buildPath(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
 
   // specs for path
   let pathWidth = <%= pathWidth %>
@@ -95,7 +95,7 @@ function buildPath(x: number, y: number, z: number, zRotationDegrees: number) {
 
   // material for paths
   let pathMaterial = new Material()
-  pathMaterial.albedoColor = Color3.FromHexString('<%= pathColor %>')
+  pathMaterial.albedoColor = Color3.FromHexString(color)
 
   // west path goes from south to north
   let path = new Entity()
@@ -124,13 +124,13 @@ function buildTree(x: number, y: number, z: number) {
 
 <% paths.forEach(function(path) { %>
 
-engine.addEntity(buildPath(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>))
+engine.addEntity(buildPath(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>'))
 
 <% }) %>
 
 <% benches.forEach(function(bench) { %>
 
-engine.addEntity(buildBench(<%= bench.x %>, <%= bench.y %>, <%= bench.z %>, <%= bench.angle %>))
+engine.addEntity(buildBench(<%= bench.x %>, <%= bench.y %>, <%= bench.z %>, <%= bench.angle %>, '<%= bench.color %>'))
 
 <% }) %>
 

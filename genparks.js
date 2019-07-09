@@ -45,22 +45,20 @@ const templateVars = function(parkNumber) {
     sittingHeight: 0.1,
     backWidth: 0.1,
     backHeight: 0.6,
-    benchColor: '#f9e79f',
     pathWidth: 2,
     pathLength: 16,
     pathHeight: 1,
-    pathColor: '#6e2c00',
     paths: [
-      {x: 3,  y: 0, z: 8,  angle: 0},      // westPath
-      {x: 8,  y: 0, z: 13, angle: 90},     // northPath
-      {x: 13, y: 0, z: 8,  angle: 180},    // eastPath
-      {x: 8,  y: 0, z: 3,  angle: 270}     // southPath
+      {x: 3,  y: 0, z: 8,  angle: 0, color: '#6e2c00'},      // westPath
+      {x: 8,  y: 0, z: 13, angle: 90, color: '#707000'},     // northPath
+      {x: 13, y: 0, z: 8,  angle: 180, color: '#007070'},    // eastPath
+      {x: 8,  y: 0, z: 3,  angle: 270, color: '#700070'}     // southPath
     ],
     benches: [
-      {x: 1,  y: 0, z: 8,  angle: 0},       // westBench  
-      {x: 8,  y: 0, z: 15, angle: 90},      // northBench
-      {x: 15, y: 0, z: 8,  angle: 180},     // eastBench
-      {x: 8,  y: 0, z: 1,  angle: 270}      // southBench
+      {x: 1,  y: 0, z: 8,  angle: 0, color: '#f9e79f'},       // westBench  
+      {x: 8,  y: 0, z: 15, angle: 90, color: '#ff0000'},      // northBench
+      {x: 15, y: 0, z: 8,  angle: 180, color: '#00ff00'},     // eastBench
+      {x: 8,  y: 0, z: 1,  angle: 270, color: '#0000ff'}      // southBench
     ],
     trees: [
       {x: 1,  y: 0.5, z: 1},    // swTree
@@ -77,7 +75,7 @@ const templateVars = function(parkNumber) {
       {x: 11, y: 0.5, z: 1},    // sewTree
     ]
   }
-  
+
   return vars
 }
 
