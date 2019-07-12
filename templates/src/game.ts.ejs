@@ -1,3 +1,7 @@
+function buildArtwork(blockNumber: number, hash: string) {
+  return 0
+}
+
 function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
 
   // specs for benches
@@ -85,7 +89,7 @@ function buildBench(x: number, y: number, z: number, zRotationDegrees: number, c
   return bench
 }
 
-function buildPath(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
+function buildPath(x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
 
   // specs for path
   let pathWidth = <%= pathWidth %>
@@ -107,6 +111,17 @@ function buildPath(x: number, y: number, z: number, zRotationDegrees: number, co
     scale: new Vector3(pathWidth, pathLength, pathHeight)
   }))
 
+  // if legend provided, add the text to the path
+  if(legend !== undefined) {
+    let legendTextEntity = new Entity()
+    let legendText = new TextShape(legend)
+    legendText.fontSize = 1
+    legendText.color = Color3.White()
+    legendText.fontFamily = "Arial, Helvetica, sans-serif"
+    legendTextEntity.addComponent(legendText)
+    legendTextEntity.setParent(path)
+  }  
+
   return path
 }
 
@@ -122,9 +137,13 @@ function buildTree(x: number, y: number, z: number) {
   return tree
 }
 
-<% paths.forEach(function(path) { %>
+<% paths.forEach(function(path, index) { %>
 
-engine.addEntity(buildPath(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>'))
+<% if(index == 0) { %>
+  engine.addEntity(buildPath(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>', '<%= parkData.name %>'))
+<% } else { %>
+  engine.addEntity(buildPath(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>')
+<% } %>
 
 <% }) %>
 
@@ -139,3 +158,5 @@ engine.addEntity(buildBench(<%= bench.x %>, <%= bench.y %>, <%= bench.z %>, <%= 
 engine.addEntity(buildTree(<%= tree.x %>, <%= tree.y %>, <%= tree.z %>))  
 
 <% }) %>
+
+buildArtwork(<%= parkData.blockNumber %>, '<%= parkData.hash %>')
