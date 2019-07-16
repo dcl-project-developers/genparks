@@ -1,3 +1,51 @@
+/// ---- CUBES ----
+// Concept: use cubes to represent each of the 64 hex digits in the hash
+// Unused: block number
+// the hex digit value itself is used for height
+function buildCube(cubeNumber, cubeHexDigit) {
+
+  const xBase = 4
+  const zBase = 4
+
+  console.log('Cube number', cubeNumber, 'Cube hex: ', cubeHexDigit)
+
+  // calculate y1 (height)
+  cubeDecimal = parseInt('0x' + cubeHexDigit, 16)
+  let height = (cubeDecimal + 1)/ 16.0 // hex digit translated to [1/16, 1]
+  
+  console.log('height', height, 'decimal', cubeDecimal)
+
+  const width = 1
+  const length = 1
+  
+  // calculate color
+  let colorHex = '#' + cubeHexDigit + '0' + cubeHexDigit + '0' + cubeHexDigit + '0'
+  console.log('Color: ', colorHex)
+
+  // add the color
+  let cubeMaterial = new Material()
+  cubeMaterial.hasAlpha = true
+  cubeMaterial.albedoColor = Color3.FromHexString(colorHex)
+
+  // add the cube
+  let cube = new Entity()
+  cube.addComponent(cubeMaterial)
+  cube.addComponent(new BoxShape())
+  cube.addComponent(new Transform({
+    scale: new Vector3(width, height, length),
+    position: new Vector3(xBase + (width * cubeNumber % 8) + width / 2.0, height / 2.0, zBase + (length * Math.floor(cubeNumber / 8)) + length / 2.0)
+  }))
+
+  // render the building
+  engine.addEntity(cube)
+}
+
+function buildCubesArtwork(blockNumber: number, hash: string) {
+  for(i = 0; i < 64; i++) {
+    buildCube(i, hash[i])
+  }
+}
+
 /// ---- BUILDINGS ----
 // Concept: use hash to build 8 buildings
 // Unused: block number
@@ -68,8 +116,13 @@ function buildBuildingsArtwork(blockNumber: number, hash: string) {
   }
 }
 
-function buildArtwork(blockNumber: number, hash: string) {
-  return buildBuildingsArtwork(blockNumber, hash)
+function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+  if(conceptNumber == 1) {
+    return buildBuildingsArtwork(blockNumber, hash)
+  }
+  if(conceptNumber == 2) {
+    return buildCubesArtwork(blockNumber, hash)
+  }
 }
 
 function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
@@ -232,4 +285,4 @@ engine.addEntity(buildTree(<%= tree.x %>, <%= tree.y %>, <%= tree.z %>))
 
 <% }) %>
 
-buildArtwork(<%= parkData.blockNumber %>, '<%= parkData.hash %>')
+buildArtwork(2, <%= parkData.blockNumber %>, '<%= parkData.hash %>')
