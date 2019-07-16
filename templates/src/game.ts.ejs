@@ -119,6 +119,9 @@ function buildPath(x: number, y: number, z: number, zRotationDegrees: number, co
     legendText.color = Color3.White()
     legendText.fontFamily = "Arial, Helvetica, sans-serif"
     legendTextEntity.addComponent(legendText)
+    legendTextEntity.addComponent(new Transform({
+      scale: new Vector3(0.5, 0.5, 0.5)
+    }))
     legendTextEntity.setParent(path)
   }  
 
