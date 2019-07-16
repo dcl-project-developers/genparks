@@ -71,73 +71,85 @@ const showHelp = function() {
 // 6610000,DevCon-4: Prague,garden,The Peak of Inflated Expectations,"milestone, buidl",Oct-30-2018 06:54:19 AM +UTC,https://etherscan.io/block/6610000,./exhibits/6610000/artwork.png,./exhibits/6610000/description.txt
 
 const sourceParkDataArr = [
-  {parkNumber: 1,   name: 'The Genesis',                                blockNumber: 0,       hash: '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3'},
-  {parkNumber: 2,   name: 'The Ethereum Frontier',                      blockNumber: 1,       hash: '0x88e96d4537bea4d9c05d12549907b32561d3bf31f45aae734cdc119f13406cb6'},
-  {parkNumber: 3,   name: 'Oldest One-time Miner',                      blockNumber: 762,     hash: '0xd898664323723661c037e39cd24e7290dee0ffe3aa1a62f3cb0ace3034814403'},  
-  {parkNumber: 4,   name: 'The First ICO: Augur',                       blockNumber: 88090,   hash: '0x0a7af5a5870648ff8c2c10691ac01e08451d054a15da8c4a843c5393752e2baa'},   
-  {parkNumber: 5,   name: 'DevCon-1: London',                           blockNumber: 515000,  hash: '0x926287a535d7929ab81c0d72eb10f5711b8156d617f61d58b7b04ddab5673f78'},  
-
-  {parkNumber: 6,   name: 'One Million Blocks',                         blockNumber: 1000000, hash: '0x8e38b4dbf6b11fcc3b9dee84fb7986e29ca0a02cecd8977c161ff7333329681e'},  
-  {parkNumber: 7,   name: 'Homestead Fork',                             blockNumber: 1150000, hash: '0x584bdb5d4e74fe97f5a5222b533fe1322fd0b6ad3eb03f02c3221984e2c0b430'}, 
-  {parkNumber: 8,   name: 'theDAO is deployed',                         blockNumber: 1428757, hash: '0x17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59'},  
-  {parkNumber: 9,   name: 'theDAO is drained',                          blockNumber: 1718497, hash: '0xcaaa13ce099342d5e1342b04d588d7733093591666af8ef756ce20cf13d16475'},  
-  {parkNumber: 10,  name: 'theDAO Fork',                                blockNumber: 1920000, hash: '0x4985f5ca3d2afbec36529aa96f74de3cc10a2a4a6c44f2157a57d2c6059a11bb'}, 
-
-  {parkNumber: 11,  name: 'EXTCODESIZE DoS Attack',                     blockNumber: 2283416, hash: '0x9852a25198a980b28999db234404a99ebf38bd9531b330bf6d7cf4cfe0f904ea'},
-  {parkNumber: 12,  name: 'DevCon-2: Shanghai',                         blockNumber: 2290000, hash: '0xb7307cb2eb75e101c7fa95972c255d6e03520a5390365b22cb07a8c7a3b849a2'},    
-  {parkNumber: 13,  name: '“Suicide Bomb” DoS Attack',                  blockNumber: 2421507, hash: '0xc71986e9d7b7b17234ee8601009bdb7e3d2c1cbf0a24ce3d48375dba663c649f'},
-  {parkNumber: 14,  name: 'Tangerine Whistle',                          blockNumber: 2463000, hash: '0x2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0'}, 
-  {parkNumber: 15,  name: 'Spurious Dragon',                            blockNumber: 2675000, hash: '0x58eff9265aedf8a54da8121de1324e1e0d9aac99f694d16c6a41afffe3817d73'}, 
-
-  {parkNumber: 16,  name: 'The Most Recent Pi Block',                   blockNumber: 3141592, hash: '0x68a31d86567fcb4807643375ea68ab4d281a570d42399505c8e0b49ee574363f'},
-  {parkNumber: 17,  name: 'Parity Multisig Public Init Hack',           blockNumber: 4041169, hash: '0x648276e5bffbeaaceae97b83954d7b79198032cce03dd538fe2f52b1da5f10c4'},
-  {parkNumber: 18,  name: 'Decentraland MANA sale startBlock',          blockNumber: 4170700, hash: '0x6de40774564a3678218acc0f606c1e35464d632830db5c10e51e61f36e1326d3'},
-  {parkNumber: 19,  name: 'The Terraform Event',                        blockNumber: 4321454, hash: '0x0a989ad83a89295795f9cc128dd00be1e6b430a86137cce4bbf66c3f015fb0b7'},    
-  {parkNumber: 20,  name: 'Metropolis Byzantium',                       blockNumber: 4370000, hash: '0xb1fcff633029ee18ab6482b58ff8b6e95dd7c82a954c852157152a7a6d32785e'}, 
-
-  {parkNumber: 21,  name: 'DevCon-3: Cancun',                           blockNumber: 4470000, hash: '0xdcbe9efcdb05574f8f10323c794e2246add50a99445951695e3da78f4cb71ce7'},
-  {parkNumber: 22,  name: 'Parity Multisig Library Suicide',            blockNumber: 4501969, hash: '0x894f3aac1c8a0c9b05d2cbe6c0c9af907ca44a1c96aeda69a0ec064b9a74b790'},
-  {parkNumber: 23,  name: 'CryptoKitty #1 is born',                     blockNumber: 4605346, hash: '0x62b5de48e43c2ff66623d272f9dd1db879870f9d78c840b450501b9e4fbe93ab'},
-  {parkNumber: 24,  name: 'The Birth of the DAI',                       blockNumber: 4752008, hash: '0x1ccb5da1337a99a6f864046dbbc79ba3be50ff6122811eb3989f6a470d2492f1'},
-  {parkNumber: 25,  name: 'DevCon-4: Prague',                           blockNumber: 6610000, hash: '0x1d47e931fc01f54f1119f5efd98ab4fd0e07ed6358da0d15de30611a7ecede69'},
+  {parkNumber: 1,   name: 'The Genesis',                                blockNumber: 0,       hash: 'd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3'},
+  {parkNumber: 2,   name: 'The Ethereum Frontier',                      blockNumber: 1,       hash: '88e96d4537bea4d9c05d12549907b32561d3bf31f45aae734cdc119f13406cb6'},
+  {parkNumber: 3,   name: 'Oldest One-time Miner',                      blockNumber: 762,     hash: 'd898664323723661c037e39cd24e7290dee0ffe3aa1a62f3cb0ace3034814403'},  
+  {parkNumber: 4,   name: 'The First ICO: Augur',                       blockNumber: 88090,   hash: '0a7af5a5870648ff8c2c10691ac01e08451d054a15da8c4a843c5393752e2baa'},   
+  {parkNumber: 5,   name: 'DevCon-1: London',                           blockNumber: 515000,  hash: '926287a535d7929ab81c0d72eb10f5711b8156d617f61d58b7b04ddab5673f78'},  
+  {parkNumber: 6,   name: 'One Million Blocks',                         blockNumber: 1000000, hash: '8e38b4dbf6b11fcc3b9dee84fb7986e29ca0a02cecd8977c161ff7333329681e'},  
+  {parkNumber: 7,   name: 'Homestead Fork',                             blockNumber: 1150000, hash: '584bdb5d4e74fe97f5a5222b533fe1322fd0b6ad3eb03f02c3221984e2c0b430'}, 
+  {parkNumber: 8,   name: 'theDAO is deployed',                         blockNumber: 1428757, hash: '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59'},  
+  {parkNumber: 9,   name: 'theDAO is drained',                          blockNumber: 1718497, hash: 'caaa13ce099342d5e1342b04d588d7733093591666af8ef756ce20cf13d16475'},  
+  {parkNumber: 10,  name: 'theDAO Fork',                                blockNumber: 1920000, hash: '4985f5ca3d2afbec36529aa96f74de3cc10a2a4a6c44f2157a57d2c6059a11bb'}, 
+  {parkNumber: 11,  name: 'EXTCODESIZE DoS Attack',                     blockNumber: 2283416, hash: '9852a25198a980b28999db234404a99ebf38bd9531b330bf6d7cf4cfe0f904ea'},
+  {parkNumber: 12,  name: 'DevCon-2: Shanghai',                         blockNumber: 2290000, hash: 'b7307cb2eb75e101c7fa95972c255d6e03520a5390365b22cb07a8c7a3b849a2'},    
+  {parkNumber: 13,  name: '“Suicide Bomb” DoS Attack',                  blockNumber: 2421507, hash: 'c71986e9d7b7b17234ee8601009bdb7e3d2c1cbf0a24ce3d48375dba663c649f'},
+  {parkNumber: 14,  name: 'Tangerine Whistle',                          blockNumber: 2463000, hash: '2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0'}, 
+  {parkNumber: 15,  name: 'Spurious Dragon',                            blockNumber: 2675000, hash: '58eff9265aedf8a54da8121de1324e1e0d9aac99f694d16c6a41afffe3817d73'}, 
+  {parkNumber: 16,  name: 'The Most Recent Pi Block',                   blockNumber: 3141592, hash: '68a31d86567fcb4807643375ea68ab4d281a570d42399505c8e0b49ee574363f'},
+  {parkNumber: 17,  name: 'Parity Multisig Public Init Hack',           blockNumber: 4041169, hash: '648276e5bffbeaaceae97b83954d7b79198032cce03dd538fe2f52b1da5f10c4'},
+  {parkNumber: 18,  name: 'Decentraland MANA sale startBlock',          blockNumber: 4170700, hash: '6de40774564a3678218acc0f606c1e35464d632830db5c10e51e61f36e1326d3'},
+  {parkNumber: 19,  name: 'The Terraform Event',                        blockNumber: 4321454, hash: '0a989ad83a89295795f9cc128dd00be1e6b430a86137cce4bbf66c3f015fb0b7'},    
+  {parkNumber: 20,  name: 'Metropolis Byzantium',                       blockNumber: 4370000, hash: 'b1fcff633029ee18ab6482b58ff8b6e95dd7c82a954c852157152a7a6d32785e'}, 
+  {parkNumber: 21,  name: 'DevCon-3: Cancun',                           blockNumber: 4470000, hash: 'dcbe9efcdb05574f8f10323c794e2246add50a99445951695e3da78f4cb71ce7'},
+  {parkNumber: 22,  name: 'Parity Multisig Library Suicide',            blockNumber: 4501969, hash: '894f3aac1c8a0c9b05d2cbe6c0c9af907ca44a1c96aeda69a0ec064b9a74b790'},
+  {parkNumber: 23,  name: 'CryptoKitty #1 is born',                     blockNumber: 4605346, hash: '62b5de48e43c2ff66623d272f9dd1db879870f9d78c840b450501b9e4fbe93ab'},
+  {parkNumber: 24,  name: 'The Birth of the DAI',                       blockNumber: 4752008, hash: '1ccb5da1337a99a6f864046dbbc79ba3be50ff6122811eb3989f6a470d2492f1'},
+  {parkNumber: 25,  name: 'DevCon-4: Prague',                           blockNumber: 6610000, hash: '1d47e931fc01f54f1119f5efd98ab4fd0e07ed6358da0d15de30611a7ecede69'},
 ]
 
-const subColors = ['00', '33', '66', '99', 'CC', 'FF']
-const options = subColors.length
-const random1 = Math.floor(Math.random() * options)
-const random2 = Math.floor(Math.random() * options)
-const random3 = Math.floor(Math.random() * options)
-const random4 = Math.floor(Math.random() * options)
+// maps two hexa digits to one of these options:
+// 20, 40, 60, 80, a0, c0, e0
+const normalizeSubcolor = function(twoHexDigits) {
+  twoHexDigits = twoHexDigits.toUpperCase()
+  let firstDigit = twoHexDigits[0]
+  switch(firstDigit) {
+    case '0':
+    case '1':
+    case '2':
+      return '20'
+      break;
+    case '3':
+    case '4':
+      return '40'
+      break;        
+    case '5':        
+    case '6': 
+      return '60'
+      break;                
+    case '7':                
+    case '8':            
+      return '80'
+      break;                
+    case '9':                
+    case 'A':            
+      return 'A0'
+      break;                    
+    case 'B':            
+    case 'C':            
+      return 'C0'
+      break;                        
+    case 'D':            
+    case 'E':            
+    case 'F':  
+      return 'E0'
+      break;                                  
+  }
+}
 
 const buildColor = function(parkNumber, variationNumber) {
-  let color = ''
-  switch(variationNumber) {
-    case 1:
-      color = '#' + subColors[random1] + subColors[random2] + subColors[random3]
-      break;
-    case 2:
-      color = '#' + subColors[random1] + subColors[random3] + subColors[random2]
-      break;
-    case 3:
-      color = '#' + subColors[random2] + subColors[random1] + subColors[random3]
-      break;    
-    case 4:
-      color = '#' + subColors[random2] + subColors[random3] + subColors[random1]
-      break;    
-    case 5:
-      color = '#' + subColors[random3] + subColors[random1] + subColors[random2]
-      break;    
-    case 6:
-      color = '#' + subColors[random3] + subColors[random2] + subColors[random1]
-      break;    
-    case 7:
-      color = '#' + subColors[random1] + subColors[random2] + subColors[random4]
-      break;
-    case 8:
-      color = '#' + subColors[random1] + subColors[random4] + subColors[random2]
-      break;
-  }
-  return color;
+  let hash = sourceParkDataArr[parkNumber - 1].hash
+
+  let start = (variationNumber - 1) * 6  // each variation takes 6 hex digits from hash
+  let red = hash.substring(start, start + 2)
+  let green = hash.substring(start + 2, start + 4)
+  let blue = hash.substring(start + 4, start + 6)
+  let normalizedRed = normalizeSubcolor(red)
+  let normalizedGreen = normalizeSubcolor(green)
+  let normalizedBlue = normalizeSubcolor(blue)  
+
+  let normalizedColor = '#' + normalizedRed + normalizedGreen + normalizedBlue
+  return normalizedColor
 }
 
 const pathColor1 = function(parkNumber) {
