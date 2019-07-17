@@ -29,7 +29,7 @@ const showHelp = function() {
 
     commands can be:
 
-    new:      generate park number <park-number> with <concept-number>
+    new:      generate new <concept-number> <park-number>
     help:     show help
   `
 
@@ -243,7 +243,7 @@ const generatePark = function(conceptNumber, parkNumber, outputFolder) {
 
   // validate outputFolder
   if(fs.existsSync(outputFolder)) {
-    logError('Output folder already exists')
+    logError('Output folder ' + outputFolder + ' already exists')
     process.exit(1)
   }
 

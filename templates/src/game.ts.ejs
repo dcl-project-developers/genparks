@@ -1,8 +1,7 @@
 /// ---- CUBES ----
 // Concept: use cubes to represent each of the 64 hex digits in the hash
-// Unused: block number
 // the hex digit value itself is used for height
-function buildCube(cubeNumber, cubeHexDigit) {
+function buildCube(blockNumber, cubeNumber, cubeHexDigit) {
 
   const xBase = 4
   const zBase = 4
@@ -36,13 +35,47 @@ function buildCube(cubeNumber, cubeHexDigit) {
     position: new Vector3(xBase + (width * cubeNumber % 8) + width / 2.0, height / 2.0, zBase + (length * Math.floor(cubeNumber / 8)) + length / 2.0)
   }))
 
+  // add a decoration if cube belongs to the base 64 representation of blockNumber
+  let value = blockNumber
+  let mod = 0
+  let result = 0
+  let index = 0
+  do {
+    console.log('===== start index ', index, 'mod', mod, 'result', result, 'value', value)        
+    mod = value % 64
+    result = mod + 64 * result
+    value = Math.floor(value / 64)
+    if(cubeDecimal === mod) {
+      // decorator color
+      let decoratorColorHex = '#' + (index + 5) + '0' + (index + 2) + '0' + (index + 2) + '0'
+      console.log('decorator Color: ', decoratorColorHex)
+      let decoratorMaterial = new Material()
+      decoratorMaterial.hasAlpha = true
+      decoratorMaterial.albedoColor = Color3.FromHexString(decoratorColorHex)
+
+      let decoratorCube = new Entity()
+      let decoratorCubeWidth = width/8.0 * (index + 1)
+      let decoratorCubeLength = length/8.0 * (index + 1)
+      let decoratorCubeHeight = height/8.0 * (index + 1)
+      decoratorCube.addComponent(decoratorMaterial)
+      decoratorCube.addComponent(new BoxShape())
+      decoratorCube.addComponent(new Transform({
+        scale: new Vector3(decoratorCubeWidth, decoratorCubeHeight, decoratorCubeLength),
+        position: new Vector3(xBase + (width * cubeNumber % 8) + width / 2.0, height / 2.0 + decoratorCubeHeight / 2.0, zBase + (length * Math.floor(cubeNumber / 8)) + length / 2.0)
+      }))
+      engine.addEntity(decoratorCube)
+    }
+    index += 1
+    console.log('===== for index ', index, 'mod', mod, 'result', result, 'value', value)
+  } while(value > 0)
+
   // render the building
   engine.addEntity(cube)
 }
 
 function buildCubesArtwork(blockNumber: number, hash: string) {
   for(i = 0; i < 64; i++) {
-    buildCube(i, hash[i])
+    buildCube(blockNumber, i, hash[i])
   }
 }
 
