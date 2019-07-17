@@ -25,11 +25,11 @@ const showHelp = function() {
 
   usage:
 
-    genparks <command> [<park-number>]
+    genparks <command> [<concept-number>] [<park-number>]
 
     commands can be:
 
-    new:      generate park number <park-number>
+    new:      generate park number <park-number> with <concept-number>
     help:     show help
   `
 
@@ -177,9 +177,10 @@ const benchColor4 = function(parkNumber) {
   return buildColor(parkNumber, 8)
 }
 
-const templateVars = function(parkNumber) {
+const templateVars = function(conceptNumber, parkNumber) {
 
   let vars = {
+    conceptNumber: conceptNumber,
     benchLength: 4,
     legHeight: 0.6,
     legWidth: 0.05,
@@ -222,14 +223,21 @@ const templateVars = function(parkNumber) {
   return vars
 }
 
-const generatePark = function(parkNumber, outputFolder) {
+const generatePark = function(conceptNumber, parkNumber, outputFolder) {
 
   const sourceFolder = 'templates'
+
+  // validate conceptNumber
+  let cnumber = Number(conceptNumber)
+  if(isNaN(cnumber) || !Number.isInteger(cnumber) || cnumber <= 0 || cnumber > 512) {
+    logError('Concept number is invalid (must be an integer between 1 and 512)')
+    process.exit(1)
+  }
 
   // validate parkNumber
   let number = Number(parkNumber)
   if(isNaN(number) || !Number.isInteger(number) || number <= 0 || number > 512) {
-    logError('Random number is invalid (must be an integer between 1 and 512)')
+    logError('Park number is invalid (must be an integer between 1 and 512)')
     process.exit(1)
   }
 
@@ -282,7 +290,7 @@ const generatePark = function(parkNumber, outputFolder) {
   }
 
   // generate game.ts using ejs templating
-  let vars = templateVars(parkNumber)
+  let vars = templateVars(conceptNumber, parkNumber)
   ejs.renderFile(path.join(__dirname, sourceFolder, 'src', 'game.ts.ejs'), vars, (err, output) => {
     if(err) {
       logError('Error applying ejs template:\n' + err)
@@ -297,13 +305,13 @@ const generatePark = function(parkNumber, outputFolder) {
 
 switch(args[2]) {
   case 'new':
-    if(args.length !== 4 || !args[3]) {
+    if(args.length !== 5 || !args[4]) {
       logError('Invalid arguments')
       showHelp()
       process.exit(1)
     } else {
-      let outputFolder = `park-${args[3]}`
-      generatePark(args[3], outputFolder)
+      let outputFolder = `concept-${args[3]}-park-${args[4]}`
+      generatePark(args[3], args[4], outputFolder)
       process.exit(0)
     }
     break
