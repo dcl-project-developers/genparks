@@ -1,25 +1,52 @@
 /// ---- CUBES ----
 // Concept: use cubes to represent each of the 64 hex digits in the hash
 // the hex digit value itself is used for height
-function buildCube(blockNumber, cubeNumber, cubeHexDigit) {
+// the blockNumber is represented in base 64 to decorate the cubes
+
+function buildCubeDecorator(xBase, zBase, cubeWidth, cubeLength, cubeHeight, cubeNumber, index) {
+  // decorator color
+  const decoratorColors = ['#ffffa0', '#ffa0ff', '#a0ffff', '#ffa0a0', '#a0ffc0', '#a0a0ff', '#a0a0a0']
+  let decoratorColorHex = decoratorColors[index % (decoratorColors.length - 1)]
+  let decoratorMaterial = new Material()
+  decoratorMaterial.hasAlpha = true
+  decoratorMaterial.albedoColor = Color3.FromHexString(decoratorColorHex)
+
+  let decoratorCube = new Entity()
+  let decoratorCubeWidth = cubeWidth / Math.pow(2, (index + 1))
+  let decoratorCubeLength = cubeLength / Math.pow(2, (index + 1))
+  let decoratorCubeHeight = (1/8) * Math.pow(2, (index + 1))
+  decoratorCube.addComponent(decoratorMaterial)
+  decoratorCube.addComponent(new BoxShape())
+  decoratorCube.addComponent(new Transform({
+    scale: new Vector3(decoratorCubeWidth, decoratorCubeHeight, decoratorCubeLength),
+    position: new Vector3(
+      xBase + (cubeWidth * cubeNumber % 8) + cubeWidth / 2.0, 
+      cubeHeight + decoratorCubeHeight / 2.0, 
+      zBase + (cubeLength * Math.floor(cubeNumber / 8)) + cubeLength / 2.0)
+  }))
+  console.log('===== cube decorator for index ', index, 'color', decoratorColorHex, 'cubeNumber', cubeNumber, 'decoratorCubeWidth', decoratorCubeWidth, 'decoratorCubeLength', decoratorCubeLength, 'decoratorCubeHeight', decoratorCubeHeight)          
+  engine.addEntity(decoratorCube)
+}
+
+function buildCube(blockNumber, base64BlockNumberArray, cubeNumber, cubeHexDigit) {
 
   const xBase = 4
   const zBase = 4
 
-  console.log('Cube number', cubeNumber, 'Cube hex: ', cubeHexDigit)
+  // console.log('Cube number', cubeNumber, 'Cube hex: ', cubeHexDigit)
 
   // calculate y1 (height)
   cubeDecimal = parseInt('0x' + cubeHexDigit, 16)
   let height = (cubeDecimal + 1)/ 16.0 // hex digit translated to [1/16, 1]
   
-  console.log('height', height, 'decimal', cubeDecimal)
+  // console.log('height', height, 'decimal', cubeDecimal)
 
   const width = 1
   const length = 1
   
   // calculate color
   let colorHex = '#' + cubeHexDigit + '0' + cubeHexDigit + '0' + cubeHexDigit + '0'
-  console.log('Color: ', colorHex)
+  // console.log('Color: ', colorHex)
 
   // add the color
   let cubeMaterial = new Material()
@@ -27,56 +54,32 @@ function buildCube(blockNumber, cubeNumber, cubeHexDigit) {
   cubeMaterial.albedoColor = Color3.FromHexString(colorHex)
 
   // add the cube
+  let margin = 0.1
   let cube = new Entity()
   cube.addComponent(cubeMaterial)
   cube.addComponent(new BoxShape())
   cube.addComponent(new Transform({
-    scale: new Vector3(width, height, length),
-    position: new Vector3(xBase + (width * cubeNumber % 8) + width / 2.0, height / 2.0, zBase + (length * Math.floor(cubeNumber / 8)) + length / 2.0)
+    scale: new Vector3(width - margin, height, length - margin),
+    position: new Vector3(
+      xBase + (width * cubeNumber % 8) + width / 2.0, 
+      height / 2.0, 
+      zBase + (length * Math.floor(cubeNumber / 8)) + length / 2.0)
   }))
 
-  // add a decoration if cube belongs to the base 64 representation of blockNumber
-  let value = blockNumber
-  let mod = 0
-  let result = 0
-  let index = 0
-  do {
-    console.log('===== start index ', index, 'mod', mod, 'result', result, 'value', value)        
-    mod = value % 64
-    result = mod + 64 * result
-    value = Math.floor(value / 64)
-    if(cubeNumber === mod) {
-      // decorator color
-      let decoratorColors = ['#ffffc0', '#ffc0ff', '#c0ffff', '#ffc0c0', '#c0ffc0', '#c0c0ff', '#c0c0c0']
-      let decoratorColorHex = decoratorColors[index % (decoratorColors.length - 1)]
-      console.log('decorator Color: ', decoratorColorHex)
-      let decoratorMaterial = new Material()
-      decoratorMaterial.hasAlpha = true
-      decoratorMaterial.albedoColor = Color3.FromHexString(decoratorColorHex)
-
-      let decoratorCube = new Entity()
-      let decoratorCubeWidth = width/Math.pow((2, (index+1))
-      let decoratorCubeLength = length/Math.pow((2, (index + 1))
-      let decoratorCubeHeight = (1/8) * Math.pow((2, (index + 1))
-      decoratorCube.addComponent(decoratorMaterial)
-      decoratorCube.addComponent(new BoxShape())
-      decoratorCube.addComponent(new Transform({
-        scale: new Vector3(decoratorCubeWidth, decoratorCubeHeight, decoratorCubeLength),
-        position: new Vector3(xBase + (width * cubeNumber % 8) + width / 2.0, height / 2.0 + decoratorCubeHeight / 2.0, zBase + (length * Math.floor(cubeNumber / 8)) + length / 2.0)
-      }))
-      engine.addEntity(decoratorCube)
-      console.log('===== added for index ', index, 'mod', mod, 'result', result, 'value', value, 'decoratorCubeWidth', decoratorCubeWidth, 'decoratorCubeLength', decoratorCubeLength, 'decoratorCubeHeight', decoratorCubeHeight)      
-    }
-    index += 1
-  } while(value > 0)
-
-  // render the building
+  // render the cube
   engine.addEntity(cube)
+
+  // add a decoration if cube number belongs to the base 64 representation of blockNumber
+  for(index = 0; index < base64BlockNumberArray.length; index++)
+    if(base64BlockNumberArray[index] === cubeNumber)
+      buildCubeDecorator(xBase, zBase, width, length, height, cubeNumber, index)
+    }
+  }  
 }
 
-function buildCubesArtwork(blockNumber: number, hash: string) {
+function buildCubesArtwork(blockNumber: number, base64BlockNumberArray: array, hash: string) {
   for(i = 0; i < 64; i++) {
-    buildCube(blockNumber, i, hash[i])
+    buildCube(blockNumber, base64BlockNumberArray, i, hash[i])
   }
 }
 
@@ -90,6 +93,7 @@ function buildCubesArtwork(blockNumber: number, hash: string) {
 // (z1, z2) are z start and end coodrinates
 // y1 is the height of the building
 // r g b builds a color (4,096 total possible colors)
+
 function buildBuilding(buildingHex) {
 
   const xBase = 4
@@ -150,12 +154,32 @@ function buildBuildingsArtwork(blockNumber: number, hash: string) {
   }
 }
 
+
+// ---- PARK With Artwork ----
+
+function toBaseArray(value, base) {
+
+  console.log('To base array:', value, base)
+
+  let resultArr = []
+  do {
+    let mod = value % base
+    resultArr.push(mod)
+    value = Math.floor(value / 64)
+  } while(value > 0)
+
+  console.log('To base array result:', resultArr)
+
+  return resultArr
+}
+
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
   if(conceptNumber == 1) {
     return buildBuildingsArtwork(blockNumber, hash)
   }
   if(conceptNumber == 2) {
-    return buildCubesArtwork(blockNumber, hash)
+    let base64BlockNumberArray = toBaseArray(blockNumber, 64)
+    return buildCubesArtwork(blockNumber, base64BlockNumberArray, hash)
   }
 }
 
