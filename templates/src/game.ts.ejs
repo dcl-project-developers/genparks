@@ -3,6 +3,11 @@
 // the hex digit value itself is used for height
 // the blockNumber is represented in base 64 to decorate the cubes
 
+// the puzzle version of CUBES is concept #3 - adds different coloring and cube click event handling with puzzle accounting
+let puzzleAccumulatedTotal = 0
+let puzzleAccumulatedClicks = 0
+    
+
 function buildCubeDecorator(xBase, zBase, cubeWidth, cubeLength, cubeHeight, cubeNumber, index) {
   // decorator color
   const decoratorColors = ['#ffffa0', '#ffa0ff', '#a0ffff', '#ffa0a0', '#a0ffc0', '#a0a0ff', '#a0a0a0']
@@ -28,7 +33,7 @@ function buildCubeDecorator(xBase, zBase, cubeWidth, cubeLength, cubeHeight, cub
   engine.addEntity(decoratorCube)
 }
 
-function buildCube(blockNumber, base64BlockNumberArray, cubeNumber, cubeHexDigit) {
+function buildCube(blockNumber, base64BlockNumberArray, cubeNumber, cubeHexDigit, puzzleMode) {
 
   const xBase = 4
   const zBase = 4
@@ -46,6 +51,12 @@ function buildCube(blockNumber, base64BlockNumberArray, cubeNumber, cubeHexDigit
   
   // calculate color
   let colorHex = '#' + cubeHexDigit + '0' + cubeHexDigit + '0' + cubeHexDigit + '0'
+
+  // override that for puzzle mode for quick differentiation
+  if(puzzleMode) {
+    colorHex = '#' + cubeHexDigit + '0' + cubeHexDigit + '0' + 'e' + '0'
+  }
+
   // console.log('Color: ', colorHex)
 
   // add the color
@@ -66,6 +77,37 @@ function buildCube(blockNumber, base64BlockNumberArray, cubeNumber, cubeHexDigit
       zBase + (length * Math.floor(cubeNumber / 8)) + length / 2.0)
   }))
 
+  // handle click event for cubes if we are on puzzle mode
+  if(puzzleMode) {
+    cube.addComponent(
+      new OnClick(e => {
+
+        console.log("cube clicked entering event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", cubeNumber)
+
+        puzzleAccumulatedTotal = cubeNumber * Math.pow(64, puzzleAccumulatedClicks) + puzzleAccumulatedTotal
+        puzzleAccumulatedClicks = puzzleAccumulatedClicks + 1        
+
+        // check for win / loss
+        if(puzzleAccumulatedTotal > blockNumber) {
+          console.log('Game over, restarting puzzle!', puzzleAccumulatedTotal)
+          puzzleAccumulatedTotal = 0
+          puzzleAccumulatedClicks = 0
+        } 
+        if(puzzleAccumulatedTotal === blockNumber) {
+          console.log('Congratulations. You\'ve solved the puzzle!')
+          puzzleAccumulatedTotal = 0
+          puzzleAccumulatedClicks = 0          
+        }
+        if(puzzleAccumulatedTotal < blockNumber) {
+          console.log('Hmm... keep going...')
+        }        
+
+        console.log("cube clicked exiting event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", cubeNumber)
+
+      })
+    )
+  }
+
   // render the cube
   engine.addEntity(cube)
 
@@ -79,7 +121,13 @@ function buildCube(blockNumber, base64BlockNumberArray, cubeNumber, cubeHexDigit
 
 function buildCubesArtwork(blockNumber: number, base64BlockNumberArray: array, hash: string) {
   for(i = 0; i < 64; i++) {
-    buildCube(blockNumber, base64BlockNumberArray, i, hash[i])
+    buildCube(blockNumber, base64BlockNumberArray, i, hash[i], false)
+  }
+}
+
+function buildCubesPuzzleArtwork(blockNumber: number, base64BlockNumberArray: array, hash: string) {
+  for(i = 0; i < 64; i++) {
+    buildCube(blockNumber, base64BlockNumberArray, i, hash[i], true)
   }
 }
 
@@ -174,6 +222,9 @@ function toBaseArray(value, base) {
 }
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+
+  console.log('concept', conceptNumber, 'blockNumber': blockNumber)
+
   if(conceptNumber == 1) {
     return buildBuildingsArtwork(blockNumber, hash)
   }
@@ -181,6 +232,11 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
     let base64BlockNumberArray = toBaseArray(blockNumber, 64)
     return buildCubesArtwork(blockNumber, base64BlockNumberArray, hash)
   }
+  if(conceptNumber == 3) {
+    let base64BlockNumberArray = toBaseArray(blockNumber, 64)
+    console.log('base64BlockNumberArray', base64BlockNumberArray)
+    return buildCubesPuzzleArtwork(blockNumber, base64BlockNumberArray, hash)
+  }  
 }
 
 function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
