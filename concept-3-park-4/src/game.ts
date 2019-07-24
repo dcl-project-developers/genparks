@@ -249,13 +249,13 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
 function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
 
   // specs for benches
-  let benchLength = <%= benchLength %>
-  let legHeight = <%= legHeight %>
-  let legWidth = <%= legWidth %>
-  let sittingWidth = <%= sittingWidth %>
-  let sittingHeight = <%= sittingHeight %>
-  let backWidth = <%= backWidth %>
-  let backHeight = <%= backHeight %>
+  let benchLength = 4
+  let legHeight = 0.6
+  let legWidth = 0.05
+  let sittingWidth = 1
+  let sittingHeight = 0.1
+  let backWidth = 0.1
+  let backHeight = 0.6
 
   // material for benches
   let benchMaterial = new Material()
@@ -336,9 +336,9 @@ function buildBench(x: number, y: number, z: number, zRotationDegrees: number, c
 function buildPath(x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
 
   // specs for path
-  let pathWidth = <%= pathWidth %>
-  let pathLength = <%= pathLength %>
-  let pathHeight = <%= pathHeight %>
+  let pathWidth = 2
+  let pathLength = 16
+  let pathHeight = 1
   let xRorationDegrees = 90
 
   // material for paths
@@ -384,26 +384,98 @@ function buildTree(x: number, y: number, z: number) {
   return tree
 }
 
-<% paths.forEach(function(path, index) { %>
 
-<% if(index == 0) { %>
-  engine.addEntity(buildPath(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>', '<%= parkData.name %>'))
-<% } else { %>
-  engine.addEntity(buildPath(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>')
-<% } %>
 
-<% }) %>
 
-<% benches.forEach(function(bench) { %>
+  engine.addEntity(buildPath(3, 0, 8, 0, '#2080E0', 'The First ICO: Augur'))
 
-engine.addEntity(buildBench(<%= bench.x %>, <%= bench.y %>, <%= bench.z %>, <%= bench.angle %>, '<%= bench.color %>'))
 
-<% }) %>
 
-<% trees.forEach(function(tree) { %>
 
-engine.addEntity(buildTree(<%= tree.x %>, <%= tree.y %>, <%= tree.z %>))  
 
-<% }) %>
+  engine.addEntity(buildPath(8, 0, 13, 90, '#A08020')
 
-buildArtwork(<%= conceptNumber %>, <%= parkData.blockNumber %>, '<%= parkData.hash %>')
+
+
+
+
+  engine.addEntity(buildPath(13, 0, 8, 180, '#40E080')
+
+
+
+
+
+  engine.addEntity(buildPath(8, 0, 3, 270, '#202060')
+
+
+
+
+
+
+engine.addEntity(buildBench(1, 0, 8, 0, '#20C020'))
+
+
+
+engine.addEntity(buildBench(8, 0, 15, 90, '#204020'))
+
+
+
+engine.addEntity(buildBench(15, 0, 8, 180, '#204020'))
+
+
+
+engine.addEntity(buildBench(8, 0, 1, 270, '#E08040'))
+
+
+
+
+
+engine.addEntity(buildTree(1, 0.5, 1))  
+
+
+
+engine.addEntity(buildTree(5, 0.5, 1))  
+
+
+
+engine.addEntity(buildTree(1, 0.5, 5))  
+
+
+
+engine.addEntity(buildTree(1, 0.5, 15))  
+
+
+
+engine.addEntity(buildTree(1, 0.5, 11))  
+
+
+
+engine.addEntity(buildTree(5, 0.5, 15))  
+
+
+
+engine.addEntity(buildTree(15, 0.5, 15))  
+
+
+
+engine.addEntity(buildTree(11, 0.5, 15))  
+
+
+
+engine.addEntity(buildTree(15, 0.5, 11))  
+
+
+
+engine.addEntity(buildTree(15, 0.5, 1))  
+
+
+
+engine.addEntity(buildTree(15, 0.5, 5))  
+
+
+
+engine.addEntity(buildTree(11, 0.5, 1))  
+
+
+
+buildArtwork(3, 88090, '0a7af5a5870648ff8c2c10691ac01e08451d054a15da8c4a843c5393752e2baa')
