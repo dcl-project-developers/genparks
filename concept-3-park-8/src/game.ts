@@ -32,7 +32,7 @@ function buildCubeDecorator(xBase, zBase, cubeWidth, cubeLength, cubeHeight, cub
       cubeHeight + decoratorCubeHeight / 2.0, 
       zBase + (cubeLength * Math.floor(cubeNumber / 8)) + cubeLength / 2.0)
   }))
-  console.log('===== cube decorator for index ', index, 'color', decoratorColorHex, 'cubeNumber', cubeNumber, 'decoratorCubeWidth', decoratorCubeWidth, 'decoratorCubeLength', decoratorCubeLength, 'decoratorCubeHeight', decoratorCubeHeight)          
+  // console.log('===== cube decorator for index ', index, 'color', decoratorColorHex, 'cubeNumber', cubeNumber, 'decoratorCubeWidth', decoratorCubeWidth, 'decoratorCubeLength', decoratorCubeLength, 'decoratorCubeHeight', decoratorCubeHeight)          
   engine.addEntity(decoratorCube)
 }
 
@@ -44,7 +44,7 @@ function buildCube(blockNumber, base64BlockNumberArray, cubeNumber, cubeHexDigit
   // console.log('Cube number', cubeNumber, 'Cube hex: ', cubeHexDigit)
 
   // calculate y1 (height)
-  cubeDecimal = parseInt('0x' + cubeHexDigit, 16)
+  let cubeDecimal = parseInt('0x' + cubeHexDigit, 16)
   let height = (cubeDecimal + 1)/ 16.0 // hex digit translated to [1/16, 1]
   
   // console.log('height', height, 'decimal', cubeDecimal)
@@ -85,12 +85,12 @@ function buildCube(blockNumber, base64BlockNumberArray, cubeNumber, cubeHexDigit
     cube.addComponent(
       new OnClick(e => {
 
-        console.log("cube clicked entering event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", cubeNumber)
+        // console.log("cube clicked entering event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", cubeNumber)
 
         puzzleAccumulatedTotal = cubeNumber * Math.pow(64, puzzleAccumulatedClicks) + puzzleAccumulatedTotal
         puzzleAccumulatedClicks = puzzleAccumulatedClicks + 1        
 
-        console.log("cube calculated event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", cubeNumber)
+        // console.log("cube calculated event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", cubeNumber)
 
         // check for win / loss
         if(puzzleAccumulatedTotal > blockNumber) {
@@ -109,7 +109,7 @@ function buildCube(blockNumber, base64BlockNumberArray, cubeNumber, cubeHexDigit
           }
         }
 
-        console.log("cube clicked exiting event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", cubeNumber)
+        // console.log("cube clicked exiting event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", cubeNumber)
 
       })
     )
@@ -119,21 +119,21 @@ function buildCube(blockNumber, base64BlockNumberArray, cubeNumber, cubeHexDigit
   engine.addEntity(cube)
 
   // add a decoration if cube number belongs to the base 64 representation of blockNumber
-  for(index = 0; index < base64BlockNumberArray.length; index++)
-    if(base64BlockNumberArray[index] === cubeNumber)
+  for(let index = 0; index < base64BlockNumberArray.length; index++) {
+    if(base64BlockNumberArray[index] === cubeNumber) {
       buildCubeDecorator(xBase, zBase, width, length, height, cubeNumber, index)
     }
   }  
 }
 
-function buildCubesArtwork(blockNumber: number, base64BlockNumberArray: array, hash: string) {
-  for(i = 0; i < 64; i++) {
+function buildCubesArtwork(blockNumber: number, base64BlockNumberArray: number[], hash: string) {
+  for(let i = 0; i < 64; i++) {
     buildCube(blockNumber, base64BlockNumberArray, i, hash[i], false)
   }
 }
 
-function buildCubesPuzzleArtwork(blockNumber: number, base64BlockNumberArray: array, hash: string) {
-  for(i = 0; i < 64; i++) {
+function buildCubesPuzzleArtwork(blockNumber: number, base64BlockNumberArray: number[], hash: string) {
+  for(let i = 0; i < 64; i++) {
     buildCube(blockNumber, base64BlockNumberArray, i, hash[i], true)
   }
 }
@@ -154,7 +154,7 @@ function buildBuilding(buildingHex) {
   const xBase = 4
   const zBase = 4
 
-  console.log('Building hex: ', buildingHex)
+  // console.log('Building hex: ', buildingHex)
 
   // calculate x1 and x2
   let x1 = parseInt('0x' + buildingHex.substring(0, 1), 16) / 2.0 // 1st hex digit translated to [0, 7.5]
@@ -167,7 +167,7 @@ function buildBuilding(buildingHex) {
   // calculate y1 (height)
   let y1 = (parseInt('0x' + buildingHex.substring(4, 5), 16) + 1)/ 8.0 // 5th hex digit translated to [1/16, 2]
 
-  console.log('Coordinates: x1', x1, 'x2', x2, 'z1', z1, 'z2', z2, 'y1', y1)
+  // console.log('Coordinates: x1', x1, 'x2', x2, 'z1', z1, 'z2', z2, 'y1', y1)
 
   // calulate width, height, and length
   let width = Math.max(1, Math.abs(x1 - x2))
@@ -178,12 +178,12 @@ function buildBuilding(buildingHex) {
   let xStart = Math.min(x1, x2)
   let zStart = Math.min(z1, z2)
 
-  console.log('Dimensions: width', width, 'height', height, 'length', length)
-  console.log('X start', xStart, 'Z start', zStart)
+  // console.log('Dimensions: width', width, 'height', height, 'length', length)
+  // console.log('X start', xStart, 'Z start', zStart)
 
   // calculate color
   let colorHex = '#' + buildingHex.substring(5,6) + '0' + buildingHex.substring(6,7) + '0' + buildingHex.substring(7,8) + '0'
-  console.log('Color: ', colorHex)
+  // console.log('Color: ', colorHex)
 
   // add the color
   let buildingMaterial = new Material()
@@ -204,7 +204,7 @@ function buildBuilding(buildingHex) {
 }
 
 function buildBuildingsArtwork(blockNumber: number, hash: string) {
-  for(i = 0; i < 8; i++) {
+  for(let i = 0; i < 8; i++) {
     buildBuilding(hash.substring(i * 8, (i + 1) * 8))
   }
 }
@@ -214,7 +214,7 @@ function buildBuildingsArtwork(blockNumber: number, hash: string) {
 
 function toBaseArray(value, base) {
 
-  console.log('To base array:', value, base)
+  // console.log('To base array:', value, base)
 
   let resultArr = []
   do {
@@ -223,14 +223,14 @@ function toBaseArray(value, base) {
     value = Math.floor(value / 64)
   } while(value > 0)
 
-  console.log('To base array result:', resultArr)
+  // console.log('To base array result:', resultArr)
 
   return resultArr
 }
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
 
-  console.log('concept', conceptNumber, 'blockNumber': blockNumber)
+  // console.log('concept', conceptNumber, 'blockNumber': blockNumber)
 
   if(conceptNumber == 1) {
     return buildBuildingsArtwork(blockNumber, hash)
@@ -241,7 +241,7 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
   }
   if(conceptNumber == 3) {
     let base64BlockNumberArray = toBaseArray(blockNumber, 64)
-    console.log('base64BlockNumberArray', base64BlockNumberArray)
+    // console.log('base64BlockNumberArray', base64BlockNumberArray)
     return buildCubesPuzzleArtwork(blockNumber, base64BlockNumberArray, hash)
   }  
 }
@@ -326,7 +326,7 @@ function buildBench(x: number, y: number, z: number, zRotationDegrees: number, c
 
   // move bench to position
   bench.addComponent(new Transform({
-    position: new Vector3(x, y, z)
+    position: new Vector3(x, y, z),
     rotation: Quaternion.Euler(0, zRotationDegrees, 0)
   }))
 
@@ -361,7 +361,7 @@ function buildPath(x: number, y: number, z: number, zRotationDegrees: number, co
     let legendText = new TextShape(legend)
     legendText.fontSize = 1
     legendText.color = Color3.White()
-    legendText.fontFamily = "Arial, Helvetica, sans-serif"
+    // legendText.fontFamily = "Arial, Helvetica, sans-serif"
     legendTextEntity.addComponent(legendText)
     legendTextEntity.addComponent(new Transform({
       scale: new Vector3(0.5, 0.5, 0.5)
@@ -393,19 +393,19 @@ function buildTree(x: number, y: number, z: number) {
 
 
 
-  engine.addEntity(buildPath(8, 0, 13, 90, '#60E0A0')
+  engine.addEntity(buildPath(8, 0, 13, 90, '#60E0A0'))
 
 
 
 
 
-  engine.addEntity(buildPath(13, 0, 8, 180, '#A020C0')
+  engine.addEntity(buildPath(13, 0, 8, 180, '#A020C0'))
 
 
 
 
 
-  engine.addEntity(buildPath(8, 0, 3, 270, '#6040E0')
+  engine.addEntity(buildPath(8, 0, 3, 270, '#6040E0'))
 
 
 
