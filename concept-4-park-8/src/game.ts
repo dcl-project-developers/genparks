@@ -241,8 +241,20 @@ function buildPlanet(blockNumber, base64BlockNumberArray, planetNumber, planetHe
 
   // add the planet
   let planetXCenter = xBase + (width * planetNumber) + width / 2.0
-  let planetYCenter = 4
+  let planetYCenter = 2
   let planetZCenter = zBase + 4
+
+  // the orbit radio
+  let orbitRadio = 8 - planetXCenter
+
+  // use 8th digit for the angle (where in a circular orbit the planet is at)
+  // whereas 0 points towards east, 90 degrees points north, 180 degrees points west, and 270 south
+  // project the X and Z center based on angle
+  let angleDecimal = parseInt('0x' + planetHex[7])  
+  let angleRadians = angleDecimal * (2 * Math.PI) / 15.0 // map [0, 15] to [0, 2 * 3.14]
+  let planetXCenter = 8 + orbitRadio * Math.cos(angleRadians)
+  let planetZCenter = 8 + orbitRadio * Math.sin(angleRadians)
+
   let planet = new Entity()
   planet.addComponent(planetMaterial)
   planet.addComponent(new SphereShape())
@@ -254,18 +266,17 @@ function buildPlanet(blockNumber, base64BlockNumberArray, planetNumber, planetHe
       planetZCenter)
   }))  
 
-  // add the orbit
-  let orbitMaterial = new Material()
-  orbitMaterial.hasAlpha = true
-  orbitMaterial.albedoColor = Color3.FromHexString('#a0a0a0')
+  // // add the orbit
+  // let orbitMaterial = new Material()
+  // orbitMaterial.hasAlpha = true
+  // orbitMaterial.albedoColor = Color3.FromHexString('#a0a0a0')
 
-  let orbit = new Entity()
-  let orbitRadio = 8 - planetXCenter
-  console.log('orbit radio', orbitRadio)
-  orbit.addComponent(orbitMaterial)
-  orbit.addComponent(new CircleShape())
+  // let orbit = new Entity()
+  // console.log('orbit radio', orbitRadio)
+  // orbit.addComponent(orbitMaterial)
+  // orbit.addComponent(new CircleShape())
   // orbit.addComponent(new Transform({
-  //   scale: new Vector3(orbitRadio, orbitRadio, orbitRadio),
+  //   scale: new Vector3(1, 1, 1),
   //   position: new Vector3(
   //     8, 
   //     4, 
@@ -287,18 +298,18 @@ function buildPlanetsArtwork(blockNumber: number, base64BlockNumberArray: number
   console.log('build planets')
 
   // temporary plane
-  let planeMaterial = new Material()
-  planeMaterial.hasAlpha = true
-  planeMaterial.albedoColor = Color3.FromHexString('#d0d0d0')
-  let plane = new Entity
-  plane.addComponent(new PlaneShape())
-  plane.addComponent(planeMaterial)
-  plane.addComponent(new Transform({
-    position: new Vector3(8, 4, 8),
-    rotation: Quaternion.Euler(0, 0, 0),
-    scale: new Vector3(8, 8, 8)
-  }))
-  engine.addEntity(plane)
+  // let planeMaterial = new Material()
+  // planeMaterial.hasAlpha = true
+  // planeMaterial.albedoColor = Color3.FromHexString('#f0f0f0')
+  // let plane = new Entity
+  // plane.addComponent(new PlaneShape())
+  // plane.addComponent(planeMaterial)
+  // plane.addComponent(new Transform({
+  //   position: new Vector3(8, 2, 8),
+  //   rotation: Quaternion.Euler(90, 0, 90),
+  //   scale: new Vector3(8, 8, 8)
+  // }))
+  // engine.addEntity(plane)
 
   for(let i = 0; i < 8; i++) {
     let substr = hash.substring(i * 8, (i + 1) * 8)
