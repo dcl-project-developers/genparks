@@ -1,4 +1,3 @@
-
 /// ---- PLANETS ----
 // Concept: use planets to represent 8 subsequent substrings of 8 hex characters each from the 64 hex digits hash
 // the first 6 hex digits of planetHex are used for the color
@@ -31,7 +30,7 @@ function buildPlanet(blockNumber, base64BlockNumberArray, planetNumber, planetHe
 
   // add the planet
   let planetXCenter = xBase + (width * planetNumber) + width / 2.0
-  let planetYCenter = 2
+  let planetYCenter = 1.5
   let planetZCenter = zBase + 4
 
   // the orbit radio
@@ -77,17 +76,22 @@ function buildPlanet(blockNumber, base64BlockNumberArray, planetNumber, planetHe
   // }))   
   
   // render the planet
-  engine.addEntity(planet)
+  // engine.addEntity(planet)
 
   // render the orbit
   // engine.addEntity(orbit)
 
+  // return the planet
+  return planet
 }
 
 function buildPlanetsArtwork(blockNumber: number, base64BlockNumberArray: number[], hash: string) {
   console.log('build planets')
 
-  // temporary plane
+  // build planetary system
+  let system = new Entity()
+
+  // debug plane
   // let planeMaterial = new Material()
   // planeMaterial.hasAlpha = true
   // planeMaterial.albedoColor = Color3.FromHexString('#f0f0f0')
@@ -95,15 +99,29 @@ function buildPlanetsArtwork(blockNumber: number, base64BlockNumberArray: number
   // plane.addComponent(new PlaneShape())
   // plane.addComponent(planeMaterial)
   // plane.addComponent(new Transform({
-  //   position: new Vector3(8, 2, 8),
+  //   position: new Vector3(8, 1.5, 8),
   //   rotation: Quaternion.Euler(90, 0, 90),
   //   scale: new Vector3(8, 8, 8)
   // }))
-  // engine.addEntity(plane)
+  // plane.setParent(system)
 
   for(let i = 0; i < 8; i++) {
     let substr = hash.substring(i * 8, (i + 1) * 8)
     console.log('hash', hash, 'substr', substr)
-    buildPlanet(blockNumber, base64BlockNumberArray, i, substr)
+    let planet = buildPlanet(blockNumber, base64BlockNumberArray, i, substr)
+    planet.setParent(system)
   }
+
+  // use the block number to rotate the system
+  // we modulo the blockNumber by 16 two times to derive the angle  
+  let rotateAngleX = blockNumber % 16
+  let reminder = Math.floor(blockNumber / 16)
+  let rotateAngleY = reminder % 16
+  reminder = Math.floor(blockNumber / 16)
+
+  system.addComponent(new Transform({
+    rotation: Quaternion.Euler(rotateAngleX, 0, rotateAngleY),
+    scale: new Vector3(1, 1, 1)
+  }))
+  engine.addEntity(system)
 }
