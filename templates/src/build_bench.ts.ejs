@@ -1,0 +1,86 @@
+function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
+
+  // specs for benches
+  let benchLength = <%= benchLength %>
+  let legHeight = <%= legHeight %>
+  let legWidth = <%= legWidth %>
+  let sittingWidth = <%= sittingWidth %>
+  let sittingHeight = <%= sittingHeight %>
+  let backWidth = <%= backWidth %>
+  let backHeight = <%= backHeight %>
+
+  // material for benches
+  let benchMaterial = new Material()
+  benchMaterial.albedoColor = Color3.FromHexString(color)
+
+  // build the bench entity itself
+  let bench = new Entity()
+
+  // build the sitting surface
+  let sittingSurface = new Entity()
+  sittingSurface.addComponent(benchMaterial)
+  sittingSurface.addComponent(new BoxShape())
+  sittingSurface.addComponent(new Transform({
+    scale: new Vector3(sittingWidth, sittingHeight, benchLength),
+    position: new Vector3(0, legHeight + sittingHeight/2.0, 0)
+  }))
+  sittingSurface.setParent(bench)
+
+  // southwest leg
+  let swLeg = new Entity()
+  swLeg.addComponent(benchMaterial)
+  swLeg.addComponent(new BoxShape())
+  swLeg.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legWidth),
+    position: new Vector3(-sittingWidth/2.0 + legWidth/2.0, legHeight/2.0, -benchLength/2.0 + legWidth/2.0)
+  }))
+  swLeg.setParent(bench)
+
+  // southeast leg
+  let seLeg = new Entity()
+  seLeg.addComponent(benchMaterial)    
+  seLeg.addComponent(new BoxShape())
+  seLeg.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legWidth),
+    position: new Vector3(+sittingWidth/2.0 - legWidth/2.0, legHeight/2.0, -benchLength/2.0 + legWidth/2.0)
+  }))
+  seLeg.setParent(bench)
+
+  // northwest leg
+  let nwLeg = new Entity()
+  nwLeg.addComponent(benchMaterial)    
+  nwLeg.addComponent(new BoxShape())  
+  nwLeg.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legWidth),
+    position: new Vector3(-sittingWidth/2.0 + legWidth/2.0, legHeight/2.0, +benchLength/2.0 - legWidth/2.0)
+  }))
+  nwLeg.setParent(bench)
+
+  // northeast leg
+  let neLeg = new Entity()
+  neLeg.addComponent(benchMaterial)        
+  neLeg.addComponent(new BoxShape())
+  neLeg.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legWidth),
+    position: new Vector3(+sittingWidth/2.0 - legWidth/2.0, legHeight/2.0, +benchLength/2.0 - legWidth/2.0)
+  }))
+  neLeg.setParent(bench)
+
+  // back support
+  let backSupport = new Entity()
+  backSupport.addComponent(benchMaterial)
+  backSupport.addComponent(new BoxShape())
+  backSupport.addComponent(new Transform({
+    scale: new Vector3(backWidth, backHeight, benchLength),
+    position: new Vector3(-sittingWidth/2.0 + backWidth/2.0, legHeight + sittingHeight + backHeight/2.0, 0)
+  }))
+  backSupport.setParent(bench)
+
+  // move bench to position
+  bench.addComponent(new Transform({
+    position: new Vector3(x, y, z),
+    rotation: Quaternion.Euler(0, zRotationDegrees, 0)
+  }))
+
+  return bench
+}

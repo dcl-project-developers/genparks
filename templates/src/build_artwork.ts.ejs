@@ -1,0 +1,39 @@
+// ---- PARK With Artwork ----
+
+<% if(conceptNumber == 1) { %>
+<% include build_buildings_artwork.ts.ejs %>
+
+function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+  return buildBuildingsArtwork(blockNumber, hash)
+}
+<% } %>
+
+<% if(conceptNumber == 2) { %>
+<% include to_base_array.ts.ejs %>
+<% include build_cubes_artwork.ts.ejs %>
+
+function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+  let base64BlockNumberArray = toBaseArray(blockNumber, 64)
+  return buildCubesArtwork(blockNumber, base64BlockNumberArray, hash)
+}
+<% } %>
+
+<% if(conceptNumber == 3) { %>
+<% include to_base_array.ts.ejs %>
+<% include build_cubes_artwork.ts.ejs %>
+
+function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+  let base64BlockNumberArray = toBaseArray(blockNumber, 64)
+  return buildCubesPuzzleArtwork(blockNumber, base64BlockNumberArray, hash)
+}
+<% } %>
+
+<% if(conceptNumber == 4) { %>
+<% include to_base_array.ts.ejs %>  
+<% include build_planets_artwork.ts.ejs %>
+
+function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+  let base64BlockNumberArray = toBaseArray(blockNumber, 64)    
+  return buildPlanetsArtwork(blockNumber, base64BlockNumberArray, hash)
+}
+<% } %>

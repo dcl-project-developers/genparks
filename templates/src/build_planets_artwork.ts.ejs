@@ -1,0 +1,109 @@
+
+/// ---- PLANETS ----
+// Concept: use planets to represent 8 subsequent substrings of 8 hex characters each from the 64 hex digits hash
+// the first 6 hex digits of planetHex are used for the color
+// the 7th digit is used for radio
+// the blockNumber is represented in base 64 to decorate ... the planets?
+
+function buildPlanet(blockNumber, base64BlockNumberArray, planetNumber, planetHex) {
+
+  const xBase = 4
+  const zBase = 4
+
+  console.log('Planet number', planetNumber, 'Planet hex: ', planetHex)
+
+  const width = 8 / 16.0
+  const length = 8 / 16.0
+
+  // use 7th digit for radio  
+  let radioDecimal = parseInt('0x' + planetHex[6])
+  console.log('Radio decimal', radioDecimal, 'hex digit', planetHex[6])
+  const radio = 0.15 + (radioDecimal - 8) / 8.0 * 0.1    // map the [0,15] to radioDecimal
+
+  // calculate color
+  let colorHex = '#' + planetHex.substring(0, 6)
+  console.log('Color: ', colorHex)
+
+  // add the color
+  let planetMaterial = new Material()
+  planetMaterial.hasAlpha = true
+  planetMaterial.albedoColor = Color3.FromHexString(colorHex)
+
+  // add the planet
+  let planetXCenter = xBase + (width * planetNumber) + width / 2.0
+  let planetYCenter = 2
+  let planetZCenter = zBase + 4
+
+  // the orbit radio
+  let orbitRadio = 8 - planetXCenter
+
+  // use 8th digit for the angle (where in a circular orbit the planet is at)
+  // whereas 0 points towards east, 90 degrees points north, 180 degrees points west, and 270 south
+  // project the X and Z center based on angle
+  let angleDecimal = parseInt('0x' + planetHex[7])  
+  let angleRadians = angleDecimal * (2 * Math.PI) / 15.0 // map [0, 15] to [0, 2 * 3.14]
+  let planetXCenter = 8 + orbitRadio * Math.cos(angleRadians)
+  let planetZCenter = 8 + orbitRadio * Math.sin(angleRadians)
+
+  let planet = new Entity()
+  planet.addComponent(planetMaterial)
+  planet.addComponent(new SphereShape())
+  planet.addComponent(new Transform({
+    scale: new Vector3(radio, radio, radio),
+    position: new Vector3(
+      planetXCenter, 
+      planetYCenter, 
+      planetZCenter)
+  }))  
+
+  // // add the orbit
+  // let orbitMaterial = new Material()
+  // orbitMaterial.hasAlpha = true
+  // orbitMaterial.albedoColor = Color3.FromHexString('#a0a0a0')
+
+  // let orbit = new Entity()
+  // console.log('orbit radio', orbitRadio)
+  // orbit.addComponent(orbitMaterial)
+  // orbit.addComponent(new CircleShape())
+  // orbit.addComponent(new Transform({
+  //   scale: new Vector3(1, 1, 1),
+  //   position: new Vector3(
+  //     8, 
+  //     4, 
+  //     8),
+  //   rotation: Quaternion.Euler(0, 0, 0),
+  //   arc: 360,
+  //   segments: 36
+  // }))   
+  
+  // render the planet
+  engine.addEntity(planet)
+
+  // render the orbit
+  // engine.addEntity(orbit)
+
+}
+
+function buildPlanetsArtwork(blockNumber: number, base64BlockNumberArray: number[], hash: string) {
+  console.log('build planets')
+
+  // temporary plane
+  // let planeMaterial = new Material()
+  // planeMaterial.hasAlpha = true
+  // planeMaterial.albedoColor = Color3.FromHexString('#f0f0f0')
+  // let plane = new Entity
+  // plane.addComponent(new PlaneShape())
+  // plane.addComponent(planeMaterial)
+  // plane.addComponent(new Transform({
+  //   position: new Vector3(8, 2, 8),
+  //   rotation: Quaternion.Euler(90, 0, 90),
+  //   scale: new Vector3(8, 8, 8)
+  // }))
+  // engine.addEntity(plane)
+
+  for(let i = 0; i < 8; i++) {
+    let substr = hash.substring(i * 8, (i + 1) * 8)
+    console.log('hash', hash, 'substr', substr)
+    buildPlanet(blockNumber, base64BlockNumberArray, i, substr)
+  }
+}

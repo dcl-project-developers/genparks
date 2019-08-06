@@ -1,0 +1,11 @@
+function buildTree(x: number, y: number, z: number) {
+  
+  let tree = new Entity()
+  tree.addComponent(new GLTFShape("models/RiggedSimple.gltf"))
+  tree.addComponent(new Transform({ 
+      position: new Vector3(x, y, z), 
+      scale: new Vector3(0.1, 0.1, 0.1)
+      }))
+
+  return tree
+}

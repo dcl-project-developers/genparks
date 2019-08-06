@@ -1,0 +1,11 @@
+function toBaseArray(value, base) {
+
+  let resultArr = []
+  do {
+    let mod = value % base
+    resultArr.push(mod)
+    value = Math.floor(value / 64)
+  } while(value > 0)
+
+  return resultArr
+}

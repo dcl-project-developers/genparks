@@ -1,0 +1,139 @@
+/// ---- CUBES ----
+// Concept: use cubes to represent each of the 64 hex digits in the hash
+// the hex digit value itself is used for height
+// the blockNumber is represented in base 64 to decorate the cubes
+
+// the puzzle version of CUBES is concept #3 - adds different coloring and cube click event handling with puzzle accounting
+let puzzleAccumulatedTotal = 0
+let puzzleAccumulatedClicks = 0
+
+// Create UI canvas and text
+const uCanvas = new UICanvas() 
+const uText = new UIText(uCanvas)
+
+function buildCubeDecorator(xBase, zBase, cubeWidth, cubeLength, cubeHeight, cubeNumber, index) {
+  // decorator color
+  const decoratorColors = ['#ffffa0', '#ffa0ff', '#a0ffff', '#ffa0a0', '#a0ffc0', '#a0a0ff', '#a0a0a0']
+  let decoratorColorHex = decoratorColors[index % (decoratorColors.length - 1)]
+  let decoratorMaterial = new Material()
+  decoratorMaterial.hasAlpha = true
+  decoratorMaterial.albedoColor = Color3.FromHexString(decoratorColorHex)
+
+  let decoratorCube = new Entity()
+  let decoratorCubeWidth = cubeWidth / Math.pow(2, (index + 1))
+  let decoratorCubeLength = cubeLength / Math.pow(2, (index + 1))
+  let decoratorCubeHeight = (1/8) * Math.pow(2, (index + 1))
+  decoratorCube.addComponent(decoratorMaterial)
+  decoratorCube.addComponent(new BoxShape())
+  decoratorCube.addComponent(new Transform({
+    scale: new Vector3(decoratorCubeWidth, decoratorCubeHeight, decoratorCubeLength),
+    position: new Vector3(
+      xBase + (cubeWidth * cubeNumber % 8) + cubeWidth / 2.0, 
+      cubeHeight + decoratorCubeHeight / 2.0, 
+      zBase + (cubeLength * Math.floor(cubeNumber / 8)) + cubeLength / 2.0)
+  }))
+  // console.log('===== cube decorator for index ', index, 'color', decoratorColorHex, 'cubeNumber', cubeNumber, 'decoratorCubeWidth', decoratorCubeWidth, 'decoratorCubeLength', decoratorCubeLength, 'decoratorCubeHeight', decoratorCubeHeight)          
+  engine.addEntity(decoratorCube)
+}
+
+function buildCube(blockNumber, base64BlockNumberArray, cubeNumber, cubeHexDigit, puzzleMode) {
+
+  const xBase = 4
+  const zBase = 4
+
+  // console.log('Cube number', cubeNumber, 'Cube hex: ', cubeHexDigit)
+
+  // calculate y1 (height)
+  let cubeDecimal = parseInt('0x' + cubeHexDigit, 16)
+  let height = (cubeDecimal + 1)/ 16.0 // hex digit translated to [1/16, 1]
+  
+  // console.log('height', height, 'decimal', cubeDecimal)
+
+  const width = 1
+  const length = 1
+  
+  // calculate color
+  let colorHex = '#' + cubeHexDigit + '0' + cubeHexDigit + '0' + cubeHexDigit + '0'
+
+  // override that for puzzle mode for quick differentiation
+  if(puzzleMode) {
+    colorHex = '#' + cubeHexDigit + '0' + cubeHexDigit + '0' + 'e' + '0'
+  }
+
+  // console.log('Color: ', colorHex)
+
+  // add the color
+  let cubeMaterial = new Material()
+  cubeMaterial.hasAlpha = true
+  cubeMaterial.albedoColor = Color3.FromHexString(colorHex)
+
+  // add the cube
+  let margin = 0.1
+  let cube = new Entity()
+  cube.addComponent(cubeMaterial)
+  cube.addComponent(new BoxShape())
+  cube.addComponent(new Transform({
+    scale: new Vector3(width - margin, height, length - margin),
+    position: new Vector3(
+      xBase + (width * cubeNumber % 8) + width / 2.0, 
+      height / 2.0, 
+      zBase + (length * Math.floor(cubeNumber / 8)) + length / 2.0)
+  }))
+
+  // handle click event for cubes if we are on puzzle mode
+  if(puzzleMode) {
+    cube.addComponent(
+      new OnClick(e => {
+
+        // console.log("cube clicked entering event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", cubeNumber)
+
+        puzzleAccumulatedTotal = cubeNumber * Math.pow(64, puzzleAccumulatedClicks) + puzzleAccumulatedTotal
+        puzzleAccumulatedClicks = puzzleAccumulatedClicks + 1        
+
+        // console.log("cube calculated event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", cubeNumber)
+
+        // check for win / loss
+        if(puzzleAccumulatedTotal > blockNumber) {
+          puzzleAccumulatedTotal = 0
+          puzzleAccumulatedClicks = 0
+          uText.value = 'Game over, restarting puzzle! (' + puzzleAccumulatedTotal + ')'  
+        } else {
+          if(puzzleAccumulatedTotal === blockNumber) {
+            uText.value = 'Congratulations. You\'ve solved the puzzle! (' + puzzleAccumulatedTotal + '). Go again?'
+            puzzleAccumulatedTotal = 0 
+            puzzleAccumulatedClicks = 0   
+          } else {
+            if(puzzleAccumulatedTotal < blockNumber) {
+              uText.value = 'Hmm... keep going... (' + puzzleAccumulatedTotal + ')'
+            }        
+          }
+        }
+
+        // console.log("cube clicked exiting event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", cubeNumber)
+
+      })
+    )
+  }
+
+  // render the cube
+  engine.addEntity(cube)
+
+  // add a decoration if cube number belongs to the base 64 representation of blockNumber
+  for(let index = 0; index < base64BlockNumberArray.length; index++) {
+    if(base64BlockNumberArray[index] === cubeNumber) {
+      buildCubeDecorator(xBase, zBase, width, length, height, cubeNumber, index)
+    }
+  }  
+}
+
+function buildCubesArtwork(blockNumber: number, base64BlockNumberArray: number[], hash: string) {
+  for(let i = 0; i < 64; i++) {
+    buildCube(blockNumber, base64BlockNumberArray, i, hash[i], false)
+  }
+}
+
+function buildCubesPuzzleArtwork(blockNumber: number, base64BlockNumberArray: number[], hash: string) {
+  for(let i = 0; i < 64; i++) {
+    buildCube(blockNumber, base64BlockNumberArray, i, hash[i], true)
+  }
+}
