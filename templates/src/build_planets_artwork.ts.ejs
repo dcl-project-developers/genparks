@@ -26,7 +26,21 @@ function buildPlanet(blockNumber, base64BlockNumberArray, planetNumber, planetHe
   // add the color
   let planetMaterial = new Material()
   planetMaterial.hasAlpha = true
+
+  // set a bunch of other material properties all from [0.5, 1], e.g.:
+  // emissiveColor: The color emitted from the material.
+  // ambientColor: AKA Diffuse Color in other nomenclature.
+  // reflectionColor: The color reflected from the material.
+  // reflectivityColor: AKA Specular Color in other nomenclature.
+
+  planetMaterial.metalic = 0.5 + parseInt('0x' + planetHex[0]) / 15.0/2
+  planetMaterial.roughness = 0.5 + parseInt('0x' + planetHex[1]) / 15.0/2
+  planetMaterial.emissiveColor = 0.5 + parseInt('0x' + planetHex[2]) / 15.0/2
+  planetMaterial.ambientColor = 0.5 + parseInt('0x' + planetHex[3]) / 15.0/2
+  planetMaterial.reflectionColor = 0.5 + parseInt('0x' + planetHex[4]) / 15.0/2
+  planetMaterial.reflectivityColor = 0.5 + parseInt('0x' + planetHex[5]) / 15.0/2
   planetMaterial.albedoColor = Color3.FromHexString(colorHex)
+
 
   // add the planet
   let planetXCenter = xBase + (width * planetNumber) + width / 2.0
