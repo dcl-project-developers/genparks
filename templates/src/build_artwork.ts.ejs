@@ -42,6 +42,14 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
 <% include build_pyramid_artwork.ts.ejs %>
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
-  return buildPyramidArtwork(blockNumber, hash)
+  return buildPyramidArtwork(blockNumber, hash, false)
+}
+<% } %>
+
+<% if(conceptNumber == 6) { %>
+<% include build_pyramid_artwork.ts.ejs %>
+
+function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+  return buildPyramidArtwork(blockNumber, hash, true)
 }
 <% } %>

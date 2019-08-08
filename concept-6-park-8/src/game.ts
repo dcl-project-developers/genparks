@@ -9,6 +9,8 @@
 
 
 
+
+
 /// ---- PYRAMID ----
 // Concept: use cubes to build ...
 
@@ -129,10 +131,8 @@ function buildPyramidArtwork(blockNumber: number, hash: string, drawSubsteps: bo
 }
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
-  return buildPyramidArtwork(blockNumber, hash, false)
+  return buildPyramidArtwork(blockNumber, hash, true)
 }
-
-
 
 
 
@@ -368,4 +368,4 @@ engine.addEntity(buildTree(11, 0.5, 1))
 
 
 
-buildArtwork(5, 1428757, '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59')
+buildArtwork(6, 1428757, '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59')
