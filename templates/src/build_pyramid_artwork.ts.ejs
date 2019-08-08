@@ -1,0 +1,52 @@
+/// ---- PYRAMID ----
+// Concept: use cubes to build ...
+
+function buildStep(blockNumber, stepNumber, stepHexDigit) {
+
+  let artWidth = 8
+  const xBase = 8
+  const zBase = 8
+  let topStepWidth = 0.5
+  let stepWidth = (artWidth - topStepWidth) / 64.0
+
+  console.log('Step number', stepNumber, 'Step hex: ', stepHexDigit)
+
+  let stepDecimal = parseInt('0x' + stepHexDigit, 16)
+  
+  let stepHeight = 0.15
+  // let stepHeight = (stepDecimal + 1)/ 32.0 // hex digit translated to [1/32, 0.5]
+
+  console.log('stepHeight', stepHeight, 'decimal', stepDecimal)
+  
+  // calculate color
+  let colorHex = '#' + stepHexDigit + '0' + stepHexDigit + '0' + stepHexDigit + '0'
+
+  console.log('Color: ', colorHex)
+
+  // add the color
+  let stepMaterial = new Material()
+  stepMaterial.hasAlpha = true
+  stepMaterial.albedoColor = Color3.FromHexString(colorHex)
+
+  // add the step
+  let step = new Entity()
+  step.addComponent(stepMaterial)
+  step.addComponent(new BoxShape())
+  step.addComponent(new Transform({
+    scale: new Vector3((64 - stepNumber) * stepWidth, stepHeight, (64 - stepNumber) * stepWidth),
+    position: new Vector3(
+      xBase, 
+      stepHeight * stepNumber + stepHeight / 2.0, 
+      zBase
+  }))
+
+  // render the cube
+  engine.addEntity(step)
+
+}
+
+function buildPyramidArtwork(blockNumber: number, hash: string) {
+  for(let i = 0; i < 64; i++) {
+    buildStep(blockNumber, i, hash[i])
+  }
+}

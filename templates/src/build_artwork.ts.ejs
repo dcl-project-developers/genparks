@@ -37,3 +37,11 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
   return buildPlanetsArtwork(blockNumber, base64BlockNumberArray, hash)
 }
 <% } %>
+
+<% if(conceptNumber == 5) { %>
+<% include build_pyramid_artwork.ts.ejs %>
+
+function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+  return buildPyramidArtwork(blockNumber, hash)
+}
+<% } %>
