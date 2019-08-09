@@ -53,3 +53,11 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
   return buildPyramidArtwork(blockNumber, hash, true)
 }
 <% } %>
+
+<% if(conceptNumber == 7) { %>
+<% include build_wave_artwork.ts.ejs %>
+
+function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+  return buildWaveArtwork(blockNumber, hash)
+}
+<% } %>

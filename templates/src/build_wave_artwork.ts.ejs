@@ -1,0 +1,147 @@
+/// ---- WAVE ----
+// Concept: use cubes to build a 3D wave that shows the hash
+
+function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, currentHeight) {
+
+  let artWidth = 8
+  let margin = 0.005
+  const xBase = 8
+  const zBase = 8
+  let lastStepWidth = 0.5
+  let legWidth = 0.01
+  let stepWidth = ((artWidth - lastStepWidth) / (64.0 * 2))
+
+  let stepHeight = stepWidth
+  
+  let stepDecimal = parseInt('0x' + stepHexDigit, 16)
+  let previousStepDecimal = parseInt('0x' + previousStepHexDigit, 16)
+
+  console.log(
+    'stepNumber', stepNumber, 
+    'stepHexDigit', stepHexDigit, 
+    'stepDecimal', stepDecimal, 
+    'previousStepHexDigit', previousStepHexDigit, 
+    'previousStepDecimal', previousStepDecimal, 
+  )
+  
+  // calculate color
+  let colorHex = '#' + stepHexDigit + '0' + stepHexDigit + '0' + stepHexDigit + '0'
+
+  console.log('Color: ', colorHex)
+
+  // add the color
+  let stepMaterial = new Material()
+  stepMaterial.hasAlpha = false
+  stepMaterial.albedoColor = Color3.FromHexString(colorHex)
+
+  let thisStepWidth = (64 - stepNumber) * stepWidth * 2
+
+  // adjust height based on difference between current hash digit and previous hash digit
+  if(stepDecimal > previousStepDecimal) {
+    currentHeight = currentHeight + stepHeight * 3
+  } else {
+    if(stepDecimal < previousStepDecimal) {
+      currentHeight = currentHeight - stepHeight * 3
+    } 
+  }
+  
+
+  // add the step
+  let stepWest = new Entity()
+  stepWest.addComponent(stepMaterial)
+  stepWest.addComponent(new BoxShape())
+  stepWest.addComponent(new Transform({
+    scale: new Vector3(stepWidth - margin, stepHeight - margin, thisStepWidth + margin),
+    position: new Vector3(
+      xBase - thisStepWidth / 2.0 - stepWidth / 2.0, 
+      currentHeight, 
+      zBase
+  }))
+  engine.addEntity(stepWest)
+
+  let stepNorth = new Entity()
+  stepNorth.addComponent(stepMaterial)
+  stepNorth.addComponent(new BoxShape())
+  stepNorth.addComponent(new Transform({
+    scale: new Vector3(thisStepWidth + stepWidth * 2.0 - margin, stepHeight - margin, stepWidth - margin),
+    position: new Vector3(
+      xBase, 
+      currentHeight, 
+      zBase + thisStepWidth / 2.0 + stepWidth / 2.0
+  }))
+  engine.addEntity(stepNorth)
+
+  let stepEast = new Entity()
+  stepEast.addComponent(stepMaterial)
+  stepEast.addComponent(new BoxShape())
+  stepEast.addComponent(new Transform({
+    scale: new Vector3(stepWidth - margin, stepHeight - margin, thisStepWidth + margin),
+    position: new Vector3(
+      xBase + thisStepWidth / 2.0 + stepWidth / 2.0, 
+      currentHeight, 
+      zBase
+  }))
+  engine.addEntity(stepEast)
+
+  let stepSouth = new Entity()
+  stepSouth.addComponent(stepMaterial)
+  stepSouth.addComponent(new BoxShape())
+  stepSouth.addComponent(new Transform({
+    scale: new Vector3(thisStepWidth + stepWidth * 2.0 - margin, stepHeight - margin, stepWidth - margin),
+    position: new Vector3(
+      xBase, 
+      currentHeight, 
+      zBase - thisStepWidth / 2.0 - stepWidth / 2.0
+  }))
+  engine.addEntity(stepSouth)
+
+  // build the legs
+
+  // add the color
+  let legMaterial = new Material()
+  legMaterial.hasAlpha = false
+  legMaterial.metalic = 1
+  legMaterial.roughness = 1
+  legMaterial.emissiveColor = 1
+  legMaterial.ambientColor = 1
+  legMaterial.reflectionColor = 1
+  legMaterial.albedoColor = Color3.FromHexString('#ffffff')
+
+
+  let legHeight = currentHeight
+
+  let legSouth = new Entity()
+  legSouth.addComponent(legMaterial)
+  legSouth.addComponent(new BoxShape())
+  legSouth.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legWidth),
+    position: new Vector3(
+      xBase, 
+      legHeight / 2.0, 
+      zBase - thisStepWidth / 2.0 - stepWidth / 2.0
+  }))
+  engine.addEntity(legSouth)
+
+  let legNorth = new Entity()
+  legNorth.addComponent(legMaterial)
+  legNorth.addComponent(new BoxShape())
+  legNorth.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legWidth),
+    position: new Vector3(
+      xBase, 
+      legHeight / 2.0, 
+      zBase + thisStepWidth / 2.0 + stepWidth / 2.0
+  }))
+  engine.addEntity(legNorth)
+
+  return currentHeight
+}
+
+function buildWaveArtwork(blockNumber: number, hash: string) {
+  let currentHeight = 3 
+  for(let i = 0; i < 64; i++) {
+    let currentHash = hash[i]
+    let previousHash = (i == 0 ? hash[63] : hash[i - 1])
+    currentHeight = buildStep(blockNumber, i, previousHash, currentHash, currentHeight)
+  }
+}
