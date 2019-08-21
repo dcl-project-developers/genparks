@@ -217,7 +217,7 @@ const templateVars = function(conceptNumber, parkNumber) {
       {x: 15, y: 0.5, z: 5},    // senTree
       {x: 11, y: 0.5, z: 1},    // sewTree
     ],
-    parkData: sourceParkDataArr[parkNumber - 1 % sourceParkDataArr.length]
+    parkData: sourceParkDataArr[(parkNumber - 1) % sourceParkDataArr.length]
   }
 
   return vars
