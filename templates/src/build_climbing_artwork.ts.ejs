@@ -1,0 +1,106 @@
+/// ---- CLIMBING ----
+// Concept: use steps to build a climbing structure
+
+function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, currentHeight) {
+
+  let artWidth = 8
+  const xBase = 4
+  const zBase = 4
+  let lastStepWidth = 0.5
+  let legWidth = 0.01
+  let legLength = 0.01
+  let tileWidth = artWidth / 4.0
+  let tileLength = tileWidth
+  let tileHeight = 0.05
+
+  let stepDecimal = parseInt('0x' + stepHexDigit, 16)
+  let previousStepDecimal = parseInt('0x' + previousStepHexDigit, 16)
+
+  console.log(
+    'stepNumber', stepNumber, 
+    'stepHexDigit', stepHexDigit, 
+    'stepDecimal', stepDecimal, 
+    'previousStepHexDigit', previousStepHexDigit, 
+    'previousStepDecimal', previousStepDecimal, 
+  )
+  
+  // calculate color
+  let colorHex = '#' + stepHexDigit + '0' + stepHexDigit + '0' + stepHexDigit + '0'
+
+  console.log('Color: ', colorHex)
+
+  // add the color
+  let stepMaterial = new Material()
+  stepMaterial.hasAlpha = false
+  stepMaterial.albedoColor = Color3.FromHexString(colorHex)
+
+  let stepHeight = 1
+  currentHeight += stepHeight
+  
+  // map the stepDecimal [0, 15] to a 4x4 with (x,z) pair coordinates
+  let x = stepDecimal % 4
+  let z = Math.floor(stepDecimal / 4.0)
+  
+  // add the step
+  let tile = new Entity()
+  tile.addComponent(stepMaterial)
+  tile.addComponent(new BoxShape())
+  tile.addComponent(new Transform({
+    scale: new Vector3(tileWidth, tileHeight, tileLength),
+    position: new Vector3(
+      xBase + tileWidth * x + tileWidth / 2.0,
+      currentHeight + tileHeight / 2.0, 
+      zBase + tileLength * z + tileLength / 2.0, 
+  }))
+  engine.addEntity(tile)
+
+  // build the legs
+
+  // add the color
+  let legMaterial = new Material()
+  legMaterial.hasAlpha = false
+  legMaterial.metalic = 1
+  legMaterial.roughness = 1
+  legMaterial.emissiveColor = 1
+  legMaterial.ambientColor = 1
+  legMaterial.reflectionColor = 1
+  legMaterial.albedoColor = Color3.FromHexString('#ffffff')
+
+  let legHeight = currentHeight
+  let legMargin = tileWidth * 0.2
+
+  let legSouthWest = new Entity()
+  legSouthWest.addComponent(legMaterial)
+  legSouthWest.addComponent(new BoxShape())
+  legSouthWest.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legLength),
+    position: new Vector3(
+      xBase + tileWidth * x + legWidth / 2.0 + legMargin,
+      legHeight / 2.0, 
+      zBase + tileLength * z + legLength / 2.0 + legMargin
+  }))
+  engine.addEntity(legSouthWest)
+
+  let legNorthEast = new Entity()
+  legNorthEast.addComponent(legMaterial)
+  legNorthEast.addComponent(new BoxShape())
+  legNorthEast.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legWidth),
+    position: new Vector3(
+      xBase + tileWidth * (x + 1) - legWidth / 2.0 - legMargin, 
+      legHeight / 2.0, 
+      zBase + tileLength * (z + 1) - legLength / 2.0 - legMargin
+  }))
+  engine.addEntity(legNorthEast)
+
+  return currentHeight
+}
+
+function buildClimbingArtwork(blockNumber: number, hash: string) {
+  let currentHeight = 1 
+  for(let i = 0; i < 64; i++) {
+    let currentHash = hash[i]
+    let previousHash = (i == 0 ? hash[63] : hash[i - 1])
+    currentHeight = buildStep(blockNumber, i, previousHash, currentHash, currentHeight)
+  }
+}

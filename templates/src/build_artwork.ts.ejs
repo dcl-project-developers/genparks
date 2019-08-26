@@ -69,3 +69,11 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
   return buildNftTestArtwork(blockNumber, hash, false)
 }
 <% } %>
+
+<% if(conceptNumber == 9) { %>
+<% include build_climbing_artwork.ts.ejs %>
+
+function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+  return buildClimbingArtwork(blockNumber, hash)
+}
+<% } %>
