@@ -17,17 +17,26 @@
 
 
 
+
+
 /// ---- CLIMBING ----
 // Concept: use steps to build a climbing structure
 
-function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, currentHeight) {
+let legMaterial = new Material()
+legMaterial.hasAlpha = false
+legMaterial.metalic = 1
+legMaterial.roughness = 1
+legMaterial.emissiveColor = 1
+legMaterial.ambientColor = 1
+legMaterial.reflectionColor = 1
+legMaterial.albedoColor = Color3.FromHexString('#ffffff')
+
+function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, currentHeight, smallConcept) {
 
   let artWidth = 8
   const xBase = 4
   const zBase = 4
   let lastStepWidth = 0.5
-  let legWidth = 0.01
-  let legLength = 0.01
   let tileWidth = artWidth / 4.0
   let tileLength = tileWidth
   let tileHeight = 0.05
@@ -53,7 +62,12 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
   stepMaterial.hasAlpha = false
   stepMaterial.albedoColor = Color3.FromHexString(colorHex)
 
-  let stepHeight = 1
+  if(smallConcept) {
+    let stepHeight = 0.3
+  } else {
+    let stepHeight = 1
+  }
+
   currentHeight += stepHeight
   
   // map the stepDecimal [0, 15] to a 4x4 with (x,z) pair coordinates
@@ -75,57 +89,70 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
 
   // build the legs
 
-  // add the color
-  let legMaterial = new Material()
-  legMaterial.hasAlpha = false
-  legMaterial.metalic = 1
-  legMaterial.roughness = 1
-  legMaterial.emissiveColor = 1
-  legMaterial.ambientColor = 1
-  legMaterial.reflectionColor = 1
-  legMaterial.albedoColor = Color3.FromHexString('#ffffff')
+  if(!smallConcept) {
+    
+    let legWidth = 0.01
+    let legLength = 0.01    
+    let legHeight = currentHeight
+    let legMargin = tileWidth * 0.2
 
-  let legHeight = currentHeight
-  let legMargin = tileWidth * 0.2
+    let legSouthWest = new Entity()
+    legSouthWest.addComponent(legMaterial)
+    legSouthWest.addComponent(new BoxShape())
+    legSouthWest.addComponent(new Transform({
+      scale: new Vector3(legWidth, legHeight, legLength),
+      position: new Vector3(
+        xBase + tileWidth * x + legWidth / 2.0 + legMargin,
+        legHeight / 2.0, 
+        zBase + tileLength * z + legLength / 2.0 + legMargin
+    }))
+    engine.addEntity(legSouthWest)
 
-  let legSouthWest = new Entity()
-  legSouthWest.addComponent(legMaterial)
-  legSouthWest.addComponent(new BoxShape())
-  legSouthWest.addComponent(new Transform({
-    scale: new Vector3(legWidth, legHeight, legLength),
-    position: new Vector3(
-      xBase + tileWidth * x + legWidth / 2.0 + legMargin,
-      legHeight / 2.0, 
-      zBase + tileLength * z + legLength / 2.0 + legMargin
-  }))
-  engine.addEntity(legSouthWest)
+    let legNorthEast = new Entity()
+    legNorthEast.addComponent(legMaterial)
+    legNorthEast.addComponent(new BoxShape())
+    legNorthEast.addComponent(new Transform({
+      scale: new Vector3(legWidth, legHeight, legWidth),
+      position: new Vector3(
+        xBase + tileWidth * (x + 1) - legWidth / 2.0 - legMargin, 
+        legHeight / 2.0, 
+        zBase + tileLength * (z + 1) - legLength / 2.0 - legMargin
+    }))
+    engine.addEntity(legNorthEast)
 
-  let legNorthEast = new Entity()
-  legNorthEast.addComponent(legMaterial)
-  legNorthEast.addComponent(new BoxShape())
-  legNorthEast.addComponent(new Transform({
-    scale: new Vector3(legWidth, legHeight, legWidth),
-    position: new Vector3(
-      xBase + tileWidth * (x + 1) - legWidth / 2.0 - legMargin, 
-      legHeight / 2.0, 
-      zBase + tileLength * (z + 1) - legLength / 2.0 - legMargin
-  }))
-  engine.addEntity(legNorthEast)
+  } else {
+
+    let legWidth = 0.03
+    let legLength = 0.03
+    let legHeight = currentHeight
+    let legCenter = new Entity()
+    legCenter.addComponent(legMaterial)
+    legCenter.addComponent(new BoxShape())
+    legCenter.addComponent(new Transform({
+      scale: new Vector3(legWidth, legHeight, legLength),
+      position: new Vector3(
+        xBase + tileWidth * x + tileWidth / 2.0 + legWidth / 2.0 ,
+        legHeight / 2.0, 
+        zBase + tileLength * z + tileLength / 2.0 + legLength / 2.0
+    }))
+    engine.addEntity(legCenter)
+
+  }
 
   return currentHeight
 }
 
-function buildClimbingArtwork(blockNumber: number, hash: string) {
-  let currentHeight = 1 
+function buildClimbingArtwork(blockNumber: number, hash: string, smallConcept: boolean) {
+  let currentHeight = 0
   for(let i = 0; i < 64; i++) {
     let currentHash = hash[i]
     let previousHash = (i == 0 ? hash[63] : hash[i - 1])
-    currentHeight = buildStep(blockNumber, i, previousHash, currentHash, currentHeight)
+    currentHeight = buildStep(blockNumber, i, previousHash, currentHash, currentHeight, smallConcept)
   }
 }
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
-  return buildClimbingArtwork(blockNumber, hash)
+  return buildClimbingArtwork(blockNumber, hash, true)
 }
 
 
@@ -271,44 +298,44 @@ function buildTree(x: number, y: number, z: number) {
 
 
 
-  engine.addEntity(buildPath(3, 0, 8, 0, '#E0A060', 'Oldest One-time Miner'))
+  engine.addEntity(buildPath(3, 0, 8, 0, '#20E0A0', 'theDAO is deployed'))
 
 
 
 
 
-  engine.addEntity(buildPath(8, 0, 13, 90, '#402080'))
+  engine.addEntity(buildPath(8, 0, 13, 90, '#60E0A0'))
 
 
 
 
 
-  engine.addEntity(buildPath(13, 0, 8, 180, '#4060C0'))
+  engine.addEntity(buildPath(13, 0, 8, 180, '#A020C0'))
 
 
 
 
 
-  engine.addEntity(buildPath(8, 0, 3, 270, '#40E0A0'))
+  engine.addEntity(buildPath(8, 0, 3, 270, '#6040E0'))
 
 
 
 
 
 
-engine.addEntity(buildBench(1, 0, 8, 0, '#E04080'))
+engine.addEntity(buildBench(1, 0, 8, 0, '#606020'))
 
 
 
-engine.addEntity(buildBench(8, 0, 15, 90, '#A0E0E0'))
+engine.addEntity(buildBench(8, 0, 15, 90, '#208020'))
 
 
 
-engine.addEntity(buildBench(15, 0, 8, 180, '#E0E0A0'))
+engine.addEntity(buildBench(15, 0, 8, 180, '#E0E080'))
 
 
 
-engine.addEntity(buildBench(8, 0, 1, 270, '#2060E0'))
+engine.addEntity(buildBench(8, 0, 1, 270, '#E040A0'))
 
 
 
@@ -362,4 +389,4 @@ engine.addEntity(buildTree(11, 0.5, 1))
 
 
 
-buildArtwork(9, 762, 'd898664323723661c037e39cd24e7290dee0ffe3aa1a62f3cb0ace3034814403')
+buildArtwork(10, 1428757, '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59')

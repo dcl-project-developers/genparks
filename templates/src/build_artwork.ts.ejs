@@ -74,6 +74,14 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
 <% include build_climbing_artwork.ts.ejs %>
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
-  return buildClimbingArtwork(blockNumber, hash)
+  return buildClimbingArtwork(blockNumber, hash, false)
+}
+<% } %>
+
+<% if(conceptNumber == 10) { %>
+<% include build_climbing_artwork.ts.ejs %>
+
+function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+  return buildClimbingArtwork(blockNumber, hash, true)
 }
 <% } %>
