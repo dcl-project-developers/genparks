@@ -7,12 +7,12 @@
     "name": "author-name",
     "email": ""
   },
-  "owner": "",
+  "owner": "0x5eA93BD269bFd21B9e19f73Db5D51D189c35cDB3",
   "scene": {
     "parcels": [
-      "0,0"
+      "8,27"
     ],
-    "base": "0,0"
+    "base": "8,27"
   },
   "communications": {
     "type": "webrtc",
@@ -23,7 +23,7 @@
     "fly": true,
     "voiceEnabled": true,
     "blacklist": [],
-    "teleportPosition": ""
+    "teleportPosition": "3, 0, 1"
   },
   "main": "bin/game.js",
   "tags": []
