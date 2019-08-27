@@ -17,16 +17,18 @@
 
 
 
+
+
 /// ---- CLIMBING ----
 // Concept: use steps to build a climbing structure
 
 let legMaterial = new Material()
 legMaterial.hasAlpha = false
-legMaterial.metalic = 1
+legMaterial.metallic = 1
 legMaterial.roughness = 1
-legMaterial.emissiveColor = 1
-legMaterial.ambientColor = 1
-legMaterial.reflectionColor = 1
+legMaterial.emissiveColor = Color3.FromHexString('#a0a0a0')
+legMaterial.ambientColor = Color3.FromHexString('#ffffff')
+legMaterial.reflectionColor = Color3.FromHexString('#ffffff')
 legMaterial.albedoColor = Color3.FromHexString('#ffffff')
 
 function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, currentHeight, smallConcept) {
@@ -42,28 +44,29 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
   let stepDecimal = parseInt('0x' + stepHexDigit, 16)
   let previousStepDecimal = parseInt('0x' + previousStepHexDigit, 16)
 
-  console.log(
-    'stepNumber', stepNumber, 
-    'stepHexDigit', stepHexDigit, 
-    'stepDecimal', stepDecimal, 
-    'previousStepHexDigit', previousStepHexDigit, 
-    'previousStepDecimal', previousStepDecimal, 
-  )
+  // console.log(
+  //   'stepNumber', stepNumber, 
+  //   'stepHexDigit', stepHexDigit, 
+  //   'stepDecimal', stepDecimal, 
+  //   'previousStepHexDigit', previousStepHexDigit, 
+  //   'previousStepDecimal', previousStepDecimal, 
+  // )
   
   // calculate color
   let colorHex = '#' + stepHexDigit + '0' + stepHexDigit + '0' + stepHexDigit + '0'
 
-  console.log('Color: ', colorHex)
+  // console.log('Color: ', colorHex)
 
   // add the color
   let stepMaterial = new Material()
   stepMaterial.hasAlpha = false
   stepMaterial.albedoColor = Color3.FromHexString(colorHex)
 
+  let stepHeight = 0
   if(smallConcept) {
-    let stepHeight = 0.3
+    stepHeight = 0.3
   } else {
-    let stepHeight = 1
+    stepHeight = 1
   }
 
   currentHeight += stepHeight
@@ -81,7 +84,8 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
     position: new Vector3(
       xBase + tileWidth * x + tileWidth / 2.0,
       currentHeight + tileHeight / 2.0, 
-      zBase + tileLength * z + tileLength / 2.0, 
+      zBase + tileLength * z + tileLength / 2.0
+    )
   }))
   engine.addEntity(tile)
 
@@ -103,6 +107,7 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
         xBase + tileWidth * x + legWidth / 2.0 + legMargin,
         legHeight / 2.0, 
         zBase + tileLength * z + legLength / 2.0 + legMargin
+      )
     }))
     engine.addEntity(legSouthWest)
 
@@ -115,6 +120,7 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
         xBase + tileWidth * (x + 1) - legWidth / 2.0 - legMargin, 
         legHeight / 2.0, 
         zBase + tileLength * (z + 1) - legLength / 2.0 - legMargin
+      )
     }))
     engine.addEntity(legNorthEast)
 
@@ -131,9 +137,10 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
       position: new Vector3(
         xBase + tileWidth * x + tileWidth / 2.0 + legWidth / 2.0 ,
         legHeight / 2.0, 
-        zBase + tileLength * z + titleLength / 2.0 + legLength / 2.0
+        zBase + tileLength * z + tileLength / 2.0 + legLength / 2.0
+      )
     }))
-    engine.addEntity(legSouthWest)
+    engine.addEntity(legCenter)
 
   }
 
@@ -150,10 +157,8 @@ function buildClimbingArtwork(blockNumber: number, hash: string, smallConcept: b
 }
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
-  return buildClimbingArtwork(blockNumber, hash, false)
+  return buildClimbingArtwork(blockNumber, hash, true)
 }
-
-
 
 
 
@@ -389,4 +394,4 @@ engine.addEntity(buildTree(11, 0.5, 1))
 
 
 
-buildArtwork(9, 1428757, '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59')
+buildArtwork(10, 1428757, '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59')

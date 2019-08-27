@@ -174,6 +174,10 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
 
 
 
+
+
+
+
 function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
 
   // specs for benches
