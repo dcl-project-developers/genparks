@@ -88,8 +88,11 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
 
 <% if(conceptNumber == 11) { %>
 <% include build_climbing_artwork.ts.ejs %>
+<% include to_base_array.ts.ejs %>
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
-  return buildClimbingArtwork(blockNumber, hash, true, true)
+  let base64BlockNumberArray = toBaseArray(blockNumber, 64)  
+  return buildClimbingArtwork(blockNumber, hash, true, true, base64BlockNumberArray)
 }
 <% } %>
+

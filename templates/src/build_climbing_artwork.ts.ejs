@@ -1,6 +1,14 @@
 /// ---- CLIMBING ----
 // Concept: use steps to build a climbing structure
 
+// the puzzle version of CLIMBING is concept #11 - adds decorators and click event handling with puzzle accounting
+let puzzleAccumulatedTotal = 0
+let puzzleAccumulatedClicks = 0
+
+// Create UI canvas and text
+const uCanvas = new UICanvas() 
+const uText = new UIText(uCanvas)
+
 let legMaterial = new Material()
 legMaterial.hasAlpha = false
 legMaterial.metallic = 1
@@ -10,7 +18,13 @@ legMaterial.ambientColor = Color3.FromHexString('#ffffff')
 legMaterial.reflectionColor = Color3.FromHexString('#ffffff')
 legMaterial.albedoColor = Color3.FromHexString('#ffffff')
 
-function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, currentHeight, smallConcept, puzzleMode) {
+function buildStepDecorator(x, y, z, stepNumber, index) {
+  console.log('build step decorator', x, y, z, stepNumber, index)
+  return
+}
+
+
+function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, currentHeight, smallConcept, puzzleMode, base64BlockNumberArray?: number[]) {
 
   let artWidth = 8
   const xBase = 4
@@ -109,28 +123,38 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
     let legLength = 0.03
     let legHeight = currentHeight
     let legCenter = new Entity()
+    let xCoord = xBase + tileWidth * x + tileWidth / 2.0 + legWidth / 2.0
+    let zCoord = zBase + tileLength * z + tileLength / 2.0 + legLength / 2.0
     legCenter.addComponent(legMaterial)
     legCenter.addComponent(new BoxShape())
     legCenter.addComponent(new Transform({
       scale: new Vector3(legWidth, legHeight, legLength),
       position: new Vector3(
-        xBase + tileWidth * x + tileWidth / 2.0 + legWidth / 2.0 ,
+        xCoord,
         legHeight / 2.0, 
-        zBase + tileLength * z + tileLength / 2.0 + legLength / 2.0
+        zCoord
       )
     }))
     engine.addEntity(legCenter)
 
+    if(puzzleMode) {
+      // add a decoration if step number belongs to the base 64 representation of blockNumber
+      for(let index = 0; index < base64BlockNumberArray.length; index++) {
+        if(base64BlockNumberArray[index] === stepNumber) {
+          buildStepDecorator(xCoord, currentHeight, zCoord, stepNumber, index)
+        }
+      }  
+    }
   }
 
   return currentHeight
 }
 
-function buildClimbingArtwork(blockNumber: number, hash: string, smallConcept: boolean, puzzleMode: boolean) {
+function buildClimbingArtwork(blockNumber: number, hash: string, smallConcept: boolean, puzzleMode: boolean, base64BlockNumberArray?: number[]) {
   let currentHeight = 0
   for(let i = 0; i < 64; i++) {
     let currentHash = hash[i]
     let previousHash = (i == 0 ? hash[63] : hash[i - 1])
-    currentHeight = buildStep(blockNumber, i, previousHash, currentHash, currentHeight, smallConcept, puzzleMode)
+    currentHeight = buildStep(blockNumber, i, previousHash, currentHash, currentHeight, smallConcept, puzzleMode, base64BlockNumberArray)
   }
 }
