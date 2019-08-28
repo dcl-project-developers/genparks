@@ -29,7 +29,7 @@ legMaterial.ambientColor = Color3.FromHexString('#ffffff')
 legMaterial.reflectionColor = Color3.FromHexString('#ffffff')
 legMaterial.albedoColor = Color3.FromHexString('#ffffff')
 
-function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, currentHeight, smallConcept) {
+function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, currentHeight, smallConcept, puzzleMode) {
 
   let artWidth = 8
   const xBase = 4
@@ -145,18 +145,19 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
   return currentHeight
 }
 
-function buildClimbingArtwork(blockNumber: number, hash: string, smallConcept: boolean) {
+function buildClimbingArtwork(blockNumber: number, hash: string, smallConcept: boolean, puzzleMode: boolean) {
   let currentHeight = 0
   for(let i = 0; i < 64; i++) {
     let currentHash = hash[i]
     let previousHash = (i == 0 ? hash[63] : hash[i - 1])
-    currentHeight = buildStep(blockNumber, i, previousHash, currentHash, currentHeight, smallConcept)
+    currentHeight = buildStep(blockNumber, i, previousHash, currentHash, currentHeight, smallConcept, puzzleMode)
   }
 }
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
-  return buildClimbingArtwork(blockNumber, hash, false)
+  return buildClimbingArtwork(blockNumber, hash, false, false)
 }
+
 
 
 
