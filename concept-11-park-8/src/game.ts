@@ -41,9 +41,79 @@ legMaterial.ambientColor = Color3.FromHexString('#ffffff')
 legMaterial.reflectionColor = Color3.FromHexString('#ffffff')
 legMaterial.albedoColor = Color3.FromHexString('#ffffff')
 
-function buildStepDecorator(x, y, z, stepNumber, index) {
+function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index) {
   console.log('build step decorator', x, y, z, stepNumber, index)
-  return
+
+  // use index for the radio
+  const radio = (tileWidth * 0.25) * ((index + 1)/ 5.0)
+
+  // use same decorator color as buildings artwork (maybe refactor if we keep this?)
+  const decoratorColors = ['#ffffa0', '#ffa0ff', '#a0ffff', '#ffa0a0', '#a0ffc0', '#a0a0ff', '#a0a0a0']
+  let decoratorColorHex = decoratorColors[index % (decoratorColors.length - 1)]
+  let decoratorMaterial = new Material()
+  decoratorMaterial.hasAlpha = false
+  decoratorMaterial.albedoColor = Color3.FromHexString(decoratorColorHex)
+
+  // set a bunch of other material properties e.g.:
+  // emissiveColor: The color emitted from the material.
+  // ambientColor: AKA Diffuse Color in other nomenclature.
+  // reflectionColor: The color reflected from the material.
+  // reflectivityColor: AKA Specular Color in other nomenclature.
+
+  decoratorMaterial.metallic = 0.2
+  decoratorMaterial.roughness = 0
+
+  // decoratorMaterial.emissiveColor = Color3('#000000')
+  // decoratorMaterial.ambientColor = Color3('#000000')
+  // decoratorMaterial.reflectionColor = Color3('#000000')
+  // decoratorMaterial.reflectivityColor = Color3('#ffffff')
+
+  let sphere = new Entity()
+  sphere.addComponent(decoratorMaterial)
+  sphere.addComponent(new SphereShape())
+  sphere.addComponent(new Transform({
+    scale: new Vector3(radio, radio, radio),
+    position: new Vector3(
+      x, 
+      y, 
+      z
+    )
+  }))  
+  engine.addEntity(sphere)
+
+  // handle click event
+  sphere.addComponent(
+    new OnClick(e => {
+
+      console.log("sphere clicked entering event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", stepNumber)
+
+      puzzleAccumulatedTotal = stepNumber * Math.pow(64, puzzleAccumulatedClicks) + puzzleAccumulatedTotal
+      puzzleAccumulatedClicks = puzzleAccumulatedClicks + 1        
+
+      console.log("sphere calculated event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", stepNumber)
+
+      // check for win / loss
+      if(puzzleAccumulatedTotal > blockNumber) {
+        puzzleAccumulatedTotal = 0
+        puzzleAccumulatedClicks = 0
+        uText.value = 'Game over, restarting puzzle! (' + puzzleAccumulatedTotal + ')'  
+      } else {
+        if(puzzleAccumulatedTotal === blockNumber) {
+          uText.value = 'Congratulations. You\'ve solved the puzzle! (' + puzzleAccumulatedTotal + '). Go again?'
+          puzzleAccumulatedTotal = 0 
+          puzzleAccumulatedClicks = 0   
+        } else {
+          if(puzzleAccumulatedTotal < blockNumber) {
+            uText.value = 'Hmm... keep going... (' + puzzleAccumulatedTotal + ')'
+          }        
+        }
+      }
+
+      console.log("sphere clicked exiting event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", stepNumber)
+
+    })
+  )
+  
 }
 
 
@@ -164,7 +234,7 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
       // add a decoration if step number belongs to the base 64 representation of blockNumber
       for(let index = 0; index < base64BlockNumberArray.length; index++) {
         if(base64BlockNumberArray[index] === stepNumber) {
-          buildStepDecorator(xCoord, currentHeight, zCoord, stepNumber, index)
+          buildStepDecorator(blockNumber, tileWidth, xCoord, currentHeight, zCoord, stepNumber, index)
         }
       }  
     }
