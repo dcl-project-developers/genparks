@@ -31,18 +31,18 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
   let stepDecimal = parseInt('0x' + stepHexDigit, 16)
   let previousStepDecimal = parseInt('0x' + previousStepHexDigit, 16)
 
-  console.log(
-    'stepNumber', stepNumber, 
-    'stepHexDigit', stepHexDigit, 
-    'stepDecimal', stepDecimal, 
-    'previousStepHexDigit', previousStepHexDigit, 
-    'previousStepDecimal', previousStepDecimal, 
-  )
+  // console.log(
+  //   'stepNumber', stepNumber, 
+  //   'stepHexDigit', stepHexDigit, 
+  //   'stepDecimal', stepDecimal, 
+  //   'previousStepHexDigit', previousStepHexDigit, 
+  //   'previousStepDecimal', previousStepDecimal, 
+  // )
   
   // calculate color
   let colorHex = '#' + stepHexDigit + '0' + stepHexDigit + '0' + stepHexDigit + '0'
 
-  console.log('Color: ', colorHex)
+  // console.log('Color: ', colorHex)
 
   // add the color
   let stepMaterial = new Material()
@@ -71,6 +71,7 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
       xBase - thisStepWidth / 2.0 - stepWidth / 2.0, 
       currentHeight, 
       zBase
+    )
   }))
   engine.addEntity(stepWest)
 
@@ -83,6 +84,7 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
       xBase, 
       currentHeight, 
       zBase + thisStepWidth / 2.0 + stepWidth / 2.0
+    )
   }))
   engine.addEntity(stepNorth)
 
@@ -95,6 +97,7 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
       xBase + thisStepWidth / 2.0 + stepWidth / 2.0, 
       currentHeight, 
       zBase
+    )
   }))
   engine.addEntity(stepEast)
 
@@ -107,6 +110,7 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
       xBase, 
       currentHeight, 
       zBase - thisStepWidth / 2.0 - stepWidth / 2.0
+    )
   }))
   engine.addEntity(stepSouth)
 
@@ -115,11 +119,14 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
   // add the color
   let legMaterial = new Material()
   legMaterial.hasAlpha = false
-  legMaterial.metalic = 1
+  legMaterial.metallic = 1
   legMaterial.roughness = 1
-  legMaterial.emissiveColor = 1
-  legMaterial.ambientColor = 1
-  legMaterial.reflectionColor = 1
+
+  // these should be Color3 instead otherwise just ignored
+  // legMaterial.emissiveColor = 1
+  // legMaterial.ambientColor = 1
+  // legMaterial.reflectionColor = 1
+
   legMaterial.albedoColor = Color3.FromHexString('#ffffff')
 
 
@@ -134,6 +141,7 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
       xBase, 
       legHeight / 2.0, 
       zBase - thisStepWidth / 2.0 - stepWidth / 2.0
+    )
   }))
   engine.addEntity(legSouth)
 
@@ -146,6 +154,7 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
       xBase, 
       legHeight / 2.0, 
       zBase + thisStepWidth / 2.0 + stepWidth / 2.0
+    )
   }))
   engine.addEntity(legNorth)
 
@@ -164,6 +173,12 @@ function buildWaveArtwork(blockNumber: number, hash: string) {
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
   return buildWaveArtwork(blockNumber, hash)
 }
+
+
+
+
+
+
 
 
 

@@ -29,19 +29,19 @@ function buildPlanet(blockNumber, base64BlockNumberArray, planetNumber, planetHe
   const xBase = 4
   const zBase = 4
 
-  console.log('Planet number', planetNumber, 'Planet hex: ', planetHex)
+  // console.log('Planet number', planetNumber, 'Planet hex: ', planetHex)
 
   const width = 8 / 16.0
   const length = 8 / 16.0
 
   // use 7th digit for radio  
   let radioDecimal = parseInt('0x' + planetHex[6])
-  console.log('Radio decimal', radioDecimal, 'hex digit', planetHex[6])
+  // console.log('Radio decimal', radioDecimal, 'hex digit', planetHex[6])
   const radio = 0.15 + (radioDecimal - 8) / 8.0 * 0.1    // map the [0,15] to radioDecimal
 
   // calculate color
   let colorHex = '#' + planetHex.substring(0, 6)
-  console.log('Color: ', colorHex)
+  // console.log('Color: ', colorHex)
 
   // add the color
   let planetMaterial = new Material()
@@ -53,12 +53,15 @@ function buildPlanet(blockNumber, base64BlockNumberArray, planetNumber, planetHe
   // reflectionColor: The color reflected from the material.
   // reflectivityColor: AKA Specular Color in other nomenclature.
 
-  planetMaterial.metalic = 0.5 + parseInt('0x' + planetHex[0]) / 15.0/2
+  planetMaterial.metallic = 0.5 + parseInt('0x' + planetHex[0]) / 15.0/2
   planetMaterial.roughness = 0.5 + parseInt('0x' + planetHex[1]) / 15.0/2
-  planetMaterial.emissiveColor = 0.5 + parseInt('0x' + planetHex[2]) / 15.0/2
-  planetMaterial.ambientColor = 0.5 + parseInt('0x' + planetHex[3]) / 15.0/2
-  planetMaterial.reflectionColor = 0.5 + parseInt('0x' + planetHex[4]) / 15.0/2
-  planetMaterial.reflectivityColor = 0.5 + parseInt('0x' + planetHex[5]) / 15.0/2
+
+  // these should be colors instead - this was being ignored
+  // planetMaterial.emissiveColor = 0.5 + parseInt('0x' + planetHex[2]) / 15.0/2
+  // planetMaterial.ambientColor = 0.5 + parseInt('0x' + planetHex[3]) / 15.0/2
+  // planetMaterial.reflectionColor = 0.5 + parseInt('0x' + planetHex[4]) / 15.0/2
+  // planetMaterial.reflectivityColor = 0.5 + parseInt('0x' + planetHex[5]) / 15.0/2
+
   planetMaterial.albedoColor = Color3.FromHexString(colorHex)
 
 
@@ -75,8 +78,8 @@ function buildPlanet(blockNumber, base64BlockNumberArray, planetNumber, planetHe
   // project the X and Z center based on angle
   let angleDecimal = parseInt('0x' + planetHex[7])  
   let angleRadians = angleDecimal * (2 * Math.PI) / 15.0 // map [0, 15] to [0, 2 * 3.14]
-  let planetXCenter = 8 + orbitRadio * Math.cos(angleRadians)
-  let planetZCenter = 8 + orbitRadio * Math.sin(angleRadians)
+  planetXCenter = 8 + orbitRadio * Math.cos(angleRadians)
+  planetZCenter = 8 + orbitRadio * Math.sin(angleRadians)
 
   let planet = new Entity()
   planet.addComponent(planetMaterial)
@@ -120,7 +123,7 @@ function buildPlanet(blockNumber, base64BlockNumberArray, planetNumber, planetHe
 }
 
 function buildPlanetsArtwork(blockNumber: number, base64BlockNumberArray: number[], hash: string) {
-  console.log('build planets')
+  // console.log('build planets')
 
   // build planetary system
   let system = new Entity()
@@ -141,7 +144,7 @@ function buildPlanetsArtwork(blockNumber: number, base64BlockNumberArray: number
 
   for(let i = 0; i < 8; i++) {
     let substr = hash.substring(i * 8, (i + 1) * 8)
-    console.log('hash', hash, 'substr', substr)
+    // console.log('hash', hash, 'substr', substr)
     let planet = buildPlanet(blockNumber, base64BlockNumberArray, i, substr)
     planet.setParent(system)
   }
@@ -164,6 +167,18 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
   let base64BlockNumberArray = toBaseArray(blockNumber, 64)    
   return buildPlanetsArtwork(blockNumber, base64BlockNumberArray, hash)
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

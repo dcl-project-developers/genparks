@@ -15,29 +15,40 @@
 
 
 
-/// ---- TEST NFT ARTWORK ----
-/// ---- BASED ON PYRAMID ----
-// Concept: add an nft to pyramid artwork
 
-/// ---- PYRAMID ----
-// Concept: use cubes to build ...
 
-function buildStep(blockNumber, stepNumber, stepHexDigit, drawSubsteps) {
+/// ---- CLIMBING ----
+// Concept: use steps to build a climbing structure
+
+let legMaterial = new Material()
+legMaterial.hasAlpha = false
+legMaterial.metallic = 1
+legMaterial.roughness = 1
+legMaterial.emissiveColor = Color3.FromHexString('#a0a0a0')
+legMaterial.ambientColor = Color3.FromHexString('#ffffff')
+legMaterial.reflectionColor = Color3.FromHexString('#ffffff')
+legMaterial.albedoColor = Color3.FromHexString('#ffffff')
+
+function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, currentHeight, smallConcept) {
 
   let artWidth = 8
-  const xBase = 8
-  const zBase = 8
-  let topStepWidth = 0.5
-  let stepWidth = (artWidth - topStepWidth) / 64.0
-
-  // console.log('Step number', stepNumber, 'Step hex: ', stepHexDigit)
+  const xBase = 4
+  const zBase = 4
+  let lastStepWidth = 0.5
+  let tileWidth = artWidth / 4.0
+  let tileLength = tileWidth
+  let tileHeight = 0.05
 
   let stepDecimal = parseInt('0x' + stepHexDigit, 16)
-  
-  let stepHeight = 0.15
-  // let stepHeight = (stepDecimal + 1)/ 32.0 // hex digit translated to [1/32, 0.5]
+  let previousStepDecimal = parseInt('0x' + previousStepHexDigit, 16)
 
-  // console.log('stepHeight', stepHeight, 'decimal', stepDecimal)
+  // console.log(
+  //   'stepNumber', stepNumber, 
+  //   'stepHexDigit', stepHexDigit, 
+  //   'stepDecimal', stepDecimal, 
+  //   'previousStepHexDigit', previousStepHexDigit, 
+  //   'previousStepDecimal', previousStepDecimal, 
+  // )
   
   // calculate color
   let colorHex = '#' + stepHexDigit + '0' + stepHexDigit + '0' + stepHexDigit + '0'
@@ -49,134 +60,103 @@ function buildStep(blockNumber, stepNumber, stepHexDigit, drawSubsteps) {
   stepMaterial.hasAlpha = false
   stepMaterial.albedoColor = Color3.FromHexString(colorHex)
 
+  let stepHeight = 0
+  if(smallConcept) {
+    stepHeight = 0.3
+  } else {
+    stepHeight = 1
+  }
+
+  currentHeight += stepHeight
+  
+  // map the stepDecimal [0, 15] to a 4x4 with (x,z) pair coordinates
+  let x = stepDecimal % 4
+  let z = Math.floor(stepDecimal / 4.0)
+  
   // add the step
-  let step = new Entity()
-  let thisStepWidth = (64 - stepNumber) * stepWidth
-  step.addComponent(stepMaterial)
-  step.addComponent(new BoxShape())
-  step.addComponent(new Transform({
-    scale: new Vector3(thisStepWidth, stepHeight, thisStepWidth),
+  let tile = new Entity()
+  tile.addComponent(stepMaterial)
+  tile.addComponent(new BoxShape())
+  tile.addComponent(new Transform({
+    scale: new Vector3(tileWidth, tileHeight, tileLength),
     position: new Vector3(
-      xBase, 
-      stepHeight * stepNumber + stepHeight / 2.0, 
-      zBase
+      xBase + tileWidth * x + tileWidth / 2.0,
+      currentHeight + tileHeight / 2.0, 
+      zBase + tileLength * z + tileLength / 2.0
     )
   }))
+  engine.addEntity(tile)
 
-  // render the cube
-  engine.addEntity(step)
+  // build the legs
 
-  if(drawSubsteps) {
-    // add the sub-steps decorations
-    let subStepHexDigit = stepHexDigit
-    let subStepDecimal = parseInt('0x' + subStepHexDigit, 16)
-    let subStepWidth = stepWidth / 2.0
-    let subStepHeight = stepHeight / 2.0
+  if(!smallConcept) {
+    
+    let legWidth = 0.01
+    let legLength = 0.01    
+    let legHeight = currentHeight
+    let legMargin = tileWidth * 0.2
 
-    // console.log('sub-step hex', subStepHexDigit, 'subStepWidth', subStepWidth, 'subStepHeight', subStepHeight, 'subStepDecimal', subStepDecimal)
+    let legSouthWest = new Entity()
+    legSouthWest.addComponent(legMaterial)
+    legSouthWest.addComponent(new BoxShape())
+    legSouthWest.addComponent(new Transform({
+      scale: new Vector3(legWidth, legHeight, legLength),
+      position: new Vector3(
+        xBase + tileWidth * x + legWidth / 2.0 + legMargin,
+        legHeight / 2.0, 
+        zBase + tileLength * z + legLength / 2.0 + legMargin
+      )
+    }))
+    engine.addEntity(legSouthWest)
 
-    // calculate sub-step color as quick bit complement from color hex
-    let subColorHex = colorHex
+    let legNorthEast = new Entity()
+    legNorthEast.addComponent(legMaterial)
+    legNorthEast.addComponent(new BoxShape())
+    legNorthEast.addComponent(new Transform({
+      scale: new Vector3(legWidth, legHeight, legWidth),
+      position: new Vector3(
+        xBase + tileWidth * (x + 1) - legWidth / 2.0 - legMargin, 
+        legHeight / 2.0, 
+        zBase + tileLength * (z + 1) - legLength / 2.0 - legMargin
+      )
+    }))
+    engine.addEntity(legNorthEast)
 
-    // console.log('sub-step color', subColorHex)
+  } else {
 
-    // add the sub-steps color
-    let subStepMaterial = new Material()
-    subStepMaterial.hasAlpha = false
-    subStepMaterial.albedoColor = Color3.FromHexString(subColorHex)
-
-    // substeps start at the southwest corner and go clock-wise with up to 4 per side
-    subStepDecimal = subStepDecimal + 1 // we want from 1-16 substeps not 0-15 substeps
-    let margin = thisStepWidth / 8.0
-    for(let i = 0; i < subStepDecimal; i++) {
-      let x = 0
-      let z = 0      
-      let baseDelta = thisStepWidth / 2.0 + subStepWidth / 2.0
-      let subStep = new Entity()
-      subStep.addComponent(subStepMaterial)
-      subStep.addComponent(new BoxShape())
-      // west 4
-      if(i < 4) {
-        let index = i
-        x = xBase - baseDelta
-        z = zBase - baseDelta + margin + (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
-      } 
-      // north 4
-      if(i >= 4 && i < 8) {
-        let index = i - 4
-        x = xBase - baseDelta + margin + (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
-        z = zBase + baseDelta
-      }
-      // east 4
-      if(i >= 8 && i < 12) {
-        let index = i - 8
-        x = xBase + baseDelta
-        z = zBase + baseDelta - margin - (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
-      }    
-      // south 4
-      if(i >= 12 && i < 16) {
-        let index = i - 12
-        x = xBase + baseDelta - margin - (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
-        z = zBase - baseDelta
-      }        
-      subStep.addComponent(new Transform({
-        scale: new Vector3(subStepWidth, subStepHeight, subStepWidth),
-        position: new Vector3(
-          x, 
-          stepHeight * stepNumber + stepHeight / 2.0, 
-          z
-        )
-      }))
-
-      // render the sub step
-      engine.addEntity(subStep)  
-
-    }
+    let legWidth = 0.03
+    let legLength = 0.03
+    let legHeight = currentHeight
+    let legCenter = new Entity()
+    legCenter.addComponent(legMaterial)
+    legCenter.addComponent(new BoxShape())
+    legCenter.addComponent(new Transform({
+      scale: new Vector3(legWidth, legHeight, legLength),
+      position: new Vector3(
+        xBase + tileWidth * x + tileWidth / 2.0 + legWidth / 2.0 ,
+        legHeight / 2.0, 
+        zBase + tileLength * z + tileLength / 2.0 + legLength / 2.0
+      )
+    }))
+    engine.addEntity(legCenter)
 
   }
+
+  return currentHeight
 }
 
-function buildPyramidArtwork(blockNumber: number, hash: string, drawSubsteps: boolean) {
+function buildClimbingArtwork(blockNumber: number, hash: string, smallConcept: boolean) {
+  let currentHeight = 0
   for(let i = 0; i < 64; i++) {
-    buildStep(blockNumber, i, hash[i], drawSubsteps)
+    let currentHash = hash[i]
+    let previousHash = (i == 0 ? hash[63] : hash[i - 1])
+    currentHeight = buildStep(blockNumber, i, previousHash, currentHash, currentHeight, smallConcept)
   }
-}
-
-function buildNftTestArtwork(blockNumber: number, hash: string) {
-  let drawSubsteps = false
-  buildPyramidArtwork(blockNumber, hash, drawSubsteps)
-
-  // test the NFT feature
-  // see: https://docs.decentraland.org/blockchain-interactions/display-a-certified-nft/
-  const entity = new Entity()
-  const shapeComponent = new NFTShape('ethereum://0x06012c8cf97BEaD5deAe237070F9587f8E7A266d/558536')
-  entity.addComponent(shapeComponent)
-  entity.addComponent(
-    new Transform({
-      position: new Vector3(3, 1.5, 3)
-    })
-  )
-  engine.addEntity(entity)
-
-  // test CryptoArte
-  const entity2 = new Entity()
-  const shapeComponent2 = new NFTShape('ethereum://0xbace7e22f06554339911a03b8e0ae28203da9598/7429')
-  entity2.addComponent(shapeComponent2)
-  entity2.addComponent(
-    new Transform({
-      position: new Vector3(5, 1.5, 3)
-    })
-  )
-  engine.addEntity(entity2)
-
-  return
 }
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
-  return buildNftTestArtwork(blockNumber, hash)
+  return buildClimbingArtwork(blockNumber, hash, false)
 }
-
-
 
 
 
@@ -414,4 +394,4 @@ engine.addEntity(buildTree(11, 0.5, 1))
 
 
 
-buildArtwork(8, 1428757, '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59')
+buildArtwork(9, 1428757, '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59')

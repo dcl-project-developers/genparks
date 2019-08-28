@@ -20,19 +20,19 @@ function buildStep(blockNumber, stepNumber, stepHexDigit, drawSubsteps) {
   let topStepWidth = 0.5
   let stepWidth = (artWidth - topStepWidth) / 64.0
 
-  console.log('Step number', stepNumber, 'Step hex: ', stepHexDigit)
+  // console.log('Step number', stepNumber, 'Step hex: ', stepHexDigit)
 
   let stepDecimal = parseInt('0x' + stepHexDigit, 16)
   
   let stepHeight = 0.15
   // let stepHeight = (stepDecimal + 1)/ 32.0 // hex digit translated to [1/32, 0.5]
 
-  console.log('stepHeight', stepHeight, 'decimal', stepDecimal)
+  // console.log('stepHeight', stepHeight, 'decimal', stepDecimal)
   
   // calculate color
   let colorHex = '#' + stepHexDigit + '0' + stepHexDigit + '0' + stepHexDigit + '0'
 
-  console.log('Color: ', colorHex)
+  // console.log('Color: ', colorHex)
 
   // add the color
   let stepMaterial = new Material()
@@ -50,6 +50,7 @@ function buildStep(blockNumber, stepNumber, stepHexDigit, drawSubsteps) {
       xBase, 
       stepHeight * stepNumber + stepHeight / 2.0, 
       zBase
+    )
   }))
 
   // render the cube
@@ -62,12 +63,12 @@ function buildStep(blockNumber, stepNumber, stepHexDigit, drawSubsteps) {
     let subStepWidth = stepWidth / 2.0
     let subStepHeight = stepHeight / 2.0
 
-    console.log('sub-step hex', subStepHexDigit, 'subStepWidth', subStepWidth, 'subStepHeight', subStepHeight, 'subStepDecimal', subStepDecimal)
+    // console.log('sub-step hex', subStepHexDigit, 'subStepWidth', subStepWidth, 'subStepHeight', subStepHeight, 'subStepDecimal', subStepDecimal)
 
     // calculate sub-step color as quick bit complement from color hex
     let subColorHex = colorHex
 
-    console.log('sub-step color', subColorHex)
+    // console.log('sub-step color', subColorHex)
 
     // add the sub-steps color
     let subStepMaterial = new Material()
@@ -78,6 +79,8 @@ function buildStep(blockNumber, stepNumber, stepHexDigit, drawSubsteps) {
     subStepDecimal = subStepDecimal + 1 // we want from 1-16 substeps not 0-15 substeps
     let margin = thisStepWidth / 8.0
     for(let i = 0; i < subStepDecimal; i++) {
+      let x = 0
+      let z = 0      
       let baseDelta = thisStepWidth / 2.0 + subStepWidth / 2.0
       let subStep = new Entity()
       subStep.addComponent(subStepMaterial)
@@ -85,26 +88,26 @@ function buildStep(blockNumber, stepNumber, stepHexDigit, drawSubsteps) {
       // west 4
       if(i < 4) {
         let index = i
-        let x = xBase - baseDelta
-        let z = zBase - baseDelta + margin + (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
+        x = xBase - baseDelta
+        z = zBase - baseDelta + margin + (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
       } 
       // north 4
       if(i >= 4 && i < 8) {
         let index = i - 4
-        let x = xBase - baseDelta + margin + (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
-        let z = zBase + baseDelta
+        x = xBase - baseDelta + margin + (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
+        z = zBase + baseDelta
       }
       // east 4
       if(i >= 8 && i < 12) {
         let index = i - 8
-        let x = xBase + baseDelta
-        let z = zBase + baseDelta - margin - (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
+        x = xBase + baseDelta
+        z = zBase + baseDelta - margin - (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
       }    
       // south 4
       if(i >= 12 && i < 16) {
         let index = i - 12
-        let x = xBase + baseDelta - margin - (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
-        let z = zBase - baseDelta
+        x = xBase + baseDelta - margin - (index + 0.5) * ((thisStepWidth - margin * 2)/4.0)
+        z = zBase - baseDelta
       }        
       subStep.addComponent(new Transform({
         scale: new Vector3(subStepWidth, subStepHeight, subStepWidth),
@@ -112,6 +115,7 @@ function buildStep(blockNumber, stepNumber, stepHexDigit, drawSubsteps) {
           x, 
           stepHeight * stepNumber + stepHeight / 2.0, 
           z
+        )
       }))
 
       // render the sub step
@@ -131,6 +135,14 @@ function buildPyramidArtwork(blockNumber: number, hash: string, drawSubsteps: bo
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
   return buildPyramidArtwork(blockNumber, hash, false)
 }
+
+
+
+
+
+
+
+
 
 
 
