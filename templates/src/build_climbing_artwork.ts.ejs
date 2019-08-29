@@ -8,6 +8,7 @@ let puzzleAccumulatedClicks = 0
 // Create UI canvas and text
 const uCanvas = new UICanvas() 
 const uText = new UIText(uCanvas)
+let timerStart = null
 
 let legMaterial = new Material()
 legMaterial.hasAlpha = false
@@ -77,6 +78,11 @@ function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index) 
 
       console.log("sphere clicked entering event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", stepNumber)
 
+      // set timer start if not yet set
+      if(!timerStart) {
+        timerStart = Date.now()
+      }
+
       puzzleAccumulatedTotal = stepNumber * Math.pow(64, puzzleAccumulatedClicks) + puzzleAccumulatedTotal
       puzzleAccumulatedClicks = puzzleAccumulatedClicks + 1        
 
@@ -87,12 +93,15 @@ function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index) 
         puzzleAccumulatedTotal = 0
         puzzleAccumulatedClicks = 0
         uText.value = 'Game over, restarting puzzle! (' + puzzleAccumulatedTotal + ')'  
+        timerStart = null
       } else {
         if(puzzleAccumulatedTotal === blockNumber) {
-          uText.value = 'Congratulations. You\'ve solved the puzzle! (' + puzzleAccumulatedTotal + '). Go again?'
+          let timeElapsedInMilliseconds = Date.now() - timerStart
+          uText.value = 'Congratulations. You\'ve solved the puzzle! (' + puzzleAccumulatedTotal + ') in ' + (timeElapsedInMilliseconds / 1000.0).toFixed(2) + ' seconds. Go again?'
           puzzleAccumulatedTotal = 0 
           puzzleAccumulatedClicks = 0   
           showNft()
+          timerStart = nil
         } else {
           if(puzzleAccumulatedTotal < blockNumber) {
             uText.value = 'Hmm... keep going... (' + puzzleAccumulatedTotal + ')'
