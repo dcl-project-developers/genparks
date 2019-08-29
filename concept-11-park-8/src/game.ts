@@ -41,6 +41,19 @@ legMaterial.ambientColor = Color3.FromHexString('#ffffff')
 legMaterial.reflectionColor = Color3.FromHexString('#ffffff')
 legMaterial.albedoColor = Color3.FromHexString('#ffffff')
 
+function showNft() {
+  // see: https://docs.decentraland.org/blockchain-interactions/display-a-certified-nft/
+  const entity = new Entity()
+  const shapeComponent = new NFTShape('ethereum://0x06012c8cf97BEaD5deAe237070F9587f8E7A266d/558536')
+  entity.addComponent(shapeComponent)
+  entity.addComponent(
+    new Transform({
+      position: new Vector3(8, 0.5, 8)
+    })
+  )
+  engine.addEntity(entity)  
+}
+
 function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index) {
   console.log('build step decorator', x, y, z, stepNumber, index)
 
@@ -102,6 +115,7 @@ function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index) 
           uText.value = 'Congratulations. You\'ve solved the puzzle! (' + puzzleAccumulatedTotal + '). Go again?'
           puzzleAccumulatedTotal = 0 
           puzzleAccumulatedClicks = 0   
+          showNft()
         } else {
           if(puzzleAccumulatedTotal < blockNumber) {
             uText.value = 'Hmm... keep going... (' + puzzleAccumulatedTotal + ')'
