@@ -1,6 +1,8 @@
 /// ---- CLIMBING ----
 // Concept: use steps to build a climbing structure
 
+let tileHeight = 0.05
+
 // the puzzle version of CLIMBING is concept #11 - adds decorators and click event handling with puzzle accounting
 let puzzleAccumulatedTotal = 0
 let puzzleAccumulatedClicks = 0
@@ -24,12 +26,12 @@ legMaterial.albedoColor = Color3.FromHexString('#ffffff')
 
 // let theEntities:Entity[] = new Array(64)
 let theEntities = []
+let theRadios = []
 
 export class SimpleMove implements ISystem {
 
   update() {
 
-    let movementDistance = 0.01
     let distance = null
 
     // go back to 0 every 100 steps
@@ -37,30 +39,33 @@ export class SimpleMove implements ISystem {
       step = 0
     }
 
-    // for the 25 steps from step = 0 to step = 24, move up
-    if(step < 25) {
-      distance = Vector3.Up().scale(movementDistance)
-    }
+    // move the entities
+    for(let i = 0; i < theEntities.length; i++) {
 
-    // for the 50 steps from step = 25 to step = 74, move down
-    if(step >= 25 && step < 75) {
-      distance = Vector3.Down().scale(movementDistance)
-    }
+      let transform = theEntities[i].getComponent(Transform)
 
-    // for the 25 steps from step = 75 to step = 99, move up
-    if(step >= 75) {     
-      distance = Vector3.Up().scale(movementDistance)        
+      let movementDistance = (theRadios[i] + tileHeight / 2.0) / 25.0
+
+      // for the 25 steps from step = 0 to step = 24, move up
+      if(step < 25) {
+        distance = Vector3.Up().scale(movementDistance)
+      }
+      // for the 50 steps from step = 25 to step = 74, move down
+      if(step >= 25 && step < 75) {
+        distance = Vector3.Down().scale(movementDistance)
+      }
+      // for the 25 steps from step = 75 to step = 99, move up
+      if(step >= 75) {     
+        distance = Vector3.Up().scale(movementDistance)        
+      }      
+      transform.translate(distance)
     }
 
     // incremenet step
     step += 1
 
-    // move the entities
-    for(let i = 0; i < theEntities.length; i++) {
-      let transform = theEntities[i].getComponent(Transform)
-      transform.translate(distance)
-    }
   }
+  
 }
 
 function showNft() {
@@ -116,6 +121,11 @@ function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index, 
   }))  
   engine.addEntity(sphere)
 
+  if(movement) {
+    theEntities.push(sphere)
+    theRadios.push(radio)
+  }
+
   // handle click event
   sphere.addComponent(
     new OnClick(e => {
@@ -169,7 +179,7 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
   let lastStepWidth = 0.5
   let tileWidth = artWidth / 4.0
   let tileLength = tileWidth
-  let tileHeight = 0.05
+  //let tileHeight = 0.05
 
   let stepDecimal = parseInt('0x' + stepHexDigit, 16)
   let previousStepDecimal = parseInt('0x' + previousStepHexDigit, 16)
@@ -220,9 +230,9 @@ function buildStep(blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, 
   engine.addEntity(tile)
 
   // add the tile to the array of entities to be moved
-  if(movement) {
-    theEntities.push(tile)
-  }
+  // if(movement) {
+  //   theEntities.push(tile)
+  // }
 
   // build the legs
 
