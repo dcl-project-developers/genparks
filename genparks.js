@@ -181,6 +181,7 @@ const templateVars = function(conceptNumber, parkNumber) {
 
   let vars = {
     conceptNumber: conceptNumber,
+    parkNumber: parkNumber,
     benchLength: 4,
     legHeight: 0.6,
     legWidth: 0.05,
