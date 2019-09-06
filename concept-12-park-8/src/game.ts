@@ -195,9 +195,33 @@ function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index, 
   
 }
 
-function parkStepColor(stepHexDigit) {
-  let colorHex = '#' + stepHexDigit + '0' + stepHexDigit + '0' + stepHexDigit + '0'
-  return colorHex
+function parkStepColor(parkNumber, stepHexDigit) {
+
+  let parkRed = 0
+  let parkGreen = 0
+  let parkBlue = 0
+  let stepRed = 0
+  let stepGreen = 0
+  let stepBlue = 0
+  let numberOfParks = 25.0
+  let stepDecimal = parseInt('0x' + stepHexDigit, 16)
+
+  // parks 1 through 8 are blue-ish
+  if(parkNumber >= 1 && parkNumber <= 8) {
+    parkRed = 0
+    stepRed = ((stepDecimal + 1) / 16.0) / 4.0
+
+    parkGreen = 0
+    stepGreen = ((stepDecimal + 1) / 16.0) / 4.0
+
+    parkBlue = parkNumber / numberOfParks
+    stepBlue = (stepDecimal + 1) / 16.0
+  }
+
+
+  // colorHex = '#' + stepHexDigit + '0' + stepHexDigit + '0' + stepHexDigit + '0'
+  
+  return new Color3((parkRed + stepRed) / 2.0, (parkGreen + stepGreen) / 2.0, (parkBlue + stepBlue) / 2.0)
 }
 
 function buildStep(parkNumber, blockNumber, stepNumber, previousStepHexDigit, stepHexDigit, currentHeight, smallConcept, puzzleMode, base64BlockNumberArray?: number[], movement?: boolean) {
@@ -221,13 +245,10 @@ function buildStep(parkNumber, blockNumber, stepNumber, previousStepHexDigit, st
   //   'previousStepDecimal', previousStepDecimal, 
   // )
   
-  // calculate color
-  let colorHex = parkStepColor(stepHexDigit)
-
   // add the color
   let stepMaterial = new Material()
   stepMaterial.hasAlpha = false
-  stepMaterial.albedoColor = Color3.FromHexString(colorHex)
+  stepMaterial.albedoColor = parkStepColor(parkNumber, stepHexDigit)
 
   let stepHeight = 0
   if(smallConcept) {
