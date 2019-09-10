@@ -217,7 +217,7 @@ function parkStepColor(parkNumber, stepHexDigit, stepNumber) {
     parkRed = 0
     stepRed = stepNumber / 64.0    
   }
-  // parks 9 through 17 are red-ish with a little blue and increasingly green with height
+  // parks 9 through 16 are red-ish with a little blue and increasingly green with height
   if(parkNumber >= 9 && parkNumber <= 16) {
     parkRed = (parkNumber - 8) / 8.0
     stepRed = (stepDecimal + 1) / 16.0
@@ -230,7 +230,7 @@ function parkStepColor(parkNumber, stepHexDigit, stepNumber) {
 
     
   }
-  // parks 18 through 24 are green-ish with a little red and increasingly blue with height
+  // parks 17 through 24 are green-ish with a little red and increasingly blue with height
   if(parkNumber >= 17 && parkNumber <= 24) {
     parkGreen = (parkNumber - 16) / 8.0
     stepGreen = (stepDecimal + 1) / 16.0
@@ -251,9 +251,9 @@ function parkStepColor(parkNumber, stepHexDigit, stepNumber) {
 
     // the step number dictates the amount of green and blue
     parkGreen = 0
-    stepGreen = stepNumber / 64.0 * 1.5
+    stepGreen = stepNumber / 64.0 * 2
     parkBlue = 0
-    stepBlue = stepNumber / 64.0 * 1.5
+    stepBlue = stepNumber / 64.0 * 2
   }    
   return new Color3((parkRed + stepRed) / 2.0, (parkGreen + stepGreen) / 2.0, (parkBlue + stepBlue) / 2.0)
 }
