@@ -195,7 +195,7 @@ function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index, 
   
 }
 
-function parkStepColor(parkNumber, stepHexDigit) {
+function parkStepColor(parkNumber, stepHexDigit, stepNumber) {
 
   let parkRed = 0
   let parkGreen = 0
@@ -206,21 +206,55 @@ function parkStepColor(parkNumber, stepHexDigit) {
   let numberOfParks = 25.0
   let stepDecimal = parseInt('0x' + stepHexDigit, 16)
 
-  // parks 1 through 8 are blue-ish
+  // parks 1 through 8 are blue-ish with a little green and increasingly red with height
   if(parkNumber >= 1 && parkNumber <= 8) {
-    parkRed = 0
-    stepRed = ((stepDecimal + 1) / 16.0) / 4.0
+    parkBlue = parkNumber / 8.0
+    stepBlue = (stepDecimal + 1) / 16.0
 
     parkGreen = 0
-    stepGreen = ((stepDecimal + 1) / 16.0) / 4.0
+    stepGreen = ((stepDecimal + 1) / 16.0) / 2.0
 
-    parkBlue = parkNumber / numberOfParks
-    stepBlue = (stepDecimal + 1) / 16.0
+    parkRed = 0
+    stepRed = stepNumber / 64.0    
   }
+  // parks 9 through 17 are red-ish with a little blue and increasingly green with height
+  if(parkNumber >= 9 && parkNumber <= 16) {
+    parkRed = (parkNumber - 8) / 8.0
+    stepRed = (stepDecimal + 1) / 16.0
 
+    parkBlue = 0
+    stepBlue = ((stepDecimal + 1) / 16.0) / 2.0
 
-  // colorHex = '#' + stepHexDigit + '0' + stepHexDigit + '0' + stepHexDigit + '0'
-  
+    parkGreen = 0
+    stepGreen = stepNumber / 64.0
+
+    
+  }
+  // parks 18 through 24 are green-ish with a little red and increasingly blue with height
+  if(parkNumber >= 17 && parkNumber <= 24) {
+    parkGreen = (parkNumber - 16) / 8.0
+    stepGreen = (stepDecimal + 1) / 16.0
+
+    parkRed = 0
+    stepRed = ((stepDecimal + 1) / 16.0) / 2.0
+    
+    parkBlue = 0
+    stepBlue = stepNumber / 64.0
+  }  
+
+  // park 25 has special lighter color palette that gets closer to white towards the top
+  if(parkNumber == 25) {
+
+    // the letter / step positioning dictates the amount of red
+    parkRed = 0
+    stepRed = ((stepDecimal + 1) / 16.0) * 2  
+
+    // the step number dictates the amount of green and blue
+    parkGreen = 0
+    stepGreen = stepNumber / 64.0 * 1.5
+    parkBlue = 0
+    stepBlue = stepNumber / 64.0 * 1.5
+  }    
   return new Color3((parkRed + stepRed) / 2.0, (parkGreen + stepGreen) / 2.0, (parkBlue + stepBlue) / 2.0)
 }
 
@@ -248,7 +282,7 @@ function buildStep(parkNumber, blockNumber, stepNumber, previousStepHexDigit, st
   // add the color
   let stepMaterial = new Material()
   stepMaterial.hasAlpha = false
-  stepMaterial.albedoColor = parkStepColor(parkNumber, stepHexDigit)
+  stepMaterial.albedoColor = parkStepColor(parkNumber, stepHexDigit, stepNumber)
 
   let stepHeight = 0
   if(smallConcept) {
