@@ -341,19 +341,43 @@ function buildTree(x: number, y: number, z: number) {
 
 
 
-  engine.addEntity(buildPath(2, 0.05, 16, 8, 0.025, 13, 90, '#60E0A0'))
+  engine.addEntity(buildPath(2, 0.05, 2, 1, 0.025, 13, 90, '#60E0A0'))
 
 
 
 
 
-  engine.addEntity(buildPath(2, 0.05, 16, 13, 0.025, 8, 180, '#A020C0'))
+  engine.addEntity(buildPath(2, 0.05, 12, 10, 0.025, 13, 90, '#60E0A0'))
 
 
 
 
 
-  engine.addEntity(buildPath(2, 0.05, 16, 8, 0.025, 3, 270, '#6040E0'))
+  engine.addEntity(buildPath(2, 0.05, 2, 13, 0.025, 15, 180, '#A020C0'))
+
+
+
+
+
+  engine.addEntity(buildPath(2, 0.05, 12, 13, 0.025, 6, 180, '#A020C0'))
+
+
+
+
+
+  engine.addEntity(buildPath(2, 0.05, 2, 15, 0.025, 3, 270, '#6040E0'))
+
+
+
+
+
+  engine.addEntity(buildPath(2, 0.05, 8, 8, 0.025, 3, 270, '#6040E0'))
+
+
+
+
+
+  engine.addEntity(buildPath(2, 0.05, 2, 1, 0.025, 3, 270, '#6040E0'))
 
 
 
