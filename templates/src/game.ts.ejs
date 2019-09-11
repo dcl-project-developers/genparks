@@ -10,9 +10,9 @@
 <% paths.forEach(function(path, index) { %>
 
 <% if(index == 0) { %>
-  engine.addEntity(buildPath(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>', '<%= parkData.name %>'))
+  engine.addEntity(buildPath(<%= pathWidth %>, <%= pathHeight %>, <%= pathLength %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>', '<%= parkData.name %>'))
 <% } else { %>
-  engine.addEntity(buildPath(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>'))
+  engine.addEntity(buildPath(<%= pathWidth %>, <%= pathHeight %>, <%= pathLength %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>'))
 <% } %>
 
 <% }) %>

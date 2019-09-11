@@ -408,9 +408,9 @@ function buildClimbingArtwork(parkNumber: number, blockNumber: number, hash: str
   <% paths.forEach(function(path, index) { %>
 
   <% if(index == 0) { %>
-    engine.addEntity(buildPathWithColor3(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, pathColors[<%= index %>], '<%= parkData.name %>'))
+    engine.addEntity(buildPathWithColor3(<%= pathWidth %>, <%= pathHeight %>, <%= pathLength %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, pathColors[<%= index %>], '<%= parkData.name %>'))
   <% } else { %>
-    engine.addEntity(buildPathWithColor3(<%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, pathColors[<%= index %>]))
+    engine.addEntity(buildPathWithColor3(<%= pathWidth %>, <%= pathHeight %>, <%= pathLength %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, pathColors[<%= index %>]))
   <% } %>
 
   <% }) %>

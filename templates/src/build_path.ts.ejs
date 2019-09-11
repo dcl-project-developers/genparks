@@ -1,14 +1,11 @@
-function buildPath(x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
-  return buildPathWithColor3(x, y, z, zRotationDegrees, Color3.FromHexString(color), legend)
+function buildPath(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
+  return buildPathWithColor3(pathWidth, pathHeight, pathLength, x, y, z, zRotationDegrees, Color3.FromHexString(color), legend)
 }
 
-function buildPathWithColor3(x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string) {
+function buildPathWithColor3(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string) {
 
   // specs for path
-  let pathWidth = <%= pathWidth %>
-  let pathLength = <%= pathLength %>
-  let pathHeight = <%= pathHeight %>
-  let xRorationDegrees = 90
+  let xRotationDegrees = 90
 
   // material for paths
   let pathMaterial = new Material()
@@ -21,7 +18,7 @@ function buildPathWithColor3(x: number, y: number, z: number, zRotationDegrees: 
   path.addComponent(pathMaterial)
   path.addComponent(new Transform({
     position: new Vector3(x, y, z),
-    rotation: Quaternion.Euler(xRorationDegrees, 0, zRotationDegrees),
+    rotation: Quaternion.Euler(xRotationDegrees, 0, zRotationDegrees),
     scale: new Vector3(pathWidth, pathLength, pathHeight)
   }))
 

@@ -188,6 +188,10 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
 
 
 function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
+  return buildBenchWithColor3(x, y, z, zRotationDegrees, Color3.FromHexString(color))
+}
+
+function buildBenchWithColor3(x: number, y: number, z: number, zRotationDegrees: number, color: Color3) {
 
   // specs for benches
   let benchLength = 4
@@ -200,7 +204,7 @@ function buildBench(x: number, y: number, z: number, zRotationDegrees: number, c
 
   // material for benches
   let benchMaterial = new Material()
-  benchMaterial.albedoColor = Color3.FromHexString(color)
+  benchMaterial.albedoColor = color
 
   // build the bench entity itself
   let bench = new Entity()
@@ -274,25 +278,27 @@ function buildBench(x: number, y: number, z: number, zRotationDegrees: number, c
   return bench
 }
 
-function buildPath(x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
+function buildPath(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
+  return buildPathWithColor3(pathWidth, pathHeight, pathLength, x, y, z, zRotationDegrees, Color3.FromHexString(color), legend)
+}
+
+function buildPathWithColor3(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string) {
 
   // specs for path
-  let pathWidth = 2
-  let pathLength = 16
-  let pathHeight = 1
-  let xRorationDegrees = 90
+  let xRotationDegrees = 90
 
   // material for paths
   let pathMaterial = new Material()
-  pathMaterial.albedoColor = Color3.FromHexString(color)
+  pathMaterial.albedoColor = color
+  pathMaterial.hasAlpha = true
 
   // west path goes from south to north
   let path = new Entity()
-  path.addComponent(new PlaneShape())
+  path.addComponent(new BoxShape())
   path.addComponent(pathMaterial)
   path.addComponent(new Transform({
     position: new Vector3(x, y, z),
-    rotation: Quaternion.Euler(xRorationDegrees, 0, zRotationDegrees),
+    rotation: Quaternion.Euler(xRotationDegrees, 0, zRotationDegrees),
     scale: new Vector3(pathWidth, pathLength, pathHeight)
   }))
 
@@ -328,26 +334,26 @@ function buildTree(x: number, y: number, z: number) {
 
 
 
-  engine.addEntity(buildPath(3, 0, 8, 0, '#20E0A0', 'theDAO is deployed'))
+
+  engine.addEntity(buildPath(2, 0.05, 16, 3, 0.025, 8, 0, '#20E0A0', 'theDAO is deployed'))
 
 
 
 
 
-  engine.addEntity(buildPath(8, 0, 13, 90, '#60E0A0'))
+  engine.addEntity(buildPath(2, 0.05, 16, 8, 0.025, 13, 90, '#60E0A0'))
 
 
 
 
 
-  engine.addEntity(buildPath(13, 0, 8, 180, '#A020C0'))
+  engine.addEntity(buildPath(2, 0.05, 16, 13, 0.025, 8, 180, '#A020C0'))
 
 
 
 
 
-  engine.addEntity(buildPath(8, 0, 3, 270, '#6040E0'))
-
+  engine.addEntity(buildPath(2, 0.05, 16, 8, 0.025, 3, 270, '#6040E0'))
 
 
 

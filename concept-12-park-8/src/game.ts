@@ -433,25 +433,25 @@ function buildClimbingArtwork(parkNumber: number, blockNumber: number, hash: str
   
 
   
-    engine.addEntity(buildPathWithColor3(3, 0.025, 8, 0, pathColors[0], 'theDAO is deployed'))
+    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 3, 0.025, 8, 0, pathColors[0], 'theDAO is deployed'))
   
 
   
 
   
-    engine.addEntity(buildPathWithColor3(8, 0.025, 13, 90, pathColors[1]))
+    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 8, 0.025, 13, 90, pathColors[1]))
   
 
   
 
   
-    engine.addEntity(buildPathWithColor3(13, 0.025, 8, 180, pathColors[2]))
+    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 13, 0.025, 8, 180, pathColors[2]))
   
 
   
 
   
-    engine.addEntity(buildPathWithColor3(8, 0.025, 3, 270, pathColors[3]))
+    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 8, 0.025, 3, 270, pathColors[3]))
   
 
   
@@ -601,17 +601,14 @@ function buildBenchWithColor3(x: number, y: number, z: number, zRotationDegrees:
   return bench
 }
 
-function buildPath(x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
-  return buildPathWithColor3(x, y, z, zRotationDegrees, Color3.FromHexString(color), legend)
+function buildPath(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
+  return buildPathWithColor3(pathWidth, pathHeight, pathLength, x, y, z, zRotationDegrees, Color3.FromHexString(color), legend)
 }
 
-function buildPathWithColor3(x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string) {
+function buildPathWithColor3(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string) {
 
   // specs for path
-  let pathWidth = 2
-  let pathLength = 16
-  let pathHeight = 0.05
-  let xRorationDegrees = 90
+  let xRotationDegrees = 90
 
   // material for paths
   let pathMaterial = new Material()
@@ -624,7 +621,7 @@ function buildPathWithColor3(x: number, y: number, z: number, zRotationDegrees: 
   path.addComponent(pathMaterial)
   path.addComponent(new Transform({
     position: new Vector3(x, y, z),
-    rotation: Quaternion.Euler(xRorationDegrees, 0, zRotationDegrees),
+    rotation: Quaternion.Euler(xRotationDegrees, 0, zRotationDegrees),
     scale: new Vector3(pathWidth, pathLength, pathHeight)
   }))
 
