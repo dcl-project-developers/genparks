@@ -182,6 +182,11 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
 
 
 
+
+
+
+
+
 function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
 
   // specs for benches
@@ -348,6 +353,7 @@ function buildTree(x: number, y: number, z: number) {
 
 
 
+
 engine.addEntity(buildBench(1, 0, 8, 0, '#606020'))
 
 
@@ -361,6 +367,7 @@ engine.addEntity(buildBench(15, 0, 8, 180, '#E0E080'))
 
 
 engine.addEntity(buildBench(8, 0, 1, 270, '#E040A0'))
+
 
 
 

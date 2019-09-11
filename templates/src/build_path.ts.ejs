@@ -1,4 +1,8 @@
 function buildPath(x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
+  return buildPathWithColor3(x, y, z, zRotationDegrees, Color3.FromHexString(color), legend)
+}
+
+function buildPathWithColor3(x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string) {
 
   // specs for path
   let pathWidth = <%= pathWidth %>
@@ -8,11 +12,12 @@ function buildPath(x: number, y: number, z: number, zRotationDegrees: number, co
 
   // material for paths
   let pathMaterial = new Material()
-  pathMaterial.albedoColor = Color3.FromHexString(color)
+  pathMaterial.albedoColor = color
+  pathMaterial.hasAlpha = true
 
   // west path goes from south to north
   let path = new Entity()
-  path.addComponent(new PlaneShape())
+  path.addComponent(new BoxShape())
   path.addComponent(pathMaterial)
   path.addComponent(new Transform({
     position: new Vector3(x, y, z),

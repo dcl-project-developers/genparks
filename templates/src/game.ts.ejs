@@ -6,6 +6,7 @@
 
 <% include build_tree.ts.ejs %>
 
+<% if(conceptNumber < 9) { %>
 <% paths.forEach(function(path, index) { %>
 
 <% if(index == 0) { %>
@@ -21,6 +22,7 @@
 engine.addEntity(buildBench(<%= bench.x %>, <%= bench.y %>, <%= bench.z %>, <%= bench.angle %>, '<%= bench.color %>'))
 
 <% }) %>
+<% } %>
 
 <% trees.forEach(function(tree) { %>
 

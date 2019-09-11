@@ -217,7 +217,7 @@ function parkStepColor(parkNumber, stepHexDigit, stepNumber) {
     parkRed = 0
     stepRed = stepNumber / 64.0    
   }
-  // parks 9 through 17 are red-ish with a little blue and increasingly green with height
+  // parks 9 through 16 are red-ish with a little blue and increasingly green with height
   if(parkNumber >= 9 && parkNumber <= 16) {
     parkRed = (parkNumber - 8) / 8.0
     stepRed = (stepDecimal + 1) / 16.0
@@ -230,7 +230,7 @@ function parkStepColor(parkNumber, stepHexDigit, stepNumber) {
 
     
   }
-  // parks 18 through 24 are green-ish with a little red and increasingly blue with height
+  // parks 17 through 24 are green-ish with a little red and increasingly blue with height
   if(parkNumber >= 17 && parkNumber <= 24) {
     parkGreen = (parkNumber - 16) / 8.0
     stepGreen = (stepDecimal + 1) / 16.0
@@ -251,9 +251,9 @@ function parkStepColor(parkNumber, stepHexDigit, stepNumber) {
 
     // the step number dictates the amount of green and blue
     parkGreen = 0
-    stepGreen = stepNumber / 64.0 * 1.5
+    stepGreen = stepNumber / 64.0 * 2
     parkBlue = 0
-    stepBlue = stepNumber / 64.0 * 1.5
+    stepBlue = stepNumber / 64.0 * 2
   }    
   return new Color3((parkRed + stepRed) / 2.0, (parkGreen + stepGreen) / 2.0, (parkBlue + stepBlue) / 2.0)
 }
@@ -392,6 +392,100 @@ function buildClimbingArtwork(parkNumber: number, blockNumber: number, hash: str
     currentHeight = buildStep(parkNumber, blockNumber, i, previousHash, currentHash, currentHeight, smallConcept, puzzleMode, base64BlockNumberArray, movement)
   }
 
+  // prepare base path colors and base bench colors
+  let pathBaseColor = null
+  let benchBaseColor  null
+  
+  // parks 1 through 8 are blue-ish with a little green and increasingly red with height
+  if(parkNumber >= 1 && parkNumber <= 8) {
+    pathBaseColor = Color3.Yellow()
+    benchBaseColor = Color3.Green()
+  }
+  // parks 9 through 16 are red-ish with a little blue and increasingly green with height
+  if(parkNumber >= 9 && parkNumber <= 16) {
+    pathBaseColor = Color3.Yellow()
+    benchBaseColor = Color3.Blue()
+  }
+  // parks 17 through 24 are green-ish with a little red and increasingly blue with height
+  if(parkNumber >= 17 && parkNumber <= 24) {
+    pathBaseColor = Color3.Blue()
+    benchBaseColor = Color3.Red()    
+  }  
+
+  // park 25 has special lighter color palette that gets closer to white towards the top
+  if(parkNumber == 25) {
+    pathBaseColor = Color3.Yellow()
+    benchBaseColor = Color3.Green()
+  }    
+
+  // paths
+  let pathColors = []
+
+  // west path uses step 8 color
+  pathColors[0] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, '8', 0), 0.8)
+  // north path uses step d color
+  pathColors[1] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, 'd', 22), 0.8)
+  // east path uses step b color
+  pathColors[2] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, 'b', 43), 0.8)
+  // south path uses step 2 color
+  pathColors[3] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, '2', 63), 0.8)
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(3, 0.025, 8, 0, pathColors[0], 'Parity Multisig Public Init Hack'))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(8, 0.025, 13, 90, pathColors[1]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(13, 0.025, 8, 180, pathColors[2]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(8, 0.025, 3, 270, pathColors[3]))
+  
+
+  
+
+  // benches
+  let benchColors = []
+
+  // west bench uses step 8 color
+  benchColors[0] = Color3.Lerp(benchBaseColor, parkStepColor(parkNumber, '8', 0), 0.8)
+  // north bench uses step d color
+  benchColors[1] = Color3.Lerp(benchBaseColor, parkStepColor(parkNumber, 'd', 22), 0.8)
+  // east bench uses step b color
+  benchColors[2] = Color3.Lerp(benchBaseColor, parkStepColor(parkNumber, 'b', 43), 0.8)
+  // south bench uses step 2 color
+  benchColors[3] = Color3.Lerp(benchBaseColor, parkStepColor(parkNumber, '2', 63), 0.8)
+
+  
+
+  engine.addEntity(buildBenchWithColor3(1, 0, 8, 0, benchColors[0]))
+
+  
+
+  engine.addEntity(buildBenchWithColor3(8, 0, 15, 90, benchColors[1]))
+
+  
+
+  engine.addEntity(buildBenchWithColor3(15, 0, 8, 180, benchColors[2]))
+
+  
+
+  engine.addEntity(buildBenchWithColor3(8, 0, 1, 270, benchColors[3]))
+
+    
+
   if(movement) {
     engine.addSystem(new SimpleMove())
   }
@@ -417,6 +511,10 @@ function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) 
 
 
 function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
+  return buildBenchWithColor3(x, y, z, zRotationDegrees, Color3.FromHexString(color))
+}
+
+function buildBenchWithColor3(x: number, y: number, z: number, zRotationDegrees: number, color: Color3) {
 
   // specs for benches
   let benchLength = 4
@@ -429,7 +527,7 @@ function buildBench(x: number, y: number, z: number, zRotationDegrees: number, c
 
   // material for benches
   let benchMaterial = new Material()
-  benchMaterial.albedoColor = Color3.FromHexString(color)
+  benchMaterial.albedoColor = color
 
   // build the bench entity itself
   let bench = new Entity()
@@ -504,20 +602,25 @@ function buildBench(x: number, y: number, z: number, zRotationDegrees: number, c
 }
 
 function buildPath(x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
+  return buildPathWithColor3(x, y, z, zRotationDegrees, Color3.FromHexString(color), legend)
+}
+
+function buildPathWithColor3(x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string) {
 
   // specs for path
   let pathWidth = 2
   let pathLength = 16
-  let pathHeight = 1
+  let pathHeight = 0.05
   let xRorationDegrees = 90
 
   // material for paths
   let pathMaterial = new Material()
-  pathMaterial.albedoColor = Color3.FromHexString(color)
+  pathMaterial.albedoColor = color
+  pathMaterial.hasAlpha = true
 
   // west path goes from south to north
   let path = new Entity()
-  path.addComponent(new PlaneShape())
+  path.addComponent(new BoxShape())
   path.addComponent(pathMaterial)
   path.addComponent(new Transform({
     position: new Vector3(x, y, z),
@@ -553,48 +656,6 @@ function buildTree(x: number, y: number, z: number) {
 
   return tree
 }
-
-
-
-
-  engine.addEntity(buildPath(3, 0, 8, 0, '#608080', 'Parity Multisig Public Init Hack'))
-
-
-
-
-
-  engine.addEntity(buildPath(8, 0, 13, 90, '#E0C0E0'))
-
-
-
-
-
-  engine.addEntity(buildPath(13, 0, 8, 180, '#E0A0E0'))
-
-
-
-
-
-  engine.addEntity(buildPath(8, 0, 3, 270, '#E08080'))
-
-
-
-
-
-
-engine.addEntity(buildBench(1, 0, 8, 0, '#A04080'))
-
-
-
-engine.addEntity(buildBench(8, 0, 15, 90, '#802080'))
-
-
-
-engine.addEntity(buildBench(15, 0, 8, 180, '#40C0E0'))
-
-
-
-engine.addEntity(buildBench(8, 0, 1, 270, '#40E040'))
 
 
 

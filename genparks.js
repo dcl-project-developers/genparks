@@ -179,6 +179,8 @@ const benchColor4 = function(parkNumber) {
 
 const templateVars = function(conceptNumber, parkNumber) {
 
+  let pathHeight = 0.05
+  
   let vars = {
     conceptNumber: conceptNumber,
     parkNumber: parkNumber,
@@ -191,12 +193,12 @@ const templateVars = function(conceptNumber, parkNumber) {
     backHeight: 0.6,
     pathWidth: 2,
     pathLength: 16,
-    pathHeight: 1,
+    pathHeight: pathHeight,
     paths: [
-      {x: 3,  y: 0, z: 8,  angle: 0,   color: pathColor1(parkNumber)},      // westPath
-      {x: 8,  y: 0, z: 13, angle: 90,  color: pathColor2(parkNumber)},      // northPath
-      {x: 13, y: 0, z: 8,  angle: 180, color: pathColor3(parkNumber)},      // eastPath
-      {x: 8,  y: 0, z: 3,  angle: 270, color: pathColor4(parkNumber)}       // southPath
+      {x: 3,  y: pathHeight / 2.0, z: 8,  angle: 0,   color: pathColor1(parkNumber)},      // westPath
+      {x: 8,  y: pathHeight / 2.0, z: 13, angle: 90,  color: pathColor2(parkNumber)},      // northPath
+      {x: 13, y: pathHeight / 2.0, z: 8,  angle: 180, color: pathColor3(parkNumber)},      // eastPath
+      {x: 8,  y: pathHeight / 2.0, z: 3,  angle: 270, color: pathColor4(parkNumber)}       // southPath
     ],
     benches: [
       {x: 1,  y: 0, z: 8,  angle: 0,   color: benchColor1(parkNumber)},       // westBench  

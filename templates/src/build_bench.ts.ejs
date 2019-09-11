@@ -1,4 +1,8 @@
 function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
+  return buildBenchWithColor3(x, y, z, zRotationDegrees, Color3.FromHexString(color))
+}
+
+function buildBenchWithColor3(x: number, y: number, z: number, zRotationDegrees: number, color: Color3) {
 
   // specs for benches
   let benchLength = <%= benchLength %>
@@ -11,7 +15,7 @@ function buildBench(x: number, y: number, z: number, zRotationDegrees: number, c
 
   // material for benches
   let benchMaterial = new Material()
-  benchMaterial.albedoColor = Color3.FromHexString(color)
+  benchMaterial.albedoColor = color
 
   // build the bench entity itself
   let bench = new Entity()
