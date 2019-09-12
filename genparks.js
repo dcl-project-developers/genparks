@@ -180,6 +180,7 @@ const benchColor4 = function(parkNumber) {
 const templateVars = function(conceptNumber, parkNumber) {
 
   let pathHeight = 0.05
+  let grassHeight = 0.05
   
   let vars = {
     conceptNumber: conceptNumber,
@@ -191,14 +192,20 @@ const templateVars = function(conceptNumber, parkNumber) {
     sittingHeight: 0.1,
     backWidth: 0.1,
     backHeight: 0.6,
-    pathWidth: 2,
-    pathLength: 16,
     pathHeight: pathHeight,
+    grassHeight: grassHeight,
     paths: [
-      {x: 3,  y: pathHeight / 2.0, z: 8,  angle: 0,   color: pathColor1(parkNumber)},      // westPath
-      {x: 8,  y: pathHeight / 2.0, z: 13, angle: 90,  color: pathColor2(parkNumber)},      // northPath
-      {x: 13, y: pathHeight / 2.0, z: 8,  angle: 180, color: pathColor3(parkNumber)},      // eastPath
-      {x: 8,  y: pathHeight / 2.0, z: 3,  angle: 270, color: pathColor4(parkNumber)}       // southPath
+      {width: 2, height: pathHeight, length: 16, x: 3,  y: pathHeight / 2.0, z: 8,  angle: 0,   color: pathColor1(parkNumber)},      // westPath
+
+      {width: 2, height: pathHeight, length: 2, x: 1,  y: pathHeight / 2.0, z: 13, angle: 90,  color: pathColor2(parkNumber)},        // northPath 1
+      {width: 2, height: pathHeight, length: 12, x: 10,  y: pathHeight / 2.0, z: 13, angle: 90,  color: pathColor2(parkNumber)},      // northPath 2
+
+      {width: 2, height: pathHeight, length: 2, x: 13, y: pathHeight / 2.0, z: 15,  angle: 180, color: pathColor3(parkNumber)},      // eastPath 1
+      {width: 2, height: pathHeight, length: 12, x: 13, y: pathHeight / 2.0, z: 6,  angle: 180, color: pathColor3(parkNumber)},      // eastPath 2
+
+      {width: 2, height: pathHeight, length: 2, x: 15,  y: pathHeight / 2.0, z: 3,  angle: 270, color: pathColor4(parkNumber)},       // southPath 1
+      {width: 2, height: pathHeight, length: 8, x: 8,  y: pathHeight / 2.0, z: 3,  angle: 270, color: pathColor4(parkNumber)},        // southPath 2
+      {width: 2, height: pathHeight, length: 2, x: 1,  y: pathHeight / 2.0, z: 3,  angle: 270, color: pathColor4(parkNumber)}         // southPath 3
     ],
     benches: [
       {x: 1,  y: 0, z: 8,  angle: 0,   color: benchColor1(parkNumber)},       // westBench  
@@ -219,6 +226,16 @@ const templateVars = function(conceptNumber, parkNumber) {
       {x: 15, y: 0.5, z: 1},    // seTree
       {x: 15, y: 0.5, z: 5},    // senTree
       {x: 11, y: 0.5, z: 1},    // sewTree
+    ],
+    grassyAreas: [
+      {width: 2, height: grassHeight, length: 2, x: 1, y: grassHeight / 2.0, z: 1 },     // southwest
+      {width: 2, height: grassHeight, length: 8, x: 1, y: grassHeight / 2.0, z: 8 },     // west
+      {width: 2, height: grassHeight, length: 2, x: 1, y: grassHeight / 2.0, z: 15 },    // northwest
+      {width: 8, height: grassHeight, length: 2, x: 8, y: grassHeight / 2.0, z: 15 },    // north      
+      {width: 2, height: grassHeight, length: 2, x: 15, y: grassHeight / 2.0, z: 15 },   // northeast
+      {width: 2, height: grassHeight, length: 8, x: 15, y: grassHeight / 2.0, z: 8 },    // east      
+      {width: 2, height: grassHeight, length: 2, x: 15, y: grassHeight / 2.0, z: 1 },    // southeast
+      {width: 8, height: grassHeight, length: 2, x: 8, y: grassHeight / 2.0, z: 1 }      // south
     ],
     parkData: sourceParkDataArr[(parkNumber - 1) % sourceParkDataArr.length]
   }

@@ -398,19 +398,26 @@ function buildClimbingArtwork(parkNumber: number, blockNumber: number, hash: str
 
   // west path uses step 8 color
   pathColors[0] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, '8', 0), 0.8)
-  // north path uses step d color
+  
+  // north 1 and 2 path use step d color
   pathColors[1] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, 'd', 22), 0.8)
-  // east path uses step b color
-  pathColors[2] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, 'b', 43), 0.8)
-  // south path uses step 2 color
-  pathColors[3] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, '2', 63), 0.8)
+  pathColors[2] = pathColors[1]
+
+  // east path 1 and 2 use step b color
+  pathColors[3] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, 'b', 43), 0.8)
+  pathColors[4] = pathColors[3]
+
+  // south path 1, 2, and 3 use step 2 color
+  pathColors[5] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, '2', 63), 0.8)
+  pathColors[6] = pathColors[5]
+  pathColors[7] = pathColors[5]
 
   <% paths.forEach(function(path, index) { %>
 
   <% if(index == 0) { %>
-    engine.addEntity(buildPathWithColor3(<%= pathWidth %>, <%= pathHeight %>, <%= pathLength %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, pathColors[<%= index %>], '<%= parkData.name %>'))
+    engine.addEntity(buildPathWithColor3(<%= path.width %>, <%= path.height %>, <%= path.length %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, pathColors[<%= index %>], '<%= parkData.name %>'))
   <% } else { %>
-    engine.addEntity(buildPathWithColor3(<%= pathWidth %>, <%= pathHeight %>, <%= pathLength %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, pathColors[<%= index %>]))
+    engine.addEntity(buildPathWithColor3(<%= path.width %>, <%= path.height %>, <%= path.length %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, pathColors[<%= index %>]))
   <% } %>
 
   <% }) %>

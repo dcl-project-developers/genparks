@@ -6,13 +6,17 @@
 
 <% include build_tree.ts.ejs %>
 
+<% include build_grassy_area.ts.ejs %>
+
+<% include build_center_flooring.ts.ejs %>
+
 <% if(conceptNumber < 9) { %>
 <% paths.forEach(function(path, index) { %>
 
 <% if(index == 0) { %>
-  engine.addEntity(buildPath(<%= pathWidth %>, <%= pathHeight %>, <%= pathLength %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>', '<%= parkData.name %>'))
+  engine.addEntity(buildPath(<%= path.width %>, <%= path.height %>, <%= path.length %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>', '<%= parkData.name %>'))
 <% } else { %>
-  engine.addEntity(buildPath(<%= pathWidth %>, <%= pathHeight %>, <%= pathLength %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>'))
+  engine.addEntity(buildPath(<%= path.width %>, <%= path.height %>, <%= path.length %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, '<%= path.color %>'))
 <% } %>
 
 <% }) %>
@@ -25,9 +29,13 @@ engine.addEntity(buildBench(<%= bench.x %>, <%= bench.y %>, <%= bench.z %>, <%= 
 <% } %>
 
 <% trees.forEach(function(tree) { %>
-
-engine.addEntity(buildTree(<%= tree.x %>, <%= tree.y %>, <%= tree.z %>))  
-
+// engine.addEntity(buildTree(<%= tree.x %>, <%= tree.y %>, <%= tree.z %>))  
 <% }) %>
 
 buildArtwork(<%= conceptNumber %>, <%= parkData.blockNumber %>, '<%= parkData.hash %>')
+
+<% grassyAreas.forEach(function(grassyArea) { %>
+  engine.addEntity(buildGrassyArea(<%= grassyArea.width %>, <%= grassyArea.height %>, <%= grassyArea.length %>, <%= grassyArea.x %>, <%= grassyArea.y %>, <%= grassyArea.z %>))
+<% }) %>
+
+engine.addEntity(buildCenterFlooring(8, 0.05, 8, 8, 0.05 / 2.0, 8))

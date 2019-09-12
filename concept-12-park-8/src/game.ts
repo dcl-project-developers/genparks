@@ -423,12 +423,19 @@ function buildClimbingArtwork(parkNumber: number, blockNumber: number, hash: str
 
   // west path uses step 8 color
   pathColors[0] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, '8', 0), 0.8)
-  // north path uses step d color
+  
+  // north 1 and 2 path use step d color
   pathColors[1] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, 'd', 22), 0.8)
-  // east path uses step b color
-  pathColors[2] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, 'b', 43), 0.8)
-  // south path uses step 2 color
-  pathColors[3] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, '2', 63), 0.8)
+  pathColors[2] = pathColors[1]
+
+  // east path 1 and 2 use step b color
+  pathColors[3] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, 'b', 43), 0.8)
+  pathColors[4] = pathColors[3]
+
+  // south path 1, 2, and 3 use step 2 color
+  pathColors[5] = Color3.Lerp(pathBaseColor, parkStepColor(parkNumber, '2', 63), 0.8)
+  pathColors[6] = pathColors[5]
+  pathColors[7] = pathColors[5]
 
   
 
@@ -439,19 +446,43 @@ function buildClimbingArtwork(parkNumber: number, blockNumber: number, hash: str
   
 
   
-    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 8, 0.025, 13, 90, pathColors[1]))
+    engine.addEntity(buildPathWithColor3(2, 0.05, 2, 1, 0.025, 13, 90, pathColors[1]))
   
 
   
 
   
-    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 13, 0.025, 8, 180, pathColors[2]))
+    engine.addEntity(buildPathWithColor3(2, 0.05, 12, 10, 0.025, 13, 90, pathColors[2]))
   
 
   
 
   
-    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 8, 0.025, 3, 270, pathColors[3]))
+    engine.addEntity(buildPathWithColor3(2, 0.05, 2, 13, 0.025, 15, 180, pathColors[3]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 12, 13, 0.025, 6, 180, pathColors[4]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 2, 15, 0.025, 3, 270, pathColors[5]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 8, 8, 0.025, 3, 270, pathColors[6]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 2, 1, 0.025, 3, 270, pathColors[7]))
   
 
   
@@ -654,56 +685,88 @@ function buildTree(x: number, y: number, z: number) {
   return tree
 }
 
+function buildGrassyArea(width: number, height: number, length: number, x: number, y: number, z: number) {
+
+  // material for grass
+  let material = new Material()
+  material.albedoColor = Color3.Green()
+  material.hasAlpha = false
+
+  let grass = new Entity()
+  grass.addComponent(new BoxShape())
+  grass.addComponent(material)
+  grass.addComponent(new Transform({
+    position: new Vector3(x, y, z),
+    scale: new Vector3(width, height, length)
+  }))
+
+  return grass
+}
+
+function buildCenterFlooring(width: number, height: number, length: number, x: number, y: number, z: number) {
+
+  // material for grass
+  let material = new Material()
+  material.albedoColor = Color3.FromHexString('#a0a0a0')
+  material.hasAlpha = false
+
+  let floor = new Entity()
+  floor.addComponent(new BoxShape())
+  floor.addComponent(material)
+  floor.addComponent(new Transform({
+    position: new Vector3(x, y, z),
+    scale: new Vector3(width, height, length)
+  }))
+
+  return floor  
+}
 
 
 
 
-engine.addEntity(buildTree(1, 0.5, 1))  
+// engine.addEntity(buildTree(1, 0.5, 1))  
 
+// engine.addEntity(buildTree(5, 0.5, 1))  
 
+// engine.addEntity(buildTree(1, 0.5, 5))  
 
-engine.addEntity(buildTree(5, 0.5, 1))  
+// engine.addEntity(buildTree(1, 0.5, 15))  
 
+// engine.addEntity(buildTree(1, 0.5, 11))  
 
+// engine.addEntity(buildTree(5, 0.5, 15))  
 
-engine.addEntity(buildTree(1, 0.5, 5))  
+// engine.addEntity(buildTree(15, 0.5, 15))  
 
+// engine.addEntity(buildTree(11, 0.5, 15))  
 
+// engine.addEntity(buildTree(15, 0.5, 11))  
 
-engine.addEntity(buildTree(1, 0.5, 15))  
+// engine.addEntity(buildTree(15, 0.5, 1))  
 
+// engine.addEntity(buildTree(15, 0.5, 5))  
 
-
-engine.addEntity(buildTree(1, 0.5, 11))  
-
-
-
-engine.addEntity(buildTree(5, 0.5, 15))  
-
-
-
-engine.addEntity(buildTree(15, 0.5, 15))  
-
-
-
-engine.addEntity(buildTree(11, 0.5, 15))  
-
-
-
-engine.addEntity(buildTree(15, 0.5, 11))  
-
-
-
-engine.addEntity(buildTree(15, 0.5, 1))  
-
-
-
-engine.addEntity(buildTree(15, 0.5, 5))  
-
-
-
-engine.addEntity(buildTree(11, 0.5, 1))  
-
+// engine.addEntity(buildTree(11, 0.5, 1))  
 
 
 buildArtwork(12, 1428757, '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59')
+
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 2, 1, 0.025, 1))
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 8, 1, 0.025, 8))
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 2, 1, 0.025, 15))
+
+  engine.addEntity(buildGrassyArea(8, 0.05, 2, 8, 0.025, 15))
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 2, 15, 0.025, 15))
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 8, 15, 0.025, 8))
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 2, 15, 0.025, 1))
+
+  engine.addEntity(buildGrassyArea(8, 0.05, 2, 8, 0.025, 1))
+
+
+engine.addEntity(buildCenterFlooring(8, 0.05, 8, 8, 0.05 / 2.0, 8))
