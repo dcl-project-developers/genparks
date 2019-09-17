@@ -11,8 +11,32 @@ let puzzleAccumulatedClicks = 0
 let step = 0
 
 // Create UI canvas and text
+// see https://docs.decentraland.org/development-guide/onscreen-ui/
 const uCanvas = new UICanvas() 
-const uText = new UIText(uCanvas)
+const uRect = new UIScrollRect(uCanvas)
+//const uRect = new UIContainerRect(uCanvas)
+uRect.width = 300
+uRect.height = 150
+uRect.hAlign = 'right'
+uRect.vAlign = 'bottom'
+// uRect.paddingLeft = '10%'
+// uRect.paddingRight = '10%'
+// uRect.paddingTop = '10%'
+// uRect.paddingBottom = '10%'
+// uRect.isVertical = true
+// uRect.backgroundColor = Color4.Gray()
+uRect.color = Color4.Gray()
+uRect.opacity = 0.3
+
+const uText = new UIText(uRect)
+uText.fontSize = 16
+uText.color = Color4.White()
+uText.textWrapping = true
+uText.width = '80%'
+uText.height = '80%'
+uText.hAlign = 'center'
+uText.vAlign = 'top'
+
 let timerStart = null
 
 let legMaterial = new Material()
@@ -144,14 +168,14 @@ function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index, 
 
       // check for win / loss
       if(puzzleAccumulatedTotal > blockNumber) {
+        uText.value = 'Sorry, that\'s too far (' + puzzleAccumulatedTotal + ')! Puzzle restarted - click on a sphere to go again.'
         puzzleAccumulatedTotal = 0
         puzzleAccumulatedClicks = 0
-        uText.value = 'Game over, restarting puzzle! (' + puzzleAccumulatedTotal + ')'  
         timerStart = null
       } else {
         if(puzzleAccumulatedTotal === blockNumber) {
           let timeElapsedInMilliseconds = Date.now() - timerStart
-          uText.value = 'Congratulations. You\'ve solved the puzzle! (' + puzzleAccumulatedTotal + ') in ' + (timeElapsedInMilliseconds / 1000.0).toFixed(2) + ' seconds. Go again?'
+          uText.value = 'Congratulations. You\'ve solved the puzzle (' + puzzleAccumulatedTotal + ') in ' + (timeElapsedInMilliseconds / 1000.0).toFixed(2) + ' seconds! You can now verify ownership of this park scene by checking out the NFT at the bottom center of the park.'
           puzzleAccumulatedTotal = 0 
           puzzleAccumulatedClicks = 0   
           showNft()
@@ -347,6 +371,8 @@ function buildStep(parkNumber, blockNumber, stepNumber, previousStepHexDigit, st
     engine.addEntity(legCenter)
 
     if(puzzleMode) {
+      uText.value = 'Welcome to park #' + parkNumber + '. To solve the puzzle, encode the block number (' + blockNumber + ') by clicking on the spheres in the right order.'
+
       // add a decoration if step number belongs to the base 64 representation of blockNumber
       for(let index = 0; index < base64BlockNumberArray.length; index++) {
         if(base64BlockNumberArray[index] === stepNumber) {
