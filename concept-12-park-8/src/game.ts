@@ -1,3 +1,28 @@
+// ---- PARK With Artwork ----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /// ---- CLIMBING ----
 // Concept: use steps to build a climbing structure
 
@@ -440,15 +465,55 @@ function buildClimbingArtwork(parkNumber: number, blockNumber: number, hash: str
   pathColors[6] = pathColors[5]
   pathColors[7] = pathColors[5]
 
-  <% paths.forEach(function(path, index) { %>
+  
 
-  <% if(index == 0) { %>
-    engine.addEntity(buildPathWithColor3(<%= path.width %>, <%= path.height %>, <%= path.length %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, pathColors[<%= index %>], '<%= parkData.name %>'))
-  <% } else { %>
-    engine.addEntity(buildPathWithColor3(<%= path.width %>, <%= path.height %>, <%= path.length %>, <%= path.x %>, <%= path.y %>, <%= path.z %>, <%= path.angle %>, pathColors[<%= index %>]))
-  <% } %>
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 3, 0.025, 8, 0, pathColors[0], 'theDAO is deployed'))
+  
 
-  <% }) %>
+  
+
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 2, 1, 0.025, 13, 90, pathColors[1]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 12, 10, 0.025, 13, 90, pathColors[2]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 2, 13, 0.025, 15, 180, pathColors[3]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 12, 13, 0.025, 6, 180, pathColors[4]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 2, 15, 0.025, 3, 270, pathColors[5]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 8, 8, 0.025, 3, 270, pathColors[6]))
+  
+
+  
+
+  
+    engine.addEntity(buildPathWithColor3(2, 0.05, 2, 1, 0.025, 3, 270, pathColors[7]))
+  
+
+  
 
   // benches
   let benchColors = []
@@ -462,13 +527,274 @@ function buildClimbingArtwork(parkNumber: number, blockNumber: number, hash: str
   // south bench uses step 2 color
   benchColors[3] = Color3.Lerp(benchBaseColor, parkStepColor(parkNumber, '2', 63), 0.8)
 
-  <% benches.forEach(function(bench, index) { %>
+  
 
-  engine.addEntity(buildBenchWithColor3(<%= bench.x %>, <%= bench.y %>, <%= bench.z %>, <%= bench.angle %>, benchColors[<%= index %>]))
+  engine.addEntity(buildBenchWithColor3(1, 0, 8, 0, benchColors[0]))
 
-  <% }) %>  
+  
+
+  engine.addEntity(buildBenchWithColor3(8, 0, 15, 90, benchColors[1]))
+
+  
+
+  engine.addEntity(buildBenchWithColor3(15, 0, 8, 180, benchColors[2]))
+
+  
+
+  engine.addEntity(buildBenchWithColor3(8, 0, 1, 270, benchColors[3]))
+
+    
 
   if(movement) {
     engine.addSystem(new SimpleMove())
   }
 }
+function toBaseArray(value, base) {
+
+  let resultArr = []
+  do {
+    let mod = value % base
+    resultArr.push(mod)
+    value = Math.floor(value / 64)
+  } while(value > 0)
+
+  return resultArr
+}
+
+function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
+  let base64BlockNumberArray = toBaseArray(blockNumber, 64)  
+  return buildClimbingArtwork(8, blockNumber, hash, true, true, base64BlockNumberArray, true)
+}
+
+
+
+
+function buildBench(x: number, y: number, z: number, zRotationDegrees: number, color: string) {
+  return buildBenchWithColor3(x, y, z, zRotationDegrees, Color3.FromHexString(color))
+}
+
+function buildBenchWithColor3(x: number, y: number, z: number, zRotationDegrees: number, color: Color3) {
+
+  // specs for benches
+  let benchLength = 4
+  let legHeight = 0.6
+  let legWidth = 0.05
+  let sittingWidth = 1
+  let sittingHeight = 0.1
+  let backWidth = 0.1
+  let backHeight = 0.6
+
+  // material for benches
+  let benchMaterial = new Material()
+  benchMaterial.albedoColor = color
+
+  // build the bench entity itself
+  let bench = new Entity()
+
+  // build the sitting surface
+  let sittingSurface = new Entity()
+  sittingSurface.addComponent(benchMaterial)
+  sittingSurface.addComponent(new BoxShape())
+  sittingSurface.addComponent(new Transform({
+    scale: new Vector3(sittingWidth, sittingHeight, benchLength),
+    position: new Vector3(0, legHeight + sittingHeight/2.0, 0)
+  }))
+  sittingSurface.setParent(bench)
+
+  // southwest leg
+  let swLeg = new Entity()
+  swLeg.addComponent(benchMaterial)
+  swLeg.addComponent(new BoxShape())
+  swLeg.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legWidth),
+    position: new Vector3(-sittingWidth/2.0 + legWidth/2.0, legHeight/2.0, -benchLength/2.0 + legWidth/2.0)
+  }))
+  swLeg.setParent(bench)
+
+  // southeast leg
+  let seLeg = new Entity()
+  seLeg.addComponent(benchMaterial)    
+  seLeg.addComponent(new BoxShape())
+  seLeg.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legWidth),
+    position: new Vector3(+sittingWidth/2.0 - legWidth/2.0, legHeight/2.0, -benchLength/2.0 + legWidth/2.0)
+  }))
+  seLeg.setParent(bench)
+
+  // northwest leg
+  let nwLeg = new Entity()
+  nwLeg.addComponent(benchMaterial)    
+  nwLeg.addComponent(new BoxShape())  
+  nwLeg.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legWidth),
+    position: new Vector3(-sittingWidth/2.0 + legWidth/2.0, legHeight/2.0, +benchLength/2.0 - legWidth/2.0)
+  }))
+  nwLeg.setParent(bench)
+
+  // northeast leg
+  let neLeg = new Entity()
+  neLeg.addComponent(benchMaterial)        
+  neLeg.addComponent(new BoxShape())
+  neLeg.addComponent(new Transform({
+    scale: new Vector3(legWidth, legHeight, legWidth),
+    position: new Vector3(+sittingWidth/2.0 - legWidth/2.0, legHeight/2.0, +benchLength/2.0 - legWidth/2.0)
+  }))
+  neLeg.setParent(bench)
+
+  // back support
+  let backSupport = new Entity()
+  backSupport.addComponent(benchMaterial)
+  backSupport.addComponent(new BoxShape())
+  backSupport.addComponent(new Transform({
+    scale: new Vector3(backWidth, backHeight, benchLength),
+    position: new Vector3(-sittingWidth/2.0 + backWidth/2.0, legHeight + sittingHeight + backHeight/2.0, 0)
+  }))
+  backSupport.setParent(bench)
+
+  // move bench to position
+  bench.addComponent(new Transform({
+    position: new Vector3(x, y, z),
+    rotation: Quaternion.Euler(0, zRotationDegrees, 0)
+  }))
+
+  return bench
+}
+
+function buildPath(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
+  return buildPathWithColor3(pathWidth, pathHeight, pathLength, x, y, z, zRotationDegrees, Color3.FromHexString(color), legend)
+}
+
+function buildPathWithColor3(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string) {
+
+  // specs for path
+  let xRotationDegrees = 90
+
+  // material for paths
+  let pathMaterial = new Material()
+  pathMaterial.albedoColor = color
+  pathMaterial.hasAlpha = true
+
+  // west path goes from south to north
+  let path = new Entity()
+  path.addComponent(new BoxShape())
+  path.addComponent(pathMaterial)
+  path.addComponent(new Transform({
+    position: new Vector3(x, y, z),
+    rotation: Quaternion.Euler(xRotationDegrees, 0, zRotationDegrees),
+    scale: new Vector3(pathWidth, pathLength, pathHeight)
+  }))
+
+  // if legend provided, add the text to the path
+  if(legend !== undefined) {
+    let legendTextEntity = new Entity()
+    let legendText = new TextShape(legend)
+    legendText.fontSize = 1
+    legendText.color = Color3.White()
+    // legendText.fontFamily = "Arial, Helvetica, sans-serif"
+    legendTextEntity.addComponent(legendText)
+    legendTextEntity.addComponent(new Transform({
+      scale: new Vector3(0.5, 0.5, 0.5)
+    }))
+    legendTextEntity.setParent(path)
+  }  
+
+  return path
+}
+
+function buildTree(x: number, y: number, z: number) {
+  
+  let tree = new Entity()
+  tree.addComponent(new GLTFShape("models/RiggedSimple.gltf"))
+  tree.addComponent(new Transform({ 
+      position: new Vector3(x, y, z), 
+      scale: new Vector3(0.1, 0.1, 0.1)
+      }))
+
+  return tree
+}
+
+function buildGrassyArea(width: number, height: number, length: number, x: number, y: number, z: number) {
+
+  // material for grass
+  let material = new Material()
+  material.albedoColor = Color3.Green()
+  material.hasAlpha = false
+
+  let grass = new Entity()
+  grass.addComponent(new BoxShape())
+  grass.addComponent(material)
+  grass.addComponent(new Transform({
+    position: new Vector3(x, y, z),
+    scale: new Vector3(width, height, length)
+  }))
+
+  return grass
+}
+
+function buildCenterFlooring(width: number, height: number, length: number, x: number, y: number, z: number) {
+
+  // material for grass
+  let material = new Material()
+  material.albedoColor = Color3.FromHexString('#a0a0a0')
+  material.hasAlpha = false
+
+  let floor = new Entity()
+  floor.addComponent(new BoxShape())
+  floor.addComponent(material)
+  floor.addComponent(new Transform({
+    position: new Vector3(x, y, z),
+    scale: new Vector3(width, height, length)
+  }))
+
+  return floor  
+}
+
+
+
+
+// engine.addEntity(buildTree(1, 0.5, 1))  
+
+// engine.addEntity(buildTree(5, 0.5, 1))  
+
+// engine.addEntity(buildTree(1, 0.5, 5))  
+
+// engine.addEntity(buildTree(1, 0.5, 15))  
+
+// engine.addEntity(buildTree(1, 0.5, 11))  
+
+// engine.addEntity(buildTree(5, 0.5, 15))  
+
+// engine.addEntity(buildTree(15, 0.5, 15))  
+
+// engine.addEntity(buildTree(11, 0.5, 15))  
+
+// engine.addEntity(buildTree(15, 0.5, 11))  
+
+// engine.addEntity(buildTree(15, 0.5, 1))  
+
+// engine.addEntity(buildTree(15, 0.5, 5))  
+
+// engine.addEntity(buildTree(11, 0.5, 1))  
+
+
+buildArtwork(12, 1428757, '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59')
+
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 2, 1, 0.025, 1))
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 8, 1, 0.025, 8))
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 2, 1, 0.025, 15))
+
+  engine.addEntity(buildGrassyArea(8, 0.05, 2, 8, 0.025, 15))
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 2, 15, 0.025, 15))
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 8, 15, 0.025, 8))
+
+  engine.addEntity(buildGrassyArea(2, 0.05, 2, 15, 0.025, 1))
+
+  engine.addEntity(buildGrassyArea(8, 0.05, 2, 8, 0.025, 1))
+
+
+engine.addEntity(buildCenterFlooring(8, 0.05, 8, 8, 0.05 / 2.0, 8))
