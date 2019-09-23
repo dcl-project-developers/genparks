@@ -468,7 +468,7 @@ function buildClimbingArtwork(parkNumber: number, blockNumber: number, hash: str
   
 
   
-    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 3, 0.025, 8, 0, pathColors[0], 'The Genesis'))
+    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 3, 0.025, 8, 0, pathColors[0], 'theDAO is deployed'))
   
 
   
@@ -563,7 +563,7 @@ function toBaseArray(value, base) {
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
   let base64BlockNumberArray = toBaseArray(blockNumber, 64)  
-  return buildClimbingArtwork(1, blockNumber, hash, true, true, base64BlockNumberArray, true)
+  return buildClimbingArtwork(8, blockNumber, hash, true, true, base64BlockNumberArray, true)
 }
 
 
@@ -777,7 +777,7 @@ function buildCenterFlooring(width: number, height: number, length: number, x: n
 // engine.addEntity(buildTree(11, 0.5, 1))  
 
 
-buildArtwork(12, 0, 'd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3')
+buildArtwork(12, 1428757, '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59')
 
 
   engine.addEntity(buildGrassyArea(2, 0.05, 2, 1, 0.025, 1))
