@@ -133,7 +133,7 @@ function showNft() {
 }
 
 function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index, movement?: boolean) {
-  console.log('build step decorator', x, y, z, stepNumber, index, movement)
+  // console.log('build step decorator', x, y, z, stepNumber, index, movement)
 
   // use index for the radio
   const radio = (tileWidth * 0.25) * ((index + 1)/ 5.0)
@@ -181,7 +181,7 @@ function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index, 
   sphere.addComponent(
     new OnClick(e => {
 
-      console.log("sphere clicked entering event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", stepNumber)
+      // console.log("sphere clicked entering event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", stepNumber)
 
       // set timer start if not yet set
       if(!timerStart) {
@@ -191,7 +191,7 @@ function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index, 
       puzzleAccumulatedTotal = stepNumber * Math.pow(64, puzzleAccumulatedClicks) + puzzleAccumulatedTotal
       puzzleAccumulatedClicks = puzzleAccumulatedClicks + 1        
 
-      console.log("sphere calculated event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", stepNumber)
+      // console.log("sphere calculated event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", stepNumber)
 
       // check for win / loss
       if(puzzleAccumulatedTotal > blockNumber) {
@@ -214,7 +214,7 @@ function buildStepDecorator(blockNumber, tileWidth, x, y, z, stepNumber, index, 
         }
       }
 
-      console.log("sphere clicked exiting event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", stepNumber)
+      // console.log("sphere clicked exiting event", puzzleAccumulatedClicks, "total", puzzleAccumulatedTotal, "number", stepNumber)
 
     })
   )
