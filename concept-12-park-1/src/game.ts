@@ -468,7 +468,7 @@ function buildClimbingArtwork(parkNumber: number, blockNumber: number, hash: str
   
 
   
-    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 3, 0.025, 8, 0, pathColors[0], 'DevCon-4: Prague'))
+    engine.addEntity(buildPathWithColor3(2, 0.05, 16, 3, 0.025, 8, 0, pathColors[0], 'The Genesis'))
   
 
   
@@ -563,7 +563,7 @@ function toBaseArray(value, base) {
 
 function buildArtwork(conceptNumber: number, blockNumber: number, hash: string) {
   let base64BlockNumberArray = toBaseArray(blockNumber, 64)  
-  return buildClimbingArtwork(25, blockNumber, hash, true, true, base64BlockNumberArray, true)
+  return buildClimbingArtwork(1, blockNumber, hash, true, true, base64BlockNumberArray, true)
 }
 
 
@@ -660,11 +660,11 @@ function buildBenchWithColor3(x: number, y: number, z: number, zRotationDegrees:
   return bench
 }
 
-function buildPath(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
-  return buildPathWithColor3(pathWidth, pathHeight, pathLength, x, y, z, zRotationDegrees, Color3.FromHexString(color), legend)
+function buildPath(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string, description?: string[]) {
+  return buildPathWithColor3(pathWidth, pathHeight, pathLength, x, y, z, zRotationDegrees, Color3.FromHexString(color), legend, description)
 }
 
-function buildPathWithColor3(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string) {
+function buildPathWithColor3(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string, description?: string[]) {
 
   // specs for path
   let xRotationDegrees = 90
@@ -686,16 +686,101 @@ function buildPathWithColor3(pathWidth: number, pathHeight: number, pathLength: 
 
   // if legend provided, add the text to the path
   if(legend !== undefined) {
+    let text = legend + "\n"
+
+    
+      text += "\n" + "The Genesis block is one-of-a-kind:"
+    
+      text += "\n" + "it contains 8893 transactions but"
+    
+      text += "\n" + "has used no gas, it was created 15"
+    
+      text += "\n" + "seconds before the Ethereum Frontier"
+    
+      text += "\n" + "at block #1, but it has no miner. And"
+    
+      text += "\n" + "More importantly, its nonce is 0x42!"
+    
+      text += "\n" + ""
+    
+      text += "\n" + "The Genesis block was shipped with"
+    
+      text += "\n" + "the first clients and was designed to"
+    
+      text += "\n" + "initialize the account of each"
+    
+      text += "\n" + "participants of the Ethereum presale."
+    
+      text += "\n" + "The presale ran for 42 days startingin"
+    
+      text += "\n" + "July 2014, the initial price was fixed"
+    
+      text += "\n" + "to 2000 ETH/BTC ($0.311/ETH at the"
+    
+      text += "\n" + "time) for two weeks. After that period,"
+    
+      text += "\n" + "the price would decrease linearly until"
+    
+      text += "\n" + "it reached 1337 ETH/BTC. The presale"
+    
+      text += "\n" + "had been delayed by several months so"
+    
+      text += "\n" + "the team could navigate the legal"
+    
+      text += "\n" + "processes and build a secure presale"
+    
+      text += "\n" + "website."
+    
+      text += "\n" + ""
+    
+      text += "\n" + "The presale website would generate an"
+    
+      text += "\n" + "encrypted wallet.json file, all"
+    
+      text += "\n" + "client-side, and associate it with a"
+    
+      text += "\n" + "Bitcoin address the participants had"
+    
+      text += "\n" + "to contribute to. That wallet contained"
+    
+      text += "\n" + "the private key needed to access the"
+    
+      text += "\n" + "accounts created during the genesis"
+    
+      text += "\n" + "block (assuming you had not forgotten"
+    
+      text += "\n" + "your password!)."
+    
+      text += "\n" + ""
+    
+      text += "\n" + "In total, some over 60M ETH were sold"
+    
+      text += "\n" + "at the presale for roughly 61,150 BTC"
+    
+      text += "\n" + "worth over $18M at the time."
+    
+    
     let legendTextEntity = new Entity()
-    let legendText = new TextShape(legend)
+
+    let legendText = new TextShape(text)
     legendText.fontSize = 1
     legendText.color = Color3.White()
+    // fontFamily is on the docs but ECS reports property doesn't exist
     // legendText.fontFamily = "Arial, Helvetica, sans-serif"
+    // legendText.resizeToFit = true
+    // legendText.vTextAlign = "top";
+    // legendText.width = 40
+    // legendText.height = pathHeight * 0.5 * 0.8
+    // legendText.textWrapping = true
+    // legendText.lineCount = 5
     legendTextEntity.addComponent(legendText)
     legendTextEntity.addComponent(new Transform({
-      scale: new Vector3(0.5, 0.5, 0.5)
+      // scale: new Vecor3(2, 2, 8)
+      // position: new Vector3(x, 2, z)
+      position: new Vector3(x, tileHeight + 0.01, z),
+      rotation: Quaternion.Euler(xRotationDegrees, 0, zRotationDegrees)
     }))
-    legendTextEntity.setParent(path)
+    engine.addEntity(legendTextEntity)
   }  
 
   return path
@@ -777,7 +862,7 @@ function buildCenterFlooring(width: number, height: number, length: number, x: n
 // engine.addEntity(buildTree(11, 0.5, 1))  
 
 
-buildArtwork(12, 6610000, '1d47e931fc01f54f1119f5efd98ab4fd0e07ed6358da0d15de30611a7ecede69')
+buildArtwork(12, 0, 'd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3')
 
 
   engine.addEntity(buildGrassyArea(2, 0.05, 2, 1, 0.025, 1))

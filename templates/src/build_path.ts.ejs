@@ -1,8 +1,8 @@
-function buildPath(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string) {
-  return buildPathWithColor3(pathWidth, pathHeight, pathLength, x, y, z, zRotationDegrees, Color3.FromHexString(color), legend)
+function buildPath(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: string, legend?: string, description?: string[]) {
+  return buildPathWithColor3(pathWidth, pathHeight, pathLength, x, y, z, zRotationDegrees, Color3.FromHexString(color), legend, description)
 }
 
-function buildPathWithColor3(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string) {
+function buildPathWithColor3(pathWidth: number, pathHeight: number, pathLength: number, x: number, y: number, z: number, zRotationDegrees: number, color: Color3, legend?: string, description?: string[]) {
 
   // specs for path
   let xRotationDegrees = 90
@@ -24,16 +24,33 @@ function buildPathWithColor3(pathWidth: number, pathHeight: number, pathLength: 
 
   // if legend provided, add the text to the path
   if(legend !== undefined) {
+    let text = legend + "\n"
+
+    <% parkData.description.forEach(function(textLine) { %>
+      text += "\n" + "<%= textLine %>"
+    <% }) %>
+    
     let legendTextEntity = new Entity()
-    let legendText = new TextShape(legend)
+
+    let legendText = new TextShape(text)
     legendText.fontSize = 1
     legendText.color = Color3.White()
+    // fontFamily is on the docs but ECS reports property doesn't exist
     // legendText.fontFamily = "Arial, Helvetica, sans-serif"
+    // legendText.resizeToFit = true
+    // legendText.vTextAlign = "top";
+    // legendText.width = 40
+    // legendText.height = pathHeight * 0.5 * 0.8
+    // legendText.textWrapping = true
+    // legendText.lineCount = 5
     legendTextEntity.addComponent(legendText)
     legendTextEntity.addComponent(new Transform({
-      scale: new Vector3(0.5, 0.5, 0.5)
+      // scale: new Vecor3(2, 2, 8)
+      // position: new Vector3(x, 2, z)
+      position: new Vector3(x, tileHeight + 0.01, z),
+      rotation: Quaternion.Euler(xRotationDegrees, 0, zRotationDegrees)
     }))
-    legendTextEntity.setParent(path)
+    engine.addEntity(legendTextEntity)
   }  
 
   return path

@@ -71,31 +71,141 @@ const showHelp = function() {
 // 6610000,DevCon-4: Prague,garden,The Peak of Inflated Expectations,"milestone, buidl",Oct-30-2018 06:54:19 AM +UTC,https://etherscan.io/block/6610000,./exhibits/6610000/artwork.png,./exhibits/6610000/description.txt
 
 const sourceParkDataArr = [
-  {parkNumber: 1,   name: 'The Genesis',                                blockNumber: 0,       hash: 'd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3'},
-  {parkNumber: 2,   name: 'The Ethereum Frontier',                      blockNumber: 1,       hash: '88e96d4537bea4d9c05d12549907b32561d3bf31f45aae734cdc119f13406cb6'},
-  {parkNumber: 3,   name: 'Oldest One-time Miner',                      blockNumber: 762,     hash: 'd898664323723661c037e39cd24e7290dee0ffe3aa1a62f3cb0ace3034814403'},  
-  {parkNumber: 4,   name: 'The First ICO: Augur',                       blockNumber: 88090,   hash: '0a7af5a5870648ff8c2c10691ac01e08451d054a15da8c4a843c5393752e2baa'},   
-  {parkNumber: 5,   name: 'DevCon-1: London',                           blockNumber: 515000,  hash: '926287a535d7929ab81c0d72eb10f5711b8156d617f61d58b7b04ddab5673f78'},  
-  {parkNumber: 6,   name: 'One Million Blocks',                         blockNumber: 1000000, hash: '8e38b4dbf6b11fcc3b9dee84fb7986e29ca0a02cecd8977c161ff7333329681e'},  
-  {parkNumber: 7,   name: 'Homestead Fork',                             blockNumber: 1150000, hash: '584bdb5d4e74fe97f5a5222b533fe1322fd0b6ad3eb03f02c3221984e2c0b430'}, 
-  {parkNumber: 8,   name: 'theDAO is deployed',                         blockNumber: 1428757, hash: '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59'},  
-  {parkNumber: 9,   name: 'theDAO is drained',                          blockNumber: 1718497, hash: 'caaa13ce099342d5e1342b04d588d7733093591666af8ef756ce20cf13d16475'},  
-  {parkNumber: 10,  name: 'theDAO Fork',                                blockNumber: 1920000, hash: '4985f5ca3d2afbec36529aa96f74de3cc10a2a4a6c44f2157a57d2c6059a11bb'}, 
-  {parkNumber: 11,  name: 'EXTCODESIZE DoS Attack',                     blockNumber: 2283416, hash: '9852a25198a980b28999db234404a99ebf38bd9531b330bf6d7cf4cfe0f904ea'},
-  {parkNumber: 12,  name: 'DevCon-2: Shanghai',                         blockNumber: 2290000, hash: 'b7307cb2eb75e101c7fa95972c255d6e03520a5390365b22cb07a8c7a3b849a2'},    
-  {parkNumber: 13,  name: '“Suicide Bomb” DoS Attack',                  blockNumber: 2421507, hash: 'c71986e9d7b7b17234ee8601009bdb7e3d2c1cbf0a24ce3d48375dba663c649f'},
-  {parkNumber: 14,  name: 'Tangerine Whistle',                          blockNumber: 2463000, hash: '2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0'}, 
-  {parkNumber: 15,  name: 'Spurious Dragon',                            blockNumber: 2675000, hash: '58eff9265aedf8a54da8121de1324e1e0d9aac99f694d16c6a41afffe3817d73'}, 
-  {parkNumber: 16,  name: 'The Most Recent Pi Block',                   blockNumber: 3141592, hash: '68a31d86567fcb4807643375ea68ab4d281a570d42399505c8e0b49ee574363f'},
-  {parkNumber: 17,  name: 'Parity Multisig Public Init Hack',           blockNumber: 4041169, hash: '648276e5bffbeaaceae97b83954d7b79198032cce03dd538fe2f52b1da5f10c4'},
-  {parkNumber: 18,  name: 'Decentraland MANA sale startBlock',          blockNumber: 4170700, hash: '6de40774564a3678218acc0f606c1e35464d632830db5c10e51e61f36e1326d3'},
-  {parkNumber: 19,  name: 'The Terraform Event',                        blockNumber: 4321454, hash: '0a989ad83a89295795f9cc128dd00be1e6b430a86137cce4bbf66c3f015fb0b7'},    
-  {parkNumber: 20,  name: 'Metropolis Byzantium',                       blockNumber: 4370000, hash: 'b1fcff633029ee18ab6482b58ff8b6e95dd7c82a954c852157152a7a6d32785e'}, 
-  {parkNumber: 21,  name: 'DevCon-3: Cancun',                           blockNumber: 4470000, hash: 'dcbe9efcdb05574f8f10323c794e2246add50a99445951695e3da78f4cb71ce7'},
-  {parkNumber: 22,  name: 'Parity Multisig Library Suicide',            blockNumber: 4501969, hash: '894f3aac1c8a0c9b05d2cbe6c0c9af907ca44a1c96aeda69a0ec064b9a74b790'},
-  {parkNumber: 23,  name: 'CryptoKitty #1 is born',                     blockNumber: 4605346, hash: '62b5de48e43c2ff66623d272f9dd1db879870f9d78c840b450501b9e4fbe93ab'},
-  {parkNumber: 24,  name: 'The Birth of the DAI',                       blockNumber: 4752008, hash: '1ccb5da1337a99a6f864046dbbc79ba3be50ff6122811eb3989f6a470d2492f1'},
-  {parkNumber: 25,  name: 'DevCon-4: Prague',                           blockNumber: 6610000, hash: '1d47e931fc01f54f1119f5efd98ab4fd0e07ed6358da0d15de30611a7ecede69'},
+  {parkNumber: 1,   name: 'The Genesis',                                blockNumber: 0,       hash: 'd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3', 
+  description: [
+    'The Genesis block is one-of-a-kind:',
+    'it contains 8893 transactions but',
+    'has used no gas, it was created 15',
+    'seconds before the Ethereum Frontier',
+    'at block #1, but it has no miner. And',
+    'More importantly, its nonce is 0x42!',
+    '',
+    'The Genesis block was shipped with',
+    'the first clients and was designed to',
+    'initialize the account of each',
+    'participants of the Ethereum presale.',
+    'The presale ran for 42 days startingin',
+    'July 2014, the initial price was fixed',
+    'to 2000 ETH/BTC ($0.311/ETH at the',
+    'time) for two weeks. After that period,',
+    'the price would decrease linearly until',
+    'it reached 1337 ETH/BTC. The presale',
+    'had been delayed by several months so',
+    'the team could navigate the legal',
+    'processes and build a secure presale',
+    'website.',
+    '',
+    'The presale website would generate an',
+    'encrypted wallet.json file, all',
+    'client-side, and associate it with a',
+    'Bitcoin address the participants had',
+    'to contribute to. That wallet contained',
+    'the private key needed to access the',
+    'accounts created during the genesis',
+    'block (assuming you had not forgotten',
+    'your password!).',
+    '',
+    'In total, some over 60M ETH were sold',
+    'at the presale for roughly 61,150 BTC',
+    'worth over $18M at the time.'
+  ]
+},
+  {parkNumber: 2,   name: 'The Ethereum Frontier',                      blockNumber: 1,       hash: '88e96d4537bea4d9c05d12549907b32561d3bf31f45aae734cdc119f13406cb6',
+  description: [
+  ]
+},
+  {parkNumber: 3,   name: 'Oldest One-time Miner',                      blockNumber: 762,     hash: 'd898664323723661c037e39cd24e7290dee0ffe3aa1a62f3cb0ace3034814403',
+  description: [
+  ]
+},  
+  {parkNumber: 4,   name: 'The First ICO: Augur',                       blockNumber: 88090,   hash: '0a7af5a5870648ff8c2c10691ac01e08451d054a15da8c4a843c5393752e2baa',
+  description: [
+  ]
+},   
+  {parkNumber: 5,   name: 'DevCon-1: London',                           blockNumber: 515000,  hash: '926287a535d7929ab81c0d72eb10f5711b8156d617f61d58b7b04ddab5673f78',
+  description: [
+  ]
+},  
+  {parkNumber: 6,   name: 'One Million Blocks',                         blockNumber: 1000000, hash: '8e38b4dbf6b11fcc3b9dee84fb7986e29ca0a02cecd8977c161ff7333329681e',
+  description: [
+  ]
+},  
+  {parkNumber: 7,   name: 'Homestead Fork',                             blockNumber: 1150000, hash: '584bdb5d4e74fe97f5a5222b533fe1322fd0b6ad3eb03f02c3221984e2c0b430',
+  description: [
+  ]
+}, 
+  {parkNumber: 8,   name: 'theDAO is deployed',                         blockNumber: 1428757, hash: '17fea357e1a1a514b45d45db586c272a7415f8eb8aeb4aa1dcaf87e56f34ca59',
+  description: [
+  ]
+},  
+  {parkNumber: 9,   name: 'theDAO is drained',                          blockNumber: 1718497, hash: 'caaa13ce099342d5e1342b04d588d7733093591666af8ef756ce20cf13d16475',
+  description: [
+  ]
+},  
+  {parkNumber: 10,  name: 'theDAO Fork',                                blockNumber: 1920000, hash: '4985f5ca3d2afbec36529aa96f74de3cc10a2a4a6c44f2157a57d2c6059a11bb',
+  description: [
+  ]
+}, 
+  {parkNumber: 11,  name: 'EXTCODESIZE DoS Attack',                     blockNumber: 2283416, hash: '9852a25198a980b28999db234404a99ebf38bd9531b330bf6d7cf4cfe0f904ea',
+  description: [
+  ]
+},
+  {parkNumber: 12,  name: 'DevCon-2: Shanghai',                         blockNumber: 2290000, hash: 'b7307cb2eb75e101c7fa95972c255d6e03520a5390365b22cb07a8c7a3b849a2',
+  description: [
+  ]
+},    
+  {parkNumber: 13,  name: '“Suicide Bomb” DoS Attack',                  blockNumber: 2421507, hash: 'c71986e9d7b7b17234ee8601009bdb7e3d2c1cbf0a24ce3d48375dba663c649f',
+  description: [
+  ]
+},
+  {parkNumber: 14,  name: 'Tangerine Whistle',                          blockNumber: 2463000, hash: '2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0',
+  description: [
+  ]
+}, 
+  {parkNumber: 15,  name: 'Spurious Dragon',                            blockNumber: 2675000, hash: '58eff9265aedf8a54da8121de1324e1e0d9aac99f694d16c6a41afffe3817d73',
+  description: [
+  ]
+}, 
+  {parkNumber: 16,  name: 'The Most Recent Pi Block',                   blockNumber: 3141592, hash: '68a31d86567fcb4807643375ea68ab4d281a570d42399505c8e0b49ee574363f',
+  description: [
+  ]
+},
+  {parkNumber: 17,  name: 'Parity Multisig Public Init Hack',           blockNumber: 4041169, hash: '648276e5bffbeaaceae97b83954d7b79198032cce03dd538fe2f52b1da5f10c4',
+  description: [
+  ]
+},
+  {parkNumber: 18,  name: 'Decentraland MANA sale startBlock',          blockNumber: 4170700, hash: '6de40774564a3678218acc0f606c1e35464d632830db5c10e51e61f36e1326d3',
+  description: [
+  ]
+},
+  {parkNumber: 19,  name: 'The Terraform Event',                        blockNumber: 4321454, hash: '0a989ad83a89295795f9cc128dd00be1e6b430a86137cce4bbf66c3f015fb0b7',
+  description: [
+  ]
+},    
+  {parkNumber: 20,  name: 'Metropolis Byzantium',                       blockNumber: 4370000, hash: 'b1fcff633029ee18ab6482b58ff8b6e95dd7c82a954c852157152a7a6d32785e',
+  description: [
+  ]
+}, 
+  {parkNumber: 21,  name: 'DevCon-3: Cancun',                           blockNumber: 4470000, hash: 'dcbe9efcdb05574f8f10323c794e2246add50a99445951695e3da78f4cb71ce7',
+  description: [
+  ]
+},
+  {parkNumber: 22,  name: 'Parity Multisig Library Suicide',            blockNumber: 4501969, hash: '894f3aac1c8a0c9b05d2cbe6c0c9af907ca44a1c96aeda69a0ec064b9a74b790',
+  description: [
+  ]
+},
+  {parkNumber: 23,  name: 'CryptoKitty #1 is born',                     blockNumber: 4605346, hash: '62b5de48e43c2ff66623d272f9dd1db879870f9d78c840b450501b9e4fbe93ab',
+  description: [
+  ]
+},
+  {parkNumber: 24,  name: 'The Birth of the DAI',                       blockNumber: 4752008, hash: '1ccb5da1337a99a6f864046dbbc79ba3be50ff6122811eb3989f6a470d2492f1',
+  description: [
+  ]
+},
+  {parkNumber: 25,  name: 'DevCon-4: Prague',                           blockNumber: 6610000, hash: '1d47e931fc01f54f1119f5efd98ab4fd0e07ed6358da0d15de30611a7ecede69',
+  description: [
+  ]
+},
 ]
 
 // maps two hexa digits to one of these options:
