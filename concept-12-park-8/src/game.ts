@@ -798,8 +798,13 @@ function buildGrassyArea(width: number, height: number, length: number, x: numbe
 
   // material for grass
   let material = new Material()
-  material.albedoColor = Color3.Green()
-  material.hasAlpha = false
+  // material.albedoColor = Color3.Green()
+  // material.hasAlpha = false
+
+  // Create texture
+  const myTexture = new Texture("materials/GrassGreenTexture0003.jpg")
+  material.albedoTexture = myTexture
+
 
   let grass = new Entity()
   grass.addComponent(new BoxShape())
@@ -814,10 +819,14 @@ function buildGrassyArea(width: number, height: number, length: number, x: numbe
 
 function buildCenterFlooring(width: number, height: number, length: number, x: number, y: number, z: number) {
 
-  // material for grass
+  // material for center flooring
   let material = new Material()
-  material.albedoColor = Color3.FromHexString('#a0a0a0')
-  material.hasAlpha = false
+  // material.albedoColor = Color3.FromHexString('#a0a0a0')
+  // material.hasAlpha = false
+
+  // Create texture
+  const myTexture = new Texture("materials/marble.jpg")
+  material.albedoTexture = myTexture
 
   let floor = new Entity()
   floor.addComponent(new BoxShape())
