@@ -802,8 +802,15 @@ function buildGrassyArea(width: number, height: number, length: number, x: numbe
 
   // material for grass
   let material = new Material()
-  material.albedoColor = Color3.Green()
-  material.hasAlpha = false
+  // material.albedoColor = Color3.Green()
+  // material.hasAlpha = false
+
+
+  // Create texture
+  const myTexture = new Texture("materials/grass.png")
+  myTexture.wrap = 3 // WRAP
+  material.albedoTexture = myTexture
+
 
   let grass = new Entity()
   grass.addComponent(new BoxShape())
