@@ -4,15 +4,15 @@
     "favicon": "favicon_asset"
   },
   "contact": {
-    "name": "author-name",
-    "email": ""
+    "name": "seb",
+    "email": "momuscollective@protonmail.com"
   },
-  "owner": "",
+  "owner": "0x5eA93BD269bFd21B9e19f73Db5D51D189c35cDB3",
   "scene": {
     "parcels": [
-      "0,0"
+      "-64,-113"
     ],
-    "base": "0,0"
+    "base": "-64,-113"
   },
   "communications": {
     "type": "webrtc",
