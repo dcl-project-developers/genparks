@@ -122,7 +122,8 @@ export class SimpleMove implements ISystem {
 function showNft() {
   // see: https://docs.decentraland.org/blockchain-interactions/display-a-certified-nft/
   const entity = new Entity()
-  const shapeComponent = new NFTShape('ethereum://0x4008de4e758bf2d066640ff8c469365782816af8/5')
+  const url = 'ethereum://0x4008de4e758bf2d066640ff8c469365782816af8/' + '5'
+  const shapeComponent = new NFTShape(url)
   entity.addComponent(shapeComponent)
   entity.addComponent(
     new Transform({
